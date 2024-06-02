@@ -1,4 +1,5 @@
 {
+  "lang_name":"English",
   "OK": "OK",
   "Cancel": "Cancel",
   "Submit": "Submit",
@@ -32,7 +33,8 @@
   "Create Account": "Create account",
   "Username": "Username",
   "Confirm Password": "Confirm password",
-  "Username or Password error!": "Username or password is invalid!",
+  "User does not exist or password is invalid": "User does not exist or password is invalid",
+  "Too many login requests": "Too many login requests",
   "All things done!": "We're good to go!",
   "Login": "Login",
   "Password error!": "Invalid password!",
@@ -105,8 +107,8 @@
   "Privileged": "Privileges",
   "Container Command": "Container Command",
   "Container Capabilities (cap-add)": "Container Capabilities (cap-add)",
-  "Container Hostname": "Container Hostname",
-  "Hostname of app container": "Hostname of app container",
+  "Container Name": "Container Name",
+  "Name of app container": "Name of app container",
   "Ports": "Port",
   "Volumes": "Volumes",
   "Environment Variables": "Environment Variables",
@@ -406,5 +408,6 @@
   "Rebulid error": "Rebulid error",
   "Installing {title}": "Installing {title}",
   "Legacy app (To be rebuilt).": "Legacy app (To be rebuilt).",
-  "To be rebuilt.": "To be rebuilt."
+  "To be rebuilt.": "To be rebuilt.",
+  "launch-and-open": "Launch and open"
 }

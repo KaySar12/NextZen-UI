@@ -74,6 +74,5 @@ module.exports = {
 		// before: require('./mock/meta_data.js'),
 		hot: true,
 		// contentBase: publicPath,
-	
 	}
 }

@@ -48,16 +48,7 @@ const sys = {
 	getLogs() {
 		return api.get(`${PREFIX}/logs`);
 	},
-	getUserServiceLogs() {
-		return api.get(`${PREFIX}/user-service-logs`);
-	},
 
-	getGateWayLogs(){
-		return api.get(`${PREFIX}/gateway-logs`);
-	},
-	GetAppManagementLogs(){
-		return api.get(`${PREFIX}/app-management-logs`);
-	},
 	//Get Debug Info
 	getDebugInfo() {
 		return api.get(`${PREFIX}/debug`);

@@ -52,34 +52,34 @@ module.exports = {
 		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_setting")
 	},
 	dashboardsetting_showsearchbar: async (isTrue) => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_showsearchbar", { value: isTrue })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_showsearchbar", {value: isTrue})
 	},
 	dashboardsetting_searchengine: async (whichSearchengine) => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_searchengine", { value: whichSearchengine })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_searchengine", {value: whichSearchengine})
 	},
 	dashboardsetting_language: async (whichLanguage) => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_language", { value: whichLanguage })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_language", {value: whichLanguage})
 	},
 	dashboardsetting_webuiport: async num => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_webuiport", { value: num })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_webuiport", {value: num})
 	},
 	dashboardsetting_wallpaper: async wallpaper => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_wallpaper", { value: wallpaper })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_wallpaper", {value: wallpaper})
 	},
 	dashboardsetting_showexistingapp: async isShow => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_showexistingapp", { value: isShow })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_showexistingapp", {value: isShow})
 	},
 	dashboardsetting_news: async isShow => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_news", { value: isShow })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_news", {value: isShow})
 	},
 	dashboardsetting_automountusb: async isShow => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_automountusb", { value: isShow })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_automountusb", {value: isShow})
 	},
 	dashboardsetting_versionavailable_show: async isTrue => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_versionavailable_show", { value: isTrue })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_versionavailable_show", {value: isTrue})
 	},
 	dashboardsetting_versionupdate: async isTrue => {
-		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_versionupdate", { value: isTrue })
+		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_versionupdate", {value: isTrue})
 	},
 	dashboardsetting_reboot: async () => {
 		return await intermediateProcessor("casaos-ui:topbar:dashboardsetting_reboot")
@@ -99,17 +99,9 @@ module.exports = {
 	terminallogs_logs: async () => {
 		return await intermediateProcessor("casaos-ui:topbar:terminallogs_logs")
 	},
-	terminallogs_users_logs: async () => {
-		return await intermediateProcessor("casaos-ui:topbar:terminallogs_users_logs")
-	},
-	terminallogs_gateway_logs: async () => {
-		return await intermediateProcessor("casaos-ui:topbar:terminallogs_gateway_logs")
-	},
-	terminallogs_app_management_logs: async () => {
-		return await intermediateProcessor("casaos-ui:topbar:terminallogs_app_management_logs")
-	},
+
 	widget_systemstatus: async (status) => {
-		return await intermediateProcessor("casaos-ui:topbar:widget_systemstatus", { value: status })
+		return await intermediateProcessor("casaos-ui:topbar:widget_systemstatus", {value: status})
 	},
 	widget_cpu: async () => {
 		return await intermediateProcessor("casaos-ui:widget:widget_cpu")
@@ -144,7 +136,7 @@ module.exports = {
 	},
 
 	youshouldknow_show: async isShow => {
-		return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_show", { value: isShow })
+		return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_show", {value: isShow})
 	},
 	youshouldknow_slide: async () => {
 		return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_slide")
@@ -157,37 +149,37 @@ module.exports = {
 	},
 
 	apps_open: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:apps_open", { value: name })
+		return await intermediateProcessor("casaos-ui:app:apps_open", {value: name})
 	},
 	apps_setting: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:apps_setting", { value: name })
+		return await intermediateProcessor("casaos-ui:app:apps_setting", {value: name})
 	},
 	apps_checkupdate: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:apps_checkupdate", { value: name })
+		return await intermediateProcessor("casaos-ui:app:apps_checkupdate", {value: name})
 	},
 	apps_clone: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:apps_checkupdate", { value: name })
+		return await intermediateProcessor("casaos-ui:app:apps_checkupdate", {value: name})
 	},
 	apps_uninstall: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:apps_uninstall", { value: name })
+		return await intermediateProcessor("casaos-ui:app:apps_uninstall", {value: name})
 	},
 	apps_restart: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:apps_restart", { value: name })
+		return await intermediateProcessor("casaos-ui:app:apps_restart", {value: name})
 	},
 	apps_stop: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:apps_stop", { value: name })
+		return await intermediateProcessor("casaos-ui:app:apps_stop", {value: name})
 	},
 	appsexsiting_open: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:appsexsiting_open", { value: name })
+		return await intermediateProcessor("casaos-ui:app:appsexsiting_open", {value: name})
 	},
 	appsexsiting_setting: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:appsexsiting_setting", { value: name })
+		return await intermediateProcessor("casaos-ui:app:appsexsiting_setting", {value: name})
 	},
 	appscustom_open: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:appscustom_open", { value: name })
+		return await intermediateProcessor("casaos-ui:app:appscustom_open", {value: name})
 	},
 	appscustom_setting: async (name) => {
-		return await intermediateProcessor("casaos-ui:app:appscustom_setting", { value: name })
+		return await intermediateProcessor("casaos-ui:app:appscustom_setting", {value: name})
 	},
 	apps_custominstall: async () => {
 		return await intermediateProcessor("casaos-ui:app:apps_custominstall")
@@ -213,25 +205,25 @@ module.exports = {
 	},
 
 	appstore_install: async (name) => {
-		return await intermediateProcessor("casaos-ui:appstore:appstore_install", { value: name })
+		return await intermediateProcessor("casaos-ui:appstore:appstore_install", {value: name})
 	},
 	appstore_detail: async (name) => {
-		return await intermediateProcessor("casaos-ui:appstore:appstore_detail", { value: name })
+		return await intermediateProcessor("casaos-ui:appstore:appstore_detail", {value: name})
 	},
 	appstorecommunity_install: async (name) => {
-		return await intermediateProcessor("casaos-ui:appstore:appstorecommunity_install", { value: name })
+		return await intermediateProcessor("casaos-ui:appstore:appstorecommunity_install", {value: name})
 	},
 	appstorecommunity_detail: async (name) => {
-		return await intermediateProcessor("casaos-ui:appstore:appstorecommunity_detail", { value: name })
+		return await intermediateProcessor("casaos-ui:appstore:appstorecommunity_detail", {value: name})
 	},
 	appstore_slide: async () => {
 		return await intermediateProcessor("casaos-ui:appstore:appstore_slide")
 	},
 	appstore_type: async (type) => {
-		return await intermediateProcessor("casaos-ui:appstore:appstore_type", { value: type })
+		return await intermediateProcessor("casaos-ui:appstore:appstore_type", {value: type})
 	},
 	appstore_sort: async (type) => {
-		return await intermediateProcessor("casaos-ui:appstore:appstore_sort", { value: type })
+		return await intermediateProcessor("casaos-ui:appstore:appstore_sort", {value: type})
 	},
 	appstore_custominstall: async () => {
 		return await intermediateProcessor("casaos-ui:appstore:appstore_custominstall")
@@ -241,7 +233,7 @@ module.exports = {
 	},
 	//files
 	files_open: async (peerid) => {
-		return await intermediateProcessor("casaos-ui:app:apps_open:files", { value: peerid })
+		return await intermediateProcessor("casaos-ui:app:apps_open:files", {value: peerid})
 	},
 	// cloud
 	files_addlocation_googledrive: async () => {

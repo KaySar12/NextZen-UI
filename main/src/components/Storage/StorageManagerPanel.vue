@@ -20,11 +20,11 @@
 							<div v-show="unDiskData.length == 0" class="popper  tooltip-content dark">
 								{{ $t('Please insert a Drive to Create Storage') }}
 							</div>
-							<!-- <div slot="reference">
+							<div slot="reference">
 								<b-button :disabled="unDiskData.length == 0" :type="state_createstorage_operability"
 									class="o" rounded size="is-small" @click="showCreate">{{ $t('Create Storage') }}
 								</b-button>
-							</div> -->
+							</div>
 						</popper>
 
 					</div>
@@ -147,10 +147,10 @@
 			<template v-else-if="!mergeConbinationsStorageData.length">
 				<div class="is-flex-grow-1"></div>
 				<div class="is-flex is-flex-direction-row-reverse">
-					<!-- <b-button :type="state_mainstorage_operability" class="width" rounded
+					<b-button :type="state_mainstorage_operability" class="width" rounded
 						@click="showStorageSettingsModal">{{ $t('Merge Storages') }}
-					</b-button> -->
-					<!-- <cToolTip isBlock></cToolTip> -->
+					</b-button>
+					<cToolTip isBlock></cToolTip>
 				</div>
 			</template>
 

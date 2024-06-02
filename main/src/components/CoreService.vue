@@ -239,7 +239,7 @@ export default {
 					this.transformNewDisk(eventJson, operateType, entityUUID)
 					break;
 				default:
-					//this.transformLocalStorage(eventJson, operateType, entityUUID)
+					this.transformLocalStorage(eventJson, operateType, entityUUID)
 					break;
 			}
 		},
@@ -413,9 +413,9 @@ export default {
 					try {
 						let progress = Number(res.message);
 						let currentInstallAppText = '';
-						if (progress === 0) {
+						if (progress?.toString() === '0') {
 							currentInstallAppText = 'Starting installation';
-						} else if (progress === 100) {
+						} else if (progress?.toString() === '100') {
 							currentInstallAppText = 'Installation completed';
 						} else {
 							currentInstallAppText = 'Installing ' + progress + '%';
@@ -446,6 +446,18 @@ export default {
 
 	},
 	sockets: {
+		"app:apply-changes-begin"(res) { 
+			const title = ice_i18n(JSON.parse(res.Properties["app:title"]));
+			this.transformAppInstallationProgress({
+				finished: false,
+				name: res.Properties["app:name"],
+				title,
+				id: res.Properties["app:name"],
+				success: true,
+				message: "Starting pulling image info",
+				icon: res.Properties["app:icon"]
+			});
+		},
 		"app:apply-changes-end"(res) {
 			this.$buefy.toast.open({
 				message: "The setting of " + res.Properties["app:name"] + " is complete",

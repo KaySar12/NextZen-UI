@@ -4,12 +4,12 @@
 		<!-- Modal-Card Header Start -->
 		<header class="modal-card-head">
 			<div class="is-flex-grow-1">
-				<h3 class="title is-header">NextZenOS</h3>
+				<h3 class="title is-header">CasaOS</h3>
 			</div>
-			<!-- <b-tooltip label="Download logs" position="is-bottom" size="is-small" type="is-black">
+			<b-tooltip label="Download logs" position="is-bottom" size="is-small" type="is-black">
 				<b-icon v-show="showTabName === 'logs'" class="close-button" icon="downloads-outline" pack="casa"
 					@click.native="downloadSystemLog" />
-			</b-tooltip> -->
+			</b-tooltip>
 			<b-icon class="close-button ml-2" icon="close-outline" pack="casa" @click.native="$emit('close');" />
 
 		</header>

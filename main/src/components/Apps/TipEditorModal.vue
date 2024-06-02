@@ -97,7 +97,6 @@ export default {
 		},
 		composeData: {
 			handler() {
-				debugger
 				//Get tips in compose.
 				let getValueByPath = this.composeData['x-casaos']
 				if (getValueByPath?.['tips']?.['custom'] || getValueByPath?.['tips']?.['before_install']) {
