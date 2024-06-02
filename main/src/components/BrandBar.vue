@@ -83,6 +83,7 @@ export default {
 				return data; // Return the fetched data
 			} catch (err) {
 				console.error('feed server is Down');
+				return "feed server is Down";
 			}
 		},
 		gotoLink(link) {

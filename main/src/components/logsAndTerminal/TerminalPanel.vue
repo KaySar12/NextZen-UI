@@ -1,4 +1,3 @@
-
 <template>
 	<div class="modal-card">
 		<!-- Modal-Card Header Start -->
@@ -17,7 +16,7 @@
 
 		<!-- Modal-Card Body Start -->
 		<section class="modal-card-body " style="overflow:hidden">
-			<div class="is-flex-grow-1">
+			<div class="is-flex-grow-3">
 				<b-tabs :animated="false" @input="onInput">
 					<b-tab-item :label="$t('Terminal')" value="terminal">
 						<terminal-card ref="terminal" :initWsUrl="wsUrl"></terminal-card>
@@ -25,7 +24,7 @@
 					<b-tab-item :label="$t('Main Service')" value="logs">
 						<logs-card ref="logs" :data="logData"></logs-card>
 					</b-tab-item>
-					<b-tab-item :label="$t('User Service')" value="user-service-log">
+					<!-- <b-tab-item :label="$t('User Service')" value="user-service-log">
 						<logs-card ref="user-service-log" :data="userServiceData"></logs-card>
 					</b-tab-item>
 					<b-tab-item :label="$t('GateWay')" value="gateway-log">
@@ -33,7 +32,7 @@
 					</b-tab-item>
 					<b-tab-item :label="$t('App Management')" value="app-management-log">
 						<logs-card ref="app-management-log" :data="appManagementData"></logs-card>
-					</b-tab-item>
+					</b-tab-item> -->
 				</b-tabs>
 
 			</div>
@@ -72,9 +71,9 @@ export default {
 		this.getLogs();
 		this.timer = setInterval(() => {
 			this.getLogs();
-			this.getUserServiceLogs();
-			this.getGateWayLogs();
-			this.GetAppManagementLogs();
+			// this.getUserServiceLogs();
+			// this.getGateWayLogs();
+			// this.GetAppManagementLogs();
 		}, 1000 * 10);
 	},
 	methods: {
@@ -85,27 +84,27 @@ export default {
 				this.logData = replaceData.substring(8, replaceData.length - 1);
 			})
 		},
-		getUserServiceLogs() {
-			this.$api.sys.getUserServiceLogs().then(res => {
-				let data = res.data.data
-				let replaceData = data.replace(/\n(.{8})/gu, '\n');
-				this.userServiceData = replaceData.substring(8, replaceData.length - 1);
-			})
-		},
-		getGateWayLogs() {
-			this.$api.sys.getGateWayLogs().then(res => {
-				let data = res.data.data
-				let replaceData = data.replace(/\n(.{8})/gu, '\n');
-				this.gateWayData = replaceData.substring(8, replaceData.length - 1);
-			})
-		},
-		GetAppManagementLogs() {
-			this.$api.sys.GetAppManagementLogs().then(res => {
-				let data = res.data.data
-				let replaceData = data.replace(/\n(.{8})/gu, '\n');
-				this.appManagementData = replaceData.substring(8, replaceData.length - 1);
-			})
-		},
+		// getUserServiceLogs() {
+		// 	this.$api.sys.getUserServiceLogs().then(res => {
+		// 		let data = res.data.data
+		// 		let replaceData = data.replace(/\n(.{8})/gu, '\n');
+		// 		this.userServiceData = replaceData.substring(8, replaceData.length - 1);
+		// 	})
+		// },
+		// getGateWayLogs() {
+		// 	this.$api.sys.getGateWayLogs().then(res => {
+		// 		let data = res.data.data
+		// 		let replaceData = data.replace(/\n(.{8})/gu, '\n');
+		// 		this.gateWayData = replaceData.substring(8, replaceData.length - 1);
+		// 	})
+		// },
+		// GetAppManagementLogs() {
+		// 	this.$api.sys.GetAppManagementLogs().then(res => {
+		// 		let data = res.data.data
+		// 		let replaceData = data.replace(/\n(.{8})/gu, '\n');
+		// 		this.appManagementData = replaceData.substring(8, replaceData.length - 1);
+		// 	})
+		// },
 		onInput(e) {
 			debugger;
 			switch (e) {

@@ -1,36 +1,37 @@
 <template>
-	<div id="app" :class="{'is-dark-bg':$route.meta.showBackground}" class="is-flex is-flex-direction-column" :style="{'--vh': vh}" >
+	<div id="app" :class="{ 'is-dark-bg': $route.meta.showBackground }" class="is-flex is-flex-direction-column"
+		:style="{ '--vh': vh }">
 		<template v-if="$route.meta.showBackground">
 			<!-- Background Layer Start -->
-			<casa-wallpaper :animate="isWelcome?initAni:noneAni"></casa-wallpaper>
+			<casa-wallpaper :animate="isWelcome ? initAni : noneAni"></casa-wallpaper>
 			<!-- Background Layer End -->
 
 			<div class="base-bar is-flex"
-				 style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);">
+				style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);">
 				<!-- BrandBar Start -->
 				<brand-bar v-if="!$store.state.isMobile && $router.currentRoute.path === '/'"
-						   v-animate-css="brandAni"></brand-bar>
+					v-animate-css="brandAni"></brand-bar>
 				<!-- BrandBar End -->
 				<!-- ContactBar Start -->
 				<contact-bar v-if="!$store.state.isMobile && $router.currentRoute.path === '/'"
-							 v-animate-css="contactAni"></contact-bar>
+					v-animate-css="contactAni"></contact-bar>
 				<!-- ContactBar End -->
 			</div>
 
 		</template>
 
 		<!-- Router View Start -->
-		<router-view/>
+		<router-view />
 		<!-- Router View End -->
 
 	</div>
 </template>
 
 <script>
-import BrandBar      from './components/BrandBar.vue'
-import ContactBar    from './components/ContactBar.vue'
+import BrandBar from './components/BrandBar.vue'
+import ContactBar from './components/ContactBar.vue'
 import CasaWallpaper from './components/wallpaper/CasaWallpaper.vue'
-import {mixin}       from './mixins/mixin';
+import { mixin } from './mixins/mixin';
 
 const customIconConfig = {
 	customIconPacks: {

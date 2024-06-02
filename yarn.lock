@@ -4963,20 +4963,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"casaos@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "casaos@workspace:."
-  dependencies:
-    "@icewhale/casaos-appmanagement-openapi": latest
-    csslint: ^1.0.5
-    htmlhint: ^1.1.4
-    js-yaml: ^4.1.0
-    jshint: ^2.13.6
-    jsonlint: ^1.6.3
-    turbo: 1.10.9
-  languageName: unknown
-  linkType: soft
-
 "case-anything@npm:^2.1.10":
   version: 2.1.13
   resolution: "case-anything@npm:2.1.13"
@@ -11987,6 +11973,19 @@ __metadata:
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
   languageName: node
   linkType: hard
+
+"nextzenos@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "nextzenos@workspace:."
+  dependencies:
+    csslint: ^1.0.5
+    htmlhint: ^1.1.4
+    js-yaml: ^4.1.0
+    jshint: ^2.13.6
+    jsonlint: ^1.6.3
+    turbo: 1.10.9
+  languageName: unknown
+  linkType: soft
 
 "nice-try@npm:^1.0.4":
   version: 1.0.5
