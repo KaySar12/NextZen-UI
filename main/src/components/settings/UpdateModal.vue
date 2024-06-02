@@ -75,7 +75,6 @@ export default {
 		getUpdateLogs() {
 			this.updateTimer = setInterval(() => {
 				this.$api.file.getContent(`/var/log/casaos/upgrade.log`).then(res => {
-
 					this.updateLogs = res.data.data;
 					if (this.updateLogs.includes(`CasaOS upgrade successfully`)) {
 						localStorage.setItem('is_update', 'true')
