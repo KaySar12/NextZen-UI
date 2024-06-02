@@ -35,3 +35,4 @@ unused-files.json
 .turbo
 
 /packages/icewhale*
+node_modules
