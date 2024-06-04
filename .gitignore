@@ -35,3 +35,4 @@ unused-files.json
 .turbo
 
 /packages/icewhale*
+main/public/img/icon/favicon.svgZone.Identifier
