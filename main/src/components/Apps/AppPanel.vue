@@ -1,8 +1,6 @@
 <template>
-	<div
-		:class="{ narrow: currentSlide > 0, 'card-width': isFirstInstall, _stepStoreList: currentSlide === 0 }"
-		class="modal-card"
-	>
+	<div :class="{ narrow: currentSlide > 0, 'card-width': isFirstInstall, _stepStoreList: currentSlide === 0 }"
+		class="modal-card">
 		<!--    first setting！！ apps installation location-->
 		<template v-if="isFirstInstall">
 			<header class="modal-card-head b-line">
@@ -11,15 +9,10 @@
 						{{ $t('Apps Installation Location') }}
 					</h3>
 				</div>
-				<b-icon
-					class="close-button"
-					icon="close-outline"
-					pack="casa"
-					@click.native="
-						$emit('close')
-						$messageBus('appstore_close')
-					"
-				/>
+				<b-icon class="close-button" icon="close-outline" pack="casa" @click.native="
+					$emit('close')
+				$messageBus('appstore_close')
+					" />
 			</header>
 			<p class="modal-card-body">
 				{{ $t('Please choose a location with enough storage space and stable connection.') }}
@@ -29,13 +22,8 @@
 			</p>
 
 			<section class="modal-card-body is-overlay">
-				<AppsInstallationLocation
-					v-for="(item, index) in storageData"
-					:key="'storage' + index"
-					:item="item"
-					:scence="storage_item_scence"
-					@selection="getSelection"
-				>
+				<AppsInstallationLocation v-for="(item, index) in storageData" :key="'storage' + index" :item="item"
+					:scence="storage_item_scence" @selection="getSelection">
 				</AppsInstallationLocation>
 			</section>
 		</template>
@@ -44,17 +32,10 @@
 			<!-- Sidebar Start -->
 			<app-side-bar v-model="sidebarOpen" :overlay="true" :right="true" position="absolute">
 				<template slot-scope="{ close }">
-					<AppDetailInfo
-						:appDetailData="appDetailData"
-						:arch="arch"
-						:cateMenu="cateMenu"
-						:close="close"
-						:currentInstallId="currentInstallId"
-						:installedList="installedList"
-						:showDetailSwiper="showDetailSwiper"
-						@install="quickInstall"
-						@switchAppConfigContent="switchAppConfigContent"
-					>
+					<AppDetailInfo :appDetailData="appDetailData" :arch="arch" :cateMenu="cateMenu" :close="close"
+						:currentInstallId="currentInstallId" :installedList="installedList"
+						:showDetailSwiper="showDetailSwiper" @install="quickInstall"
+						@switchAppConfigContent="switchAppConfigContent">
 					</AppDetailInfo>
 				</template>
 			</app-side-bar>
@@ -66,42 +47,25 @@
 					<h3 class="setting_title is-5">{{ panelTitle }}</h3>
 				</div>
 				<div class="is-flex is-align-items-center">
-					<b-button
-						v-if="currentSlide == 0"
-						:label="$t('Custom Install')"
-						class="mr-2"
-						icon-left="view-grid-plus"
-						rounded
-						size="is-small"
-						type="is-primary"
-						@click="currentSlide = 1"
-					/>
+					<b-button v-if="currentSlide == 0" :label="$t('Custom Install')" class="mr-2"
+						icon-left="view-grid-plus" rounded size="is-small" type="is-primary"
+						@click="currentSlide = 1" />
 
 					<b-tooltip v-if="showImportButton" :label="$t('Import')" position="is-bottom" type="is-dark">
 						<button class="icon-button mdi mdi-import" type="button" @click="showImportPanel" />
 					</b-tooltip>
 
-					<b-tooltip
-						v-if="showTerminalButton"
-						:label="$t('Terminal & Logs')"
-						position="is-bottom"
-						type="is-dark"
-					>
+					<b-tooltip v-if="showTerminalButton" :label="$t('Terminal & Logs')" position="is-bottom"
+						type="is-dark">
 						<button class="icon-button mdi mdi-console" type="button" @click="showTerminalPanel" />
 					</b-tooltip>
 
-					<b-tooltip
-						v-if="showExportButton"
-						:label="$t('Export ComposeFile')"
-						position="is-bottom"
-						type="is-dark"
-					>
+					<b-tooltip v-if="showExportButton" :label="$t('Export ComposeFile')" position="is-bottom"
+						type="is-dark">
 						<button class="icon-button mdi mdi-export-variant" type="button" @click="exportYAML" />
 					</b-tooltip>
-					<div
-						v-if="currentSlide < 2"
-						class="is-flex is-align-items-center modal-close-container modal-close-container-line"
-					>
+					<div v-if="currentSlide < 2"
+						class="is-flex is-align-items-center modal-close-container modal-close-container-line">
 						<b-icon class="close-button" icon="close-outline" pack="casa" @click.native="$emit('close')" />
 					</div>
 					<div v-else-if="currentSlide === 2" class="is-flex is-align-items-center">
@@ -119,61 +83,39 @@
 						<!-- Featured Slider Start -->
 						<div class="is-relative featured-app b-line">
 							<swiper ref="featureSwiper" :options="featureSwiperOptions" class="swiper">
-								<swiper-slide
-									v-for="(item, index) in recommendList"
-									:key="index + item.title + item.id"
-									class="pb-5"
-								>
+								<swiper-slide v-for="(item, index) in recommendList" :key="index + item.title + item.id"
+									class="pb-5">
 									<div class="gap" @click="showAppDetial(item.id)">
-										<b-image
-											:placeholder="require('@/assets/img/app/swiper_placeholder.png')"
+										<b-image :placeholder="require('@/assets/img/app/swiper_placeholder.png')"
 											:src="item.thumbnail"
 											:src-fallback="require('@/assets/img/app/swiper_placeholder.png')"
-											class="border-8 is-clickable"
-											ratio="16by9"
-										></b-image>
+											class="border-8 is-clickable" ratio="16by9"></b-image>
 									</div>
 									<div class="is-flex pt-5 is-align-items-center">
 										<div class="mr-3" @click="showAppDetial(item.id)">
-											<b-image
-												:placeholder="require('@/assets/img/app/default.svg')"
-												:src="item.icon"
-												:src-fallback="require('@/assets/img/app/default.svg')"
-												class="is-64x64 is-clickable icon-shadow"
-											></b-image>
+											<b-image :placeholder="require('@/assets/img/app/default.svg')"
+												:src="item.icon" :src-fallback="require('@/assets/img/app/default.svg')"
+												class="is-64x64 is-clickable icon-shadow"></b-image>
 										</div>
-										<div
-											class="is-flex-grow-1 mr-4 is-clickable"
-											@click="
-												showAppDetial(item.id)
-												$messageBus('appstore_detail', item.title)
-											"
-										>
+										<div class="is-flex-grow-1 mr-4 is-clickable" @click="
+											showAppDetial(item.id)
+										$messageBus('appstore_detail', item.title)
+											">
 											<h6 class="title is-6 mb-2">{{ item.title }}</h6>
 											<p class="is-size-7 two-line">{{ item.tagline }}</p>
 										</div>
 										<div>
-											<b-button
-												v-if="installedList.includes(item.id)"
-												:loading="item.id == currentInstallId"
-												rounded
-												size="is-small"
-												type="is-primary is-light"
-												@click="openThirdContainerByAppInfo(item)"
-												>{{ $t('launch-and-open') }}
+											<b-button v-if="installedList.includes(item.id)"
+												:loading="item.id == currentInstallId" rounded size="is-small"
+												type="is-primary is-light" @click="openThirdContainerByAppInfo(item)">{{
+													$t('launch-and-open') }}
 											</b-button>
-											<b-button
-												v-else
-												:disabled="!item.architectures?.includes(arch)"
-												:loading="item.id == currentInstallId"
-												rounded
-												size="is-small"
-												type="is-primary is-light"
-												@click="
+											<b-button v-else :disabled="!item.architectures?.includes(arch)"
+												:loading="item.id == currentInstallId" rounded size="is-small"
+												type="is-primary is-light" @click="
 													quickInstall(item.id)
-													$messageBus('appstore_install', item.title)
-												"
-											>
+												$messageBus('appstore_install', item.title)
+													">
 												{{ $t('Install') }}
 											</b-button>
 										</div>
@@ -190,41 +132,19 @@
 					<div class="is-flex mt-5 mb-5 is-justify-content-center">
 						<!-- Cate Start -->
 						<transition name="slide-fade">
-							<div
-								v-if="!activeAppStoreSourceInput || !isMobile"
-								class="mr-2 hover-effect is-flex is-align-items-center _dropdown is-clickable"
-							>
-								<b-dropdown
-									v-model="currentCate"
-									:max-height="240"
-									:mobile-modal="false"
-									animation="fade1"
-									aria-role="list"
-									class="app-select file-dropdown"
-									scrollable
-								>
+							<div v-if="!activeAppStoreSourceInput || !isMobile"
+								class="mr-2 hover-effect is-flex is-align-items-center _dropdown is-clickable">
+								<b-dropdown v-model="currentCate" :max-height="240" :mobile-modal="false"
+									animation="fade1" aria-role="list" class="app-select file-dropdown" scrollable>
 									<template #trigger="{ active }">
-										<b-button
-											:label="currentCate.name"
-											type="is-text"
-											icon-left="category"
-											icon-pack="casa"
-											:icon-right="active ? 'up-outline' : 'down-outline'"
-										/>
+										<b-button :label="currentCate.name" type="is-text" icon-left="category"
+											icon-pack="casa" :icon-right="active ? 'up-outline' : 'down-outline'" />
 									</template>
-									<b-dropdown-item
-										v-for="menu in cateMenu"
-										:key="menu.id"
-										:class="menu.id == currentCate.id ? 'is-active' : ''"
-										:data-title="menu.count"
-										:value="menu"
-										aria-role="listitem"
-										class="_dropdown__item"
-									>
-										<div
-											class="media is-align-items-center is-flex has-text-full-03"
-											@click="$messageBus('appstore_type', menu.name)"
-										>
+									<b-dropdown-item v-for="menu in cateMenu" :key="menu.id"
+										:class="menu.id == currentCate.id ? 'is-active' : ''" :data-title="menu.count"
+										:value="menu" aria-role="listitem" class="_dropdown__item">
+										<div class="media is-align-items-center is-flex has-text-full-03"
+											@click="$messageBus('appstore_type', menu.name)">
 											<div class="media-content">
 												<h3>{{ menu.name }}</h3>
 											</div>
@@ -237,42 +157,20 @@
 
 						<!-- Author Start -->
 						<transition name="slide-fade">
-							<div
-								v-if="!activeAppStoreSourceInput || !isMobile"
-								class="hover-effect is-flex is-align-items-center _dropdown is-clickable"
-							>
-								<b-dropdown
-									v-model="currentAuthor"
-									:max-height="240"
-									:mobile-modal="false"
-									animation="fade1"
-									aria-role="list"
-									class="app-select file-dropdown"
-									position="is-bottom-right"
-									scrollable
-								>
+							<div v-if="!activeAppStoreSourceInput || !isMobile"
+								class="hover-effect is-flex is-align-items-center _dropdown is-clickable">
+								<b-dropdown v-model="currentAuthor" :max-height="240" :mobile-modal="false"
+									animation="fade1" aria-role="list" class="app-select file-dropdown"
+									position="is-bottom-right" scrollable>
 									<template #trigger="{ active }">
-										<b-button
-											:label="currentAuthor.name"
-											type="is-text"
-											icon-left="posted-by"
-											icon-pack="casa"
-											:icon-right="active ? 'up-outline' : 'down-outline'"
-										/>
+										<b-button :label="currentAuthor.name" type="is-text" icon-left="posted-by"
+											icon-pack="casa" :icon-right="active ? 'up-outline' : 'down-outline'" />
 									</template>
-									<b-dropdown-item
-										v-for="menu in authorMenu"
-										:key="menu.id"
-										:class="menu.id == currentAuthor.id ? 'is-active' : ''"
-										:data-title="menu.count"
-										:value="menu"
-										aria-role="listitem"
-										class="_dropdown__item"
-									>
-										<div
-											class="media is-align-items-center is-flex has-text-full-03"
-											@click="$messageBus('appstore_author', menu.name)"
-										>
+									<b-dropdown-item v-for="menu in authorMenu" :key="menu.id"
+										:class="menu.id == currentAuthor.id ? 'is-active' : ''" :data-title="menu.count"
+										:value="menu" aria-role="listitem" class="_dropdown__item">
+										<div class="media is-align-items-center is-flex has-text-full-03"
+											@click="$messageBus('appstore_author', menu.name)">
 											<div class="media-content">
 												<h3>{{ menu.name }}</h3>
 											</div>
@@ -284,89 +182,55 @@
 						<!-- Author End -->
 
 						<transition name="search-fade">
-							<b-icon
-								v-if="searchAndSourcesStatus === 'showSources'"
-								class="is-flex is-align-self-center ml-2 is-clickable"
-								icon="search-outline"
-								pack="casa"
-								@click.native="searchAndSourcesStatusController"
-							></b-icon>
+							<b-icon v-if="searchAndSourcesStatus === 'showSources'"
+								class="is-flex is-align-self-center ml-2 is-clickable" icon="search-outline" pack="casa"
+								@click.native="searchAndSourcesStatusController"></b-icon>
 						</transition>
 						<transition name="search-fade">
-							<b-input
-								v-if="searchAndSourcesStatus !== 'showSources'"
-								ref="search_app"
-								v-on-click-outside="resetSearchAndSourcesStatus"
-								:placeholder="$t('Search an app...')"
-								class="app-search ml-2"
-								@input="debounceSearchInput"
-								@keyup.enter.native="counterPatchGetStoreList++"
-							></b-input>
+							<b-input v-if="searchAndSourcesStatus !== 'showSources'" ref="search_app"
+								v-on-click-outside="resetSearchAndSourcesStatus" :placeholder="$t('Search an app...')"
+								class="app-search ml-2" @input="debounceSearchInput"
+								@keyup.enter.native="counterPatchGetStoreList++"></b-input>
 						</transition>
 						<div class="is-flex-grow-1"></div>
-						<AppStoreSourceManagement
-							v-show="searchAndSourcesStatus !== 'showSearch'"
-							:totalApps="pageList.length"
-							class="ml-2"
-							@refreshAppStore="getStoreList"
-							@refreshSize="refreshAppStoreSourceManagementSizeStatus"
-						>
+						<AppStoreSourceManagement v-show="searchAndSourcesStatus !== 'showSearch'"
+							:totalApps="pageList.length" class="ml-2" @refreshAppStore="getStoreList"
+							@refreshSize="refreshAppStoreSourceManagementSizeStatus">
 						</AppStoreSourceManagement>
 					</div>
 
 					<!-- List condition End -->
 					<!-- App list Start-->
 					<div class="columns f-list is-multiline is-mobile pb-3 mb-5">
-						<div
-							v-for="(item, index) in filteredPageList"
-							:key="index + item.title + item.id"
-							class="column app-item is-one-quarter"
-						>
+						<div v-for="(item, index) in filteredPageList" :key="index + item.title + item.id"
+							class="column app-item is-one-quarter">
 							<div class="is-flex">
 								<div class="mr-4 is-clickable" @click="showAppDetial(item.id)">
-									<b-image
-										:src="item.icon"
-										:src-fallback="require('@/assets/img/app/default.svg')"
-										class="is-64x64 icon-shadow"
-										style="display: flex; align-items: center"
-										webp-fallback=".jpg"
-									></b-image>
+									<b-image :src="item.icon" :src-fallback="require('@/assets/img/app/default.svg')"
+										class="is-64x64 icon-shadow" style="display: flex; align-items: center"
+										webp-fallback=".jpg"></b-image>
 								</div>
-								<div
-									class="is-flex-grow-1 mr-4 is-clickable"
-									@click="
-										showAppDetial(item.id)
-										$messageBus('appstore_detail', item.title)
-									"
-								>
+								<div class="is-flex-grow-1 mr-4 is-clickable" @click="
+									showAppDetial(item.id)
+								$messageBus('appstore_detail', item.title)
+									">
 									<h6 class="title is-6 mb-2">{{ item.title }}</h6>
 									<p class="is-size-7 two-line">{{ item.tagline }}</p>
 								</div>
 							</div>
 							<div class="mt-1 ml-7 is-flex is-align-items-center">
 								<div class="is-flex-grow-1 is-size-7 has-text-grey-light">{{ item.category }}</div>
-								<b-button
-									v-if="installedList.includes(item.id)"
-									:loading="item.id == currentInstallId"
-									rounded
-									size="is-small"
-									type="is-primary is-light"
-									@click="openThirdContainerByAppInfo(item)"
-								>
+								<b-button v-if="installedList.includes(item.id)" :loading="item.id == currentInstallId"
+									rounded size="is-small" type="is-primary is-light"
+									@click="openThirdContainerByAppInfo(item)">
 									{{ $t('launch-and-open') }}
 								</b-button>
-								<b-button
-									v-else
-									:disabled="!item.architectures?.includes(arch)"
-									:loading="item.id == currentInstallId"
-									rounded
-									size="is-small"
-									type="is-primary is-light"
-									@click="
+								<b-button v-else :disabled="!item.architectures?.includes(arch)"
+									:loading="item.id == currentInstallId" rounded size="is-small"
+									type="is-primary is-light" @click="
 										quickInstall(item.id)
-										$messageBus('appstore_install', item.title)
-									"
-								>
+									$messageBus('appstore_install', item.title)
+										">
 									{{ $t('Install') }}
 								</b-button>
 							</div>
@@ -381,33 +245,25 @@
 						<h3 class="subtitle is-7 has-text-grey-light">
 							{{
 								$t(
-									'From community contributors, not optimized for CasaOS, but provides a basic App nexperience.'
+									'From community contributors, not optimized for CasaOS, but provides a basic App
+							nexperience.'
 								)
 							}}
 						</h3>
 
 						<div class="columns f-list is-multiline is-mobile pb-3 mb-5">
-							<div
-								v-for="(item, index) in communityList"
-								:key="index + item.title + item.id"
-								class="column is-one-quarter"
-							>
+							<div v-for="(item, index) in communityList" :key="index + item.title + item.id"
+								class="column is-one-quarter">
 								<div class="is-flex is-align-items-center">
 									<div class="mr-4 is-clickable" @click="showAppDetial(item.id)">
-										<b-image
-											:src="item.icon"
+										<b-image :src="item.icon"
 											:src-fallback="require('@/assets/img/app/default.svg')"
-											class="is-64x64 icon-shadow"
-											webp-fallback=".jpg"
-										></b-image>
+											class="is-64x64 icon-shadow" webp-fallback=".jpg"></b-image>
 									</div>
-									<div
-										class="is-flex-grow-1 mr-4 is-clickable"
-										@click="
-											showAppDetial(item.id)
-											$messageBus('appstorecommunity_detail', item.title)
-										"
-									>
+									<div class="is-flex-grow-1 mr-4 is-clickable" @click="
+										showAppDetial(item.id)
+									$messageBus('appstorecommunity_detail', item.title)
+										">
 										<h6 class="title is-6 mb-2">{{ item.title }}</h6>
 										<p class="is-size-7 two-line">{{ item.tagline }}</p>
 									</div>
@@ -416,28 +272,17 @@
 									<div class="is-flex-grow-1 is-size-7 has-text-grey-light">
 										{{ item.category }}
 									</div>
-									<b-button
-										v-if="installedList.includes(item.id)"
-										:loading="item.id == currentInstallId"
-										rounded
-										size="is-small"
-										type="is-primary is-light"
-										@click="openThirdContainerByAppInfo(item)"
-									>
+									<b-button v-if="installedList.includes(item.id)"
+										:loading="item.id == currentInstallId" rounded size="is-small"
+										type="is-primary is-light" @click="openThirdContainerByAppInfo(item)">
 										{{ $t('launch-and-open') }}
 									</b-button>
-									<b-button
-										v-else
-										:disabled="!item.architectures?.includes(arch)"
-										:loading="item.id == currentInstallId"
-										rounded
-										size="is-small"
-										type="is-primary is-light"
-										@click="
+									<b-button v-else :disabled="!item.architectures?.includes(arch)"
+										:loading="item.id == currentInstallId" rounded size="is-small"
+										type="is-primary is-light" @click="
 											quickInstall(item.id)
-											$messageBus('appstorecommunity_install', item.title)
-										"
-									>
+										$messageBus('appstorecommunity_install', item.title)
+											">
 										{{ $t('Install') }}
 									</b-button>
 								</div>
@@ -464,54 +309,34 @@
 
 			<!-- App Install Form Start -->
 			<template v-if="currentSlide == 1">
-				<ComposeConfig
-					v-if="isCasa"
-					ref="ComposeConfig"
-					:cap-array="capArray"
-					:docker-compose-commands="dockerComposeConfig"
-					:errInfo="errInfo"
-					:networks="networks"
-					:state="state"
-					:total-memory="totalMemory"
+				<ComposeConfig v-if="isCasa" ref="ComposeConfig" :cap-array="capArray"
+					:docker-compose-commands="dockerComposeConfig" :errInfo="errInfo" :networks="networks"
+					:state="state" :total-memory="totalMemory"
 					@updateDockerComposeCommands="updateDockerComposeCommands"
 					@updateDockerComposeServiceName="updateDockerComposeServiceName"
-					@updateMainName="name => (currentInstallId = name)"
-				></ComposeConfig>
+					@updateMainName="name => (currentInstallId = name)"></ComposeConfig>
 
 				<section v-else :class="{ _hideOverflow: !isCasa }" class="modal-card-body pt-3">
 					<!--	导入"已存在的容器"，进行初始化操作	-->
 					<ValidationObserver ref="containerValida">
 						<ValidationProvider v-slot="{ errors, valid }" name="appName" rules="required">
-							<b-field
-								:label="$t('App name') + ' *'"
-								:message="$t(errors)"
-								:type="{ 'is-danger': errors[0], 'is-success': valid }"
-							>
-								<b-input
-									v-model="settingData.label"
-									:placeholder="$t('Your custom App Name')"
-									maxlength="40"
-								></b-input>
+							<b-field :label="$t('App name') + ' *'" :message="$t(errors)"
+								:type="{ 'is-danger': errors[0], 'is-success': valid }">
+								<b-input v-model="settingData.label" :placeholder="$t('Your custom App Name')"
+									maxlength="40"></b-input>
 							</b-field>
 						</ValidationProvider>
 
 						<b-field :label="$t('Icon URL')">
 							<p class="control">
 								<span class="button is-static container-icon">
-									<b-image
-										:key="settingData.icon"
-										:src="settingData.icon"
-										:src-fallback="require('@/assets/img/app/default.svg')"
-										class="is-32x32"
-										ratio="1by1"
-									></b-image>
+									<b-image :key="settingData.icon" :src="settingData.icon"
+										:src-fallback="require('@/assets/img/app/default.svg')" class="is-32x32"
+										ratio="1by1"></b-image>
 								</span>
 							</p>
-							<b-input
-								v-model="settingData.icon"
-								:placeholder="$t('Your custom icon URL')"
-								expanded
-							></b-input>
+							<b-input v-model="settingData.icon" :placeholder="$t('Your custom icon URL')"
+								expanded></b-input>
 						</b-field>
 
 						<b-field label="Web UI">
@@ -520,26 +345,15 @@
 								<option value="https">https://</option>
 							</b-select>
 							<b-input v-model="settingData.host" :placeholder="this.$baseHostname" expanded></b-input>
-							<b-autocomplete
-								v-model="settingData.port_map"
-								:data="
-									(() => {
-										return (settingData.ports || []).map(item => {
-											return item.host
-										})
-									})()
-								"
-								:open-on-focus="true"
-								:placeholder="$t('Port')"
-								class="has-colon"
-								field="hostname"
-								@select="option => (settingData.port_map = option)"
-							></b-autocomplete>
-							<b-input
-								v-model="settingData.index"
-								:placeholder="'/index.html ' + $t('[Optional]')"
-								expanded
-							></b-input>
+							<b-autocomplete v-model="settingData.port_map" :data="(() => {
+									return (settingData.ports || []).map(item => {
+										return item.host
+									})
+								})()
+								" :open-on-focus="true" :placeholder="$t('Port')" class="has-colon" field="hostname"
+								@select="option => (settingData.port_map = option)"></b-autocomplete>
+							<b-input v-model="settingData.index" :placeholder="'/index.html ' + $t('[Optional]')"
+								expanded></b-input>
 						</b-field>
 					</ValidationObserver>
 				</section>
@@ -550,20 +364,12 @@
 			<section v-if="currentSlide == 2" :class="{ _hideOverflow: !isCasa }" class="modal-card-body pt-3 _b-line">
 				<div class="installing-warpper mb-5">
 					<div class="is-flex is-align-items-center is-justify-content-center">
-						<lottie-animation
-							:animationData="require('@/assets/ani/loading.json')"
-							:autoPlay="true"
-							:loop="true"
-							class="install-animation mt-5 mb-2"
-						></lottie-animation>
+						<lottie-animation :animationData="require('@/assets/ani/loading.json')" :autoPlay="true"
+							:loop="true" class="install-animation mt-5 mb-2"></lottie-animation>
 					</div>
 					<b-progress :value="totalPercentage" format="percent" show-value type="is-primary"></b-progress>
-					<h3
-						:class="currentInstallAppTextClass"
-						class="title is-6 has-text-centered"
-						style="height: 20px"
-						v-dompurify-html="currentInstallAppText"
-					></h3>
+					<h3 :class="currentInstallAppTextClass" class="title is-6 has-text-centered" style="height: 20px"
+						v-dompurify-html="currentInstallAppText"></h3>
 				</div>
 			</section>
 			<!-- App Install Process End -->
@@ -571,58 +377,24 @@
 			<!-- Modal-Card Body End -->
 		</template>
 		<!-- Modal-Card Footer Start-->
-		<footer
-			:class="{ 'is-justify-content-center': currentSlide == 0 }"
-			class="modal-card-foot is-flex is-align-items-center"
-		>
+		<footer :class="{ 'is-justify-content-center': currentSlide == 0 }"
+			class="modal-card-foot is-flex is-align-items-center">
 			<template>
 				<div class="is-flex-grow-1"></div>
 				<div>
-					<b-button
-						v-if="currentSlide == 2 && currentInstallAppError"
-						:label="$t('Back')"
-						rounded
-						@click="prevStep"
-					/>
-					<b-button
-						v-if="currentSlide == 1 && state == 'install'"
-						:label="$t('Install')"
-						:loading="isLoading"
-						rounded
-						type="is-primary"
-						@click="checkComposeAppAndInstallComposeApp(dockerComposeCommands, currentInstallId)"
-					/>
-					<b-button
-						v-if="isCasa && currentSlide == 1 && state == 'update'"
-						:label="$t('Save')"
-						:loading="isLoading"
-						rounded
-						type="is-primary"
-						@click="updateApp()"
-					/>
-					<b-button
-						v-if="!isCasa && currentSlide == 1 && state == 'update'"
-						:label="$t('Save')"
-						:loading="isLoading"
-						rounded
-						type="is-primary"
-						@click="updateContainer()"
-					/>
-					<b-button
-						v-if="currentSlide == 2 && !currentInstallAppError"
-						:label="$t(cancelButtonText)"
-						rounded
-						type="is-primary"
-						@click="$emit('close')"
-					/>
-					<b-button
-						v-if="isFirstInstall"
-						:label="$t('Submit')"
-						:loading="isLoading"
-						rounded
-						type="is-primary"
-						@click="submitInstallationLocation(installationLocation)"
-					/>
+					<b-button v-if="currentSlide == 2 && currentInstallAppError" :label="$t('Back')" rounded
+						@click="prevStep" />
+					<b-button v-if="currentSlide == 1 && state == 'install'" :label="$t('Install')" :loading="isLoading"
+						rounded type="is-primary"
+						@click="checkComposeAppAndInstallComposeApp(dockerComposeCommands, currentInstallId)" />
+					<b-button v-if="isCasa && currentSlide == 1 && state == 'update'" :label="$t('Save')"
+						:loading="isLoading" rounded type="is-primary" @click="updateApp()" />
+					<b-button v-if="!isCasa && currentSlide == 1 && state == 'update'" :label="$t('Save')"
+						:loading="isLoading" rounded type="is-primary" @click="updateContainer()" />
+					<b-button v-if="currentSlide == 2 && !currentInstallAppError" :label="$t(cancelButtonText)" rounded
+						type="is-primary" @click="$emit('close')" />
+					<b-button v-if="isFirstInstall" :label="$t('Submit')" :loading="isLoading" rounded type="is-primary"
+						@click="submitInstallationLocation(installationLocation)" />
 				</div>
 			</template>
 		</footer>
@@ -723,7 +495,7 @@ export default {
 		}
 	},
 
-	data () {
+	data() {
 		return {
 			timer: 0,
 			data: [],
@@ -852,7 +624,7 @@ export default {
 		}
 	},
 
-	created () {
+	created() {
 		window.addEventListener('resize', this.setCSSVHVar)
 		this.setCSSVHVar()
 
@@ -911,7 +683,7 @@ export default {
 		}
 	},
 
-	mounted () {
+	mounted() {
 		this.currentSlide === 0 &&
 			!this.isMobile &&
 			this.$nextTick().then(() => {
@@ -921,16 +693,16 @@ export default {
 	},
 
 	computed: {
-		showImportButton () {
+		showImportButton() {
 			return this.currentSlide == 1 && this.state == 'install'
 		},
-		showExportButton () {
+		showExportButton() {
 			return this.currentSlide == 1 && this.state == 'update'
 		},
-		showTerminalButton () {
+		showTerminalButton() {
 			return this.currentSlide == 1 && this.state == 'update' && this.runningStatus == 'running'
 		},
-		panelTitle () {
+		panelTitle() {
 			if (this.currentSlide == 0) {
 				return this.$t('App Store')
 			} else if (this.currentSlide == 1) {
@@ -945,25 +717,25 @@ export default {
 				return this.$t('Installing') + ' ' + this.currentInstallId
 			}
 		},
-		showDetailSwiper () {
+		showDetailSwiper() {
 			return this.appDetailData.screenshot_link?.length > 0
 		},
-		currentInstallAppTextClass () {
+		currentInstallAppTextClass() {
 			return this.currentInstallAppError ? 'has-text-danger' : 'has-text-black'
 		},
-		unuseable () {
+		unuseable() {
 			if (this.architectures.length === 0 || !this.arch) {
 				return false
 			}
 			return this.architectures.indexOf(this.arch) < 0
 		},
-		archTitle () {
+		archTitle() {
 			if (this.arch === 'arm') {
 				return 'armv7'
 			}
 			return this.arch
 		},
-		filteredPageList () {
+		filteredPageList() {
 			if (Object.keys(this.pageList).length === 0) return []
 			return this.pageList.filter(app => {
 				const keywords = (app.title + app.tagline)?.toLocaleLowerCase() ?? ''
@@ -975,7 +747,7 @@ export default {
 				return false
 			})
 		},
-		isMobile () {
+		isMobile() {
 			return this.$store.state.isMobile
 		}
 	},
@@ -986,13 +758,13 @@ export default {
 		 *  === 1 Setting Panel.	(Importing、Update Setting)
 		 *  === 2 Other Panel. (Installing)
 		 * */
-		currentSlide (val) {
+		currentSlide(val) {
 			if (val == 1) {
 				this.isLoading = false
 			}
 		},
 		currentCate: {
-			handler (val) {
+			handler(val) {
 				if (!this.isFirst) {
 					this.counterPatchGetStoreList++
 				}
@@ -1000,7 +772,7 @@ export default {
 			deep: true
 		},
 		currentAuthor: {
-			handler (val) {
+			handler(val) {
 				if (!this.isFirst) {
 					this.counterPatchGetStoreList++
 				}
@@ -1009,20 +781,20 @@ export default {
 		},
 		// Watch if app sort changes
 		currentSort: {
-			handler (val) {
+			handler(val) {
 				if (!this.isFirst) {
 					this.counterPatchGetStoreList++
 				}
 			},
 			deep: true
 		},
-		counterPatchGetStoreList () {
+		counterPatchGetStoreList() {
 			this.getStoreList()
 			return 0
 		}
 	},
 	methods: {
-		resetSearchAndSourcesStatus () {
+		resetSearchAndSourcesStatus() {
 			switch (this.isMobile) {
 				case true:
 					this.searchAndSourcesStatus = 'showSources'
@@ -1032,7 +804,7 @@ export default {
 					break
 			}
 		},
-		searchAndSourcesStatusController () {
+		searchAndSourcesStatusController() {
 			// Status for three. One of them is "showSearch", "showSources", "showAll"
 			if (this.isMobile && this.searchAndSourcesStatus === 'showSources') {
 				this.searchAndSourcesStatus = 'showSearch'
@@ -1043,7 +815,7 @@ export default {
 			}
 		},
 
-		refreshAppStoreSourceManagementSizeStatus (status) {
+		refreshAppStoreSourceManagementSizeStatus(status) {
 			if (status === 'active_input_state') {
 				this.activeAppStoreSourceInput = true
 			} else {
@@ -1051,14 +823,14 @@ export default {
 			}
 		},
 
-		setCSSVHVar () {
+		setCSSVHVar() {
 			const vh = window.innerHeight * 0.01
 			document.documentElement.style.setProperty('--vh', `${vh}px`)
 		},
 
 		// this.cateMenu : {name: 'appstore', title: 'App Store', icon: 'mdi-apps', component: 'AppStore'}
 		// param : this.cateMenu.name
-		getCateIcon (name) {
+		getCateIcon(name) {
 			let tempO = this.cateMenu.find(item => item.name == name) || { font: 'mdi-apps' }
 			return tempO.font
 		},
@@ -1068,7 +840,7 @@ export default {
 		 * @param {*}
 		 * @return {*} void
 		 */
-		async getCategoryList () {
+		async getCategoryList() {
 			this.isLoading = true
 			try {
 				this.cateMenu = await this.$openAPI.appManagement.appStore.categoryList().then(res =>
@@ -1088,7 +860,7 @@ export default {
 			}
 		},
 
-		async getStoreRecommend () {
+		async getStoreRecommend() {
 			try {
 				let res = await this.$openAPI.appManagement.appStore
 					.composeAppStoreInfoList(undefined, undefined, true)
@@ -1120,7 +892,7 @@ export default {
 		 * @param {*}
 		 * @return {*} void
 		 */
-		async getStoreList () {
+		async getStoreList() {
 			this.isLoading = true
 
 			try {
@@ -1175,7 +947,7 @@ export default {
 		 * @param {id} String
 		 * @return {*} void
 		 */
-		async showAppDetial (id) {
+		async showAppDetial(id) {
 			this.isLoading = true
 			let { min_memory, compose } = await this.$openAPI.appManagement.appStore.composeApp(id).then(res => {
 				// A district that is reserved for resource.
@@ -1215,7 +987,7 @@ export default {
 				})
 		},
 
-		retry () {
+		retry() {
 			if (this.loadErrorStep === 1) {
 				this.getCategoryList()
 			} else if (this.loadErrorStep === 2) {
@@ -1228,61 +1000,70 @@ export default {
 		 * @param {*}
 		 * @return {*} void
 		 */
-		quickInstall (id) {
-			this.sidebarOpen = false
-			this.$openAPI.appManagement.appStore
-				.composeApp(id, {
-					headers: {
-						'content-type': 'application/yaml',
-						accept: 'application/yaml'
-					}
-				})
-				.then(res => {
-					if (res.status == 200) {
-						let composeJSON = parse(res.data)
-						if (composeJSON['x-casaos']?.tips?.before_install?.en_us) {
-							this.$buefy.modal.open({
-								parent: this,
-								component: () => import('@/components/Apps/TipEditorModal.vue'),
-								hasModalCard: true,
-								customClass: '',
-								trapFocus: true,
-								canCancel: [''],
-								scroll: 'keep',
-								animation: 'zoom-in',
-								events: {
-									submit: () => {
-										this.currentInstallId = id
-										this.installComposeApp(res.data, id)
-									}
+		quickInstall(id) {
+			debugger
+			this.sidebarOpen = false;
+			this.$openAPI.appManagement.appStore.composeApp(id, {
+				headers: {
+					'content-type': 'application/yaml',
+					'accept': 'application/yaml'
+				}
+			}).then(res => {
+				debugger
+				if (res.status == 200) {
+					let composeJSON = parse(res.data)
+					//x-casaos
+					if (composeJSON["x-casaos"]?.tips?.before_install?.en_us) {
+						this.$buefy.modal.open({
+							parent: this,
+							component: () => import("@/components/Apps/TipEditorModal.vue"),
+							hasModalCard: true,
+							customClass: '',
+							trapFocus: true,
+							canCancel: [''],
+							scroll: "keep",
+							animation: "zoom-in",
+							events: {
+								submit: () => {
+									this.currentInstallId = id
+									alert("Install With tips ")
+									//Disable install compose app
+									this.installComposeApp(res.data, id)
 								},
-								props: {
-									composeData: composeJSON
-								}
-							})
-						} else {
-							this.installComposeApp(res.data, id)
-						}
-					} else {
-						this.$buefy.toast.open({
-							message: this.$t(`There was an error installing the application, please try again!`),
-							type: 'is-warning'
+							},
+							props: {
+								composeData: composeJSON
+							}
 						})
 					}
-				})
-				.catch(e => {
+					//!important
+					else if (composeJSON["x-casaos"]["install-wizard"] === 'advance') {
+						this.currentSlide = 1
+					}
+					else {
+						alert("Install with out tip")
+						this.installComposeApp(res.data, id)
+					}
+
+				} else {
 					this.$buefy.toast.open({
-						message: e.response.data.message,
-						type: 'is-danger'
+						message: this.$t(`There was an error installing the application, please try again!`),
+						type: 'is-warning'
 					})
+				}
+			}).catch((e) => {
+				this.$buefy.toast.open({
+					message: e.response.data.message,
+					type: 'is-danger'
 				})
+			})
 		},
 		/**
 		 * @description: Format AppStore tip datas
 		 * @param {data}
 		 * @return {html} Str
 		 */
-		formatTips (data) {
+		formatTips(data) {
 			let html = ''
 			if (!isNull(data) && data != '') {
 				JSON.parse(data).forEach(item => {
@@ -1301,7 +1082,7 @@ export default {
 		 * @param {*} image
 		 * @return {*}
 		 */
-		getIconFromImage (image) {
+		getIconFromImage(image) {
 			if (image == '') {
 				return ''
 			} else {
@@ -1314,7 +1095,7 @@ export default {
 		 * @param {*}
 		 * @return {*} void
 		 */
-		prevStep () {
+		prevStep() {
 			this.currentSlide--
 		},
 
@@ -1323,7 +1104,7 @@ export default {
 		 * @param {Object} ref ref of component
 		 * @return {Boolean}
 		 */
-		async checkStep (ref) {
+		async checkStep(ref) {
 			let isValid = await ref.validate()
 			return isValid
 		},
@@ -1333,7 +1114,7 @@ export default {
 		 * @param {*}
 		 * @return {*} void
 		 */
-		installComposeApp (dockerComposeCommands, appName) {
+		installComposeApp(dockerComposeCommands, appName) {
 			return this.$openAPI.appManagement.compose
 				.installComposeApp(dockerComposeCommands, false, true)
 				.then(res => {
@@ -1361,7 +1142,7 @@ export default {
 				})
 		},
 
-		checkComposeAppAndInstallComposeApp (dockerComposeCommands, appName) {
+		checkComposeAppAndInstallComposeApp(dockerComposeCommands, appName) {
 			this.$refs.ComposeConfig.checkStep().then(valid => {
 				if (valid.every(v => v === true)) {
 					this.isLoading = true
@@ -1380,7 +1161,7 @@ export default {
 			})
 		},
 
-		switchAppConfigContent (composeCommands) {
+		switchAppConfigContent(composeCommands) {
 			this.currentSlide = 1
 			this.sidebarOpen = false
 			this.dockerComposeConfig = composeCommands
@@ -1390,7 +1171,7 @@ export default {
 		 * @description: Save edit update
 		 * @return {*} void
 		 */
-		updateApp () {
+		updateApp() {
 			this.$refs.ComposeConfig.checkStep().then(valid => {
 				if (valid.every(v => v === true)) {
 					this.$openAPI.appManagement.compose
@@ -1431,7 +1212,7 @@ export default {
 			})
 		},
 
-		updateContainer () {
+		updateContainer() {
 			this.$refs.containerValida.validate().then(valid => {
 				if (valid) {
 					this.isLoading = true
@@ -1464,7 +1245,7 @@ export default {
 		 * @description: Show import panel
 		 * @return {*} void
 		 */
-		showImportPanel () {
+		showImportPanel() {
 			this.$buefy.modal.open({
 				parent: this,
 				component: ImportPanel,
@@ -1525,7 +1306,7 @@ export default {
 		 * @param {*} function
 		 * @return {*} void
 		 */
-		exportYAML () {
+		exportYAML() {
 			let title = YAML.parse(this.dockerComposeCommands)?.['x-casaos']?.['title']
 			if (title) {
 				title = ice_i18n(title)
@@ -1542,7 +1323,7 @@ export default {
 		 * @return {data} Object
 		 */
 
-		uuid2var (data) {
+		uuid2var(data) {
 			data.volumes.forEach(item => {
 				item.host = item.host.replace(this.id, '$AppID')
 			})
@@ -1557,7 +1338,7 @@ export default {
 		 * @param {*}
 		 * @return {*} String
 		 */
-		getNetworkName (netId) {
+		getNetworkName(netId) {
 			if (netId == '') {
 				return 'bridge'
 			} else {
@@ -1572,7 +1353,7 @@ export default {
 		 * @description: Show Terminal & Logs panel
 		 * @return {*} void
 		 */
-		showTerminalPanel () {
+		showTerminalPanel() {
 			this.$openAPI.appManagement.compose
 				.composeAppContainers(this.id)
 				.then(res => {
@@ -1601,7 +1382,7 @@ export default {
 				})
 		},
 
-		async getDiskList () {
+		async getDiskList() {
 			try {
 				const storageRes = await this.$api.storage.list({ system: 'show' })
 				const storageArray = []
@@ -1631,11 +1412,11 @@ export default {
 			}
 		},
 
-		getSelection (val) {
+		getSelection(val) {
 			this.installationLocation = val
 		},
 
-		async askInstallationLocation () {
+		async askInstallationLocation() {
 			try {
 				// get docker info
 				let { data } = await this.$api.container.getInstallationLocation()
@@ -1651,7 +1432,7 @@ export default {
 			}
 		},
 
-		async submitInstallationLocation (val) {
+		async submitInstallationLocation(val) {
 			this.isLoading = true
 			let path = ''
 			if (val === '/') {
@@ -1685,7 +1466,7 @@ export default {
 				})
 		},
 
-		installAppProgress (resData) {
+		installAppProgress(resData) {
 			if (this.currentInstallAppName !== resData.name) {
 				return false
 			}
@@ -1720,11 +1501,11 @@ export default {
 			}
 		},
 
-		updateDockerComposeCommands (val) {
+		updateDockerComposeCommands(val) {
 			this.dockerComposeCommands = val
 		},
 
-		updateDockerComposeServiceName (val) {
+		updateDockerComposeServiceName(val) {
 			this.dockerComposeServiceName = val
 		},
 		debounceSearchInput: debounce(function (e) {
@@ -1732,26 +1513,26 @@ export default {
 		}, 250)
 	},
 
-	destroyed () {
+	destroyed() {
 		window.addEventListener('resize', this.setCSSVHVar)
 		clearInterval(this.timer)
 	},
 
 	sockets: {
-		'app:install-begin' (res) {
+		'app:install-begin'(res) {
 			this.currentInstallAppName = res.Properties['app:name']
 			this.currentSlide = 2
 			this.currentInstallAppText = 'Start Installation...'
 			this.cancelButtonText = 'Continue in background'
 		},
-		'app:install-end' (res) {
+		'app:install-end'(res) {
 			this.installAppProgress({
 				finished: true,
 				name: res.Properties['app:name'],
 				id: res.Properties['docker:container:id']
 			})
 		},
-		'app:install-error' (res) {
+		'app:install-error'(res) {
 			this.installAppProgress({
 				finished: false,
 				name: res.Properties['app:name'],
@@ -1760,7 +1541,7 @@ export default {
 				message: res.Properties['message']
 			})
 		},
-		'app:install-progress' (res) {
+		'app:install-progress'(res) {
 			this.installAppProgress({
 				finished: false,
 				name: res.Properties['app:name'],
@@ -1770,7 +1551,7 @@ export default {
 				message: res.Properties['app:progress']
 			})
 		},
-		'docker:image:pull-progress' (res) {
+		'docker:image:pull-progress'(res) {
 			this.installAppProgress({
 				finished: false,
 				name: res.Properties['app:name'],
@@ -1863,6 +1644,7 @@ export default {
 }
 
 .featured-app {
+
 	.swiper-button-next,
 	.swiper-rtl .swiper-button-prev {
 		right: -20px;
@@ -2013,6 +1795,7 @@ export default {
 		}
 
 		.level {
+
 			.mdi-36px.mdi-set,
 			.mdi-36px.mdi:before {
 				font-size: 24px;
