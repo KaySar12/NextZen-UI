@@ -1,4 +1,5 @@
 {
+  "lang_name": "India",
   "OK": "OKE",
   "Cancel": "Batal",
   "Submit": "Kirim",
@@ -26,7 +27,7 @@
   "This field must have 2 options": "Item harus memiliki 2 isi",
   "This field must have more than 5 characters": "This field must have 5 or more characters.",
   "You entered an invalid RFC1123 hostname": "You entered an invalid time. Please use the RFC1123 format.",
-  "Welcome to CasaOS": "Welcome to CasaOS",
+  "Welcome to Nextzen": "Welcome to Nextzen",
   "Let's create your initial account": "Let's create your account",
   "Go →": "Go →",
   "Create Account": "Buat akun",
