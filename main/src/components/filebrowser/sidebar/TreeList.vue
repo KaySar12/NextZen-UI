@@ -6,8 +6,8 @@
 		<!-- Root List End -->
 
 		<!-- Data List Start -->
-		<tree-list-item v-for="item in dataList" :key="item.path" :isActive="isActive" :isShare="checkSharevisibility(item)"
-			:item="item" iconColor="casa-color-blue"></tree-list-item>
+		<tree-list-item v-for="item in dataList" :key="item.path" :isActive="isActive"
+			:isShare="checkSharevisibility(item)" :item="item" iconColor="casa-color-blue"></tree-list-item>
 		<!-- Data List End -->
 
 	</div>
@@ -60,6 +60,15 @@ export default {
 					icon: 'data-outline',
 					pack: 'casa',
 					path: '/DATA',
+					visible: true,
+					selected: true,
+					extensions: null
+				},
+				{
+					name: 'NextZEN',
+					icon: 'folder-outline',
+					pack: 'casa',
+					path: '/NextZEN',
 					visible: true,
 					selected: true,
 					extensions: null
@@ -159,4 +168,3 @@ export default {
 	},
 }
 </script>
-

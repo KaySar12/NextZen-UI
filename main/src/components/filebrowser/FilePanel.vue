@@ -317,6 +317,7 @@ export default {
 			panelType: null,
 			currentItem: null,
 			rootPath: "/DATA",
+			dataPath: "/DATA",
 			currentPath: "",
 			currentPathName: "",
 			isViewGird: true,
@@ -372,7 +373,7 @@ export default {
 				.then((res) => res.status);
 			this.hasMergerFunction = hasMergeState == 200;
 		} catch (e) {
-			console.error(e);
+			// console.error(e);
 		}
 	},
 
@@ -554,6 +555,7 @@ export default {
 		 * @return {*}
 		 */
 		getFileList(path) {
+			debugger;
 			this.isLoading = true;
 			// path = path.replace("//", "/")
 			this.pageType = "file";

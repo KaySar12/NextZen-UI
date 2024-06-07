@@ -50,7 +50,7 @@
 				</p>
 				<div class="is-flex is-flex-direction-row-reverse">
 					<b-button :type="type" class="width" rounded size="is-small"
-							  @click="showStorageSettingsModal">{{ $t('Merge Storages') }}
+							  @click="showStorageSettingsModal">{{ $t('Merge Storage') }}
 					</b-button>
 					<cToolTip isBlock modal="is-success"></cToolTip>
 				</div>

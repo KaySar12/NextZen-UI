@@ -97,9 +97,23 @@ export default {
 		this.usbDisks = this.$store.state.hardwareInfo.sys_usb
 	},
 	methods: {
-		getDiskInfo(diskInfo) {
+		async getDiskInfo(diskInfo) {
+			debugger;
+			// const storageRes = await this.$api.storage.list({ system: "show" }).then(v => v.data.data)
+			// let storageArray = []
+			// storageRes.forEach(item => {
+			// 	item.children.forEach(part => {
+			// 		part.disk = item.path
+			// 		part.diskName = item.disk_name
+			// 		storageArray.push(part)
+			// 	})
+			// })
+			// var usedStorage = 0;
+			// storageArray.forEach(e => {
+			// 	usedStorage += (parseFloat(e.size === '' ? '0' : e.size) - parseFloat(e.avail === '' ? '0' : e.avail));
+			// })
 			this.totalSize = diskInfo.size
-			this.totalUsed = diskInfo.used
+			this.totalUsed = diskInfo.size - diskInfo.avail
 			this.totalPercent = 100 - Math.floor(diskInfo.avail * 100 / this.totalSize)
 			this.health = diskInfo.health
 		},

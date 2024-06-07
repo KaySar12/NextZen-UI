@@ -3,7 +3,7 @@
 		<!-- Modal-Card Header Start -->
 		<header class="modal-card-head">
 			<div class="is-flex-grow-1">
-				<h3 class="title is-3">{{ $t('Share CasaOS') }}</h3>
+				<h3 class="title is-3">{{ $t('Share NextZenOS') }}</h3>
 			</div>
 			<div>
 				<button class="delete" type="button" @click="$emit('close')"/>
@@ -16,7 +16,7 @@
 
 				<div>
 					<div class=" is-size-14px">{{
-						$t('Please invite more friends who are concerned about family and data privacy to join and use CasaOS.')
+						$t('Please invite more friends who are concerned about family and data privacy to join and use NextzenOS.')
 						}}
 					</div>
 
@@ -54,8 +54,8 @@ export default {
 		return {
 			timer: 0,
 			updateTimer: 0,
-			githubUrl: `https://raw.githubusercontent.com/IceWhaleTech/logo/main/casaos/0.4/casaos_social_share.png`,
-			shareTitle: `I'm using CasaOS, a simple, easy-to-use, elegant open-source home cloud system, try it like me.`,
+			githubUrl: `https://dl.nextzenos.com/images/NextZen.jpg`,
+			shareTitle: `I'm using NextzenOS, a simple, easy-to-use, elegant open-source home cloud system, try it like me.`,
 			shareSites: [
 				'facebook',
 				'twitter',

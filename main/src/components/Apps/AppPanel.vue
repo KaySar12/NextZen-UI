@@ -242,15 +242,6 @@
 					<!-- Community App List Start -->
 					<template v-if="communityList.length > 0">
 						<h3 class="title is-5 has-text-weight-normal">{{ $t('Community Apps') }}</h3>
-						<h3 class="subtitle is-7 has-text-grey-light">
-							{{
-								$t(
-									'From community contributors, not optimized for CasaOS, but provides a basic App
-							nexperience.'
-								)
-							}}
-						</h3>
-
 						<div class="columns f-list is-multiline is-mobile pb-3 mb-5">
 							<div v-for="(item, index) in communityList" :key="index + item.title + item.id"
 								class="column is-one-quarter">
@@ -262,7 +253,7 @@
 									</div>
 									<div class="is-flex-grow-1 mr-4 is-clickable" @click="
 										showAppDetial(item.id)
-									$messageBus('appstorecommunity_detail', item.title)
+										$messageBus('appstorecommunity_detail', item.title)
 										">
 										<h6 class="title is-6 mb-2">{{ item.title }}</h6>
 										<p class="is-size-7 two-line">{{ item.tagline }}</p>
@@ -346,10 +337,10 @@
 							</b-select>
 							<b-input v-model="settingData.host" :placeholder="this.$baseHostname" expanded></b-input>
 							<b-autocomplete v-model="settingData.port_map" :data="(() => {
-									return (settingData.ports || []).map(item => {
-										return item.host
-									})
-								})()
+								return (settingData.ports || []).map(item => {
+									return item.host
+								})
+							})()
 								" :open-on-focus="true" :placeholder="$t('Port')" class="has-colon" field="hostname"
 								@select="option => (settingData.port_map = option)"></b-autocomplete>
 							<b-input v-model="settingData.index" :placeholder="'/index.html ' + $t('[Optional]')"

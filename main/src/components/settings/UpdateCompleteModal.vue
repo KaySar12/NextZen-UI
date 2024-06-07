@@ -15,7 +15,7 @@
 				<div class="update-info-container  is-size-14px " v-dompurify-html="markdownToHtml"></div>
 				<div class="mt-2rem">
 					<h3 class="title is-5 mb-2">{{ $t('Let more friends know') }}</h3>
-					<div class=" is-size-14px">{{ $t('Please share to friends who are concerned about family and data privacy to join and use CasaOS.') }}
+					<div class=" is-size-14px">{{ $t('Please share to friends who are concerned about family and data privacy to join and use NextzenOS.') }}
 					</div>
 				</div>
 

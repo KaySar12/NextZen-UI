@@ -158,7 +158,7 @@ onBeforeUnmount(() => {
 
 <template>
 	<div v-on-click-outside="onClickOutsideHandler">
-		<Transition mode="out-in" name="management-change" @after-enter="activeInput">
+		<!-- <Transition mode="out-in" name="management-change" @after-enter="activeInput">
 			<b-button v-if="componentState === 'first_add_state'" @click="changeInputState" icon-pack="casa"
 				icon-left="plus-outline">
 				{{ $t("Add Source") }}
@@ -217,7 +217,7 @@ onBeforeUnmount(() => {
 					</p>
 				</b-field>
 			</div>
-		</Transition>
+		</Transition> -->
 	</div>
 </template>
 

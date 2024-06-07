@@ -18,11 +18,21 @@
 			modifiers: { offset: { offset: '0,4px' } }
 		}" enter-active-class="fade-enter-active" leave-active-class="" transition='fade' trigger="hover">
 			<div class="popper  tooltip-content">
-				{{ $t('Join Discord') }}
+				{{ $t('Join Facebook') }}
 			</div>
-			<a slot="reference" rel="noopener" href="#" target="_blank"
-				@click="$messageBus('connect_discord')">
-				<b-icon icon="facebook" pack="casa"></b-icon>
+			<a slot="reference" rel="noopener" href="https://www.facebook.com/NextZenos" target="_blank">
+				<b-icon icon="facebook" pack="casa" style="scale: 0.9;"></b-icon>
+			</a>
+		</popper>
+		<popper :options="{
+			placement: 'top',
+			modifiers: { offset: { offset: '0,4px' } }
+		}" enter-active-class="fade-enter-active" leave-active-class="" transition='fade' trigger="hover">
+			<div class="popper  tooltip-content">
+				{{ $t('youtube') }}
+			</div>
+			<a slot="reference" rel="noopener" href="https://www.youtube.com/channel/UCtNlYbQXQdJYyutXlUJCQCQ" target="_blank">
+				<img :src="require('@/assets/img/social/youtube.png')" alt="pending" class="is-24x24" />
 			</a>
 		</popper>
 
@@ -31,12 +41,26 @@
 			modifiers: { offset: { offset: '0,4px' } }
 		}" enter-active-class="fade-enter-active" leave-active-class="" transition='fade' trigger="hover">
 			<div class="popper  tooltip-content">
-				{{ $t('Visit our Github') }}
+				{{ $t('Twitter') }}
 			</div>
-			<a slot="reference" rel="noopener" href="#" target="_blank"
-				@click="$messageBus('connect_github')">
-				<b-icon icon="github" pack="casa"></b-icon>
+			<a slot="reference" rel="noopener" href="https://twitter.com/nextzenos" target="_blank">
+				<span class="icon is-small"><i class="casa casa-twitter"></i></span>
 			</a>
+		</popper>
+		
+		<popper :options="{
+			placement: 'top',
+			modifiers: { offset: { offset: '0,4px' } }
+		}" enter-active-class="fade-enter-active" leave-active-class="" transition='fade' trigger="hover">
+			<div class="popper  tooltip-content">
+				{{ $t('Visit our Website') }}
+			</div>
+			<a slot="reference" rel="noopener"
+				:href="this.$i18n.locale === 'vi_vn' ? 'https://nextzenos.com' : 'https://nextzenos.com/en'"
+				target="_blank">
+				<span class="icon mr-1 ml-2 is-20"><i class="casa casa-language-outline is-size-4"></i></span>
+			</a>
+
 		</popper>
 
 		<popper :options="{
@@ -44,7 +68,7 @@
 			modifiers: { offset: { offset: '0,4px' } }
 		}" enter-active-class="fade-enter-active" leave-active-class="" transition='fade' trigger="hover">
 			<div class="popper  tooltip-content">
-				{{ $t('Share CasaOS') }}
+				{{ $t('Share NextZenOS') }}
 			</div>
 			<a slot="reference" @click="showShareModal">
 				<b-icon icon="chat" pack="casa"></b-icon>
@@ -80,7 +104,6 @@ export default {
 				animation: "zoom-in",
 			})
 		},
-
 		showShareModal() {
 			// messageBus :: share
 			this.$messageBus('connect_sharecasaos');

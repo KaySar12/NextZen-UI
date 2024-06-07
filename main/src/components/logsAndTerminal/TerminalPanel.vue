@@ -3,7 +3,7 @@
 		<!-- Modal-Card Header Start -->
 		<header class="modal-card-head">
 			<div class="is-flex-grow-1">
-				<h3 class="title is-header">CasaOS</h3>
+				<h3 class="title is-header">NextzenOS</h3>
 			</div>
 			<b-tooltip label="Download logs" position="is-bottom" size="is-small" type="is-black">
 				<b-icon v-show="showTabName === 'logs'" class="close-button" icon="downloads-outline" pack="casa"
@@ -21,9 +21,9 @@
 					<b-tab-item :label="$t('Terminal')" value="terminal">
 						<terminal-card ref="terminal" :initWsUrl="wsUrl"></terminal-card>
 					</b-tab-item>
-					<b-tab-item :label="$t('Main Service')" value="logs">
+					<!-- <b-tab-item :label="$t('Main Service')" value="logs">
 						<logs-card ref="logs" :data="logData"></logs-card>
-					</b-tab-item>
+					</b-tab-item> -->
 					<!-- <b-tab-item :label="$t('User Service')" value="user-service-log">
 						<logs-card ref="user-service-log" :data="userServiceData"></logs-card>
 					</b-tab-item>
@@ -70,20 +70,20 @@ export default {
 	mounted() {
 		this.getLogs();
 		this.timer = setInterval(() => {
-			this.getLogs();
+			// this.getLogs();
 			// this.getUserServiceLogs();
 			// this.getGateWayLogs();
 			// this.GetAppManagementLogs();
 		}, 1000 * 10);
 	},
 	methods: {
-		getLogs() {
-			this.$api.sys.getLogs().then(res => {
-				let data = res.data.data
-				let replaceData = data.replace(/\n(.{8})/gu, '\n');
-				this.logData = replaceData.substring(8, replaceData.length - 1);
-			})
-		},
+		// getLogs() {
+		// 	this.$api.sys.getLogs().then(res => {
+		// 		let data = res.data.data
+		// 		let replaceData = data.replace(/\n(.{8})/gu, '\n');
+		// 		this.logData = replaceData.substring(8, replaceData.length - 1);
+		// 	})
+		// },
 		// getUserServiceLogs() {
 		// 	this.$api.sys.getUserServiceLogs().then(res => {
 		// 		let data = res.data.data

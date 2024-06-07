@@ -57,33 +57,50 @@ export default {
 	methods: {
 		async parseFeed() {
 			debugger;
+			let test =this.$i18n.locale;
 			let parser = new Parser();
-			let params = await this.$api.file.getContent('/var/lib/casaos/baseinfo.conf').then(res => {
-				return JSON.parse(res.data.data)
-			})
+
+			// 1. Fetch & Parse Configuration
+			let params = await this.$api.file.getContent('/var/lib/casaos/baseinfo.conf')
+				.then(res => JSON.parse(res.data.data));
+
+			// 2. Get Feed Information (with error handling)
 			let feedAPI = await this.getfeed();
+			if (feedAPI === "feed server is Down") {
+				// Handle offline scenario - display a message, use fallback data, etc.
+				console.error("Unable to fetch feed. Server offline.");
+				this.rss = []; // Clear existing feed or display an "offline" message
+				return;
+			}
+
 			let feedURL = feedAPI.url;
 			debugger;
-			this.$store.commit('SET_DEVICE_ID', params.i)
-			params.l = localStorage.getItem('lang') ? localStorage.getItem('lang') : navigator.language.toLowerCase().replace("-", "_");
-			let stringify = btoa(encodeURIComponent(JSON.stringify(params)))
+
+			// 3. Prepare Parameters for the Feed Request
+			this.$store.commit('SET_DEVICE_ID', params.i);
+			params.l = localStorage.getItem('lang') || navigator.language.toLowerCase().replace("-", "_");
+			let stringify = btoa(encodeURIComponent(JSON.stringify(params)));
+
+			// 4. Fetch & Parse RSS Feed
 			let feed = await parser.parseURL(`${feedURL}/?key=` + stringify);
-			const newFeed = feed.items.map(item => {
-				return {
-					title: item.title,
-					link: DOMPurify.sanitize(item.link, { ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.1-9]+(?:[^a-z+.1-9]|$))/i })
-				}
-			})
-			this.rss = newFeed
+
+			// 5. Process Feed Items (Sanitize & Map)
+			const newFeed = feed.items.map(item => ({
+				title: item.title,
+				link: DOMPurify.sanitize(item.link, { ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.1-9]+(?:[^a-z+.1-9]|$))/i })
+			}));
+
+			this.rss = newFeed;
 		},
+
 		async getfeed() {
 			try {
-				const response = await fetch('https://nextzenapi.cstsoft.net/feed');
+				const response = await fetch('https://api.nextzenos.com/feed');
 				const data = await response.json();
-				return data; // Return the fetched data
+				return data;
 			} catch (err) {
-				console.error('feed server is Down');
-				return "feed server is Down";
+				console.error('Feed server is offline.');
+				return "feed server is Down";  // Signal offline status
 			}
 		},
 		gotoLink(link) {

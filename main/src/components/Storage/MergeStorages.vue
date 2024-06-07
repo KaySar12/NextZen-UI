@@ -340,7 +340,7 @@ export default {
 						position: "is-top",
 						duration: 5000,
 					});
-					console.error(e)
+					// console.error(e)
 				}).then(() => {
 					// TODO : need to check the result by the states code
 					switch (res.status) {

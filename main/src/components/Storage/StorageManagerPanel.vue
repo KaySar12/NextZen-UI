@@ -14,8 +14,8 @@
 			<section class="modal-card-body" style="overflow-y:hidden">
 				<!-- Storage and Disk List Start -->
 				<div v-if="!creatIsShow" class="is-flex-grow-1 is-flex-shrink-1 is-relative">
-					<div v-if="activeTab == 0" class="create-container" >
-						<popper :options="{ placement: 'bottom',  }"
+					<div v-if="activeTab == 0" class="create-container">
+						<!-- <popper :options="{ placement: 'bottom',  }"
 							append-to-body trigger="hover">
 							<div v-show="unDiskData.length == 0" class="popper  tooltip-content dark">
 								{{ $t('Please insert a Drive to Create Storage') }}
@@ -25,7 +25,7 @@
 									class="o" rounded size="is-small" @click="showCreate">{{ $t('Create Storage') }}
 								</b-button>
 							</div>
-						</popper>
+						</popper> -->
 
 					</div>
 					<b-tabs v-model="activeTab" :animated="false">
@@ -38,7 +38,8 @@
 							</template>
 						</b-tab-item>
 						<b-tab-item :label="$t('Drive')" class="scrollbars-light-auto tab-item">
-							<drive-item v-for="(item, index) in diskData" :key="'disk' + index" :item="item"></drive-item>
+							<drive-item v-for="(item, index) in diskData" :key="'disk' + index"
+								:item="item"></drive-item>
 						</b-tab-item>
 					</b-tabs>
 
@@ -124,8 +125,8 @@
 		<section v-if="isCreating" class="modal-card-body ">
 			<div class="installing-warpper mt-6 mb-6">
 				<div class="is-flex is-align-items-center is-justify-content-center mb-5">
-					<lottie-animation :animationData="require('@/assets/ani/creating.json')" :autoPlay="true" :loop="true"
-						class="creating-animation"></lottie-animation>
+					<lottie-animation :animationData="require('@/assets/ani/creating.json')" :autoPlay="true"
+						:loop="true" class="creating-animation"></lottie-animation>
 				</div>
 				<h3 class="title is-4 has-text-centered has-text-weight-light">{{ $t('Creation in progress') }}...</h3>
 			</div>
@@ -133,24 +134,30 @@
 
 		<!-- Modal-Card Body End -->
 		<!-- Modal-Card Footer Start-->
-		<footer v-if="!isCreating && activeTab == 0" class="modal-card-foot is-flex-shrink-0 is-flex is-align-items-center">
+		<footer v-if="!isCreating && activeTab == 0"
+			class="modal-card-foot is-flex-shrink-0 is-flex is-align-items-center">
 			<template v-if="creatIsShow">
 				<div class="is-flex-grow-1"></div>
 				<div>
 					<b-button :label="$t('Cancel')" rounded @click="showDefault" />
 					<b-button :label="$t('Format and Create')" :loading="isValiding"
 						:type="createStorageType == 'format' ? 'is-primary' : ''" rounded @click="createStorge(true)" />
-					<b-button v-if="createStorageType == 'mountable'" :label="$t('Create')" :loading="isValiding" rounded
-						type="is-primary" @click="createStorge(false)" />
+					<b-button v-if="createStorageType == 'mountable'" :label="$t('Create')" :loading="isValiding"
+						rounded type="is-primary" @click="createStorge(false)" />
 				</div>
 			</template>
 			<template v-else-if="!mergeConbinationsStorageData.length">
 				<div class="is-flex-grow-1"></div>
 				<div class="is-flex is-flex-direction-row-reverse">
-					<b-button :type="state_mainstorage_operability" class="width" rounded
+					<!-- <b-button :type="state_mainstorage_operability" class="width" rounded
 						@click="showStorageSettingsModal">{{ $t('Merge Storages') }}
-					</b-button>
-					<cToolTip isBlock></cToolTip>
+					</b-button> -->
+					<a href="http://10.0.0.4:1081/#/storage/disks" target="_blank">
+						<b-button :type="state_mainstorage_operability" class="width" rounded>
+							{{ $t('Manage Storages') }}
+						</b-button>
+					</a>
+					<!-- <cToolTip isBlock></cToolTip> -->
 				</div>
 			</template>
 
@@ -280,7 +287,7 @@ export default {
 		 * @return {void}
 		 */
 		async getDiskList(showDefault = false) {
-
+			debugger;
 			// get disk list
 			try {
 				const diskRes = await this.$api.disks.getDiskList()
