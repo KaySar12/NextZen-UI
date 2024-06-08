@@ -42,7 +42,9 @@ const container = {
 
 	// get container info
 	getInfo(id) {
-		return api.get(`${PREFIX}/${id}`);
+		debugger;
+		var url = `${PREFIX}/${id}`;
+		return api.get(url);
 	},
 
 	//v2:: get container info
