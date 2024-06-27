@@ -12,7 +12,7 @@
 			<div class="node-card ">
 				<div class="cover is-unselectable is-flex is-justify-content-center is-align-items-center">
 					<div :class="item | coverType">
-						<img :class="item | iconType" :src="getIconFile(item)" alt="folder"/>
+						<img :class="item | iconType" :src="getIconFile(item)" alt="folder" />
 					</div>
 				</div>
 				<div class="info mt-3 is-flex is-flex-direction-column is-justify-content-center">
@@ -20,6 +20,8 @@
 					<div class="buttons is-justify-content-center">
 						<b-button type="is-primary" @click="download">{{ $t('Download') }}
 							{{ item.size | renderSize }}
+						</b-button>
+						<b-button v-if="isCompressed" type="is-primary" @click="extract">{{ $t('Extract') }}
 						</b-button>
 					</div>
 				</div>
@@ -30,15 +32,24 @@
 </template>
 
 <script>
-import {mixin} from '@/mixins/mixin';
+import { mixin } from '@/mixins/mixin';
+import { extractLocators } from 'vee-validate/dist/types/utils/rules';
 
 export default {
 	mixins: [mixin],
+	inject: ['filePanel'],
 	props: {
 		item: Object
 	},
 	data() {
 		return {}
+	},
+	computed:
+	{
+		isCompressed() {
+			var ext = this.getFileExt(this.item)
+			return ext === 'gz' || ext === 'zip';
+		}
 	},
 	methods: {
 		download() {
@@ -46,6 +57,13 @@ export default {
 			this.$emit('close')
 			// this.$parent.fullScreen = true
 			// console.log(this.$parent);
+		},
+		extract() {
+			debugger;
+			var ext = this.getFileExt(this.item)
+			this.extractFile(this.item,ext);
+			this.$emit('close')
+			this.filePanel.reload()
 		}
 	},
 }

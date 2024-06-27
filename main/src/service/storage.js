@@ -8,6 +8,7 @@
  * 
  * Copyright (c) 2022 by IceWhale, All Rights Reserved. 
  */
+import { extractLocators } from "vee-validate/dist/types/utils/rules.js";
 import {api} from "./service.js";
 
 const PREFIX = "/storage";
@@ -31,5 +32,6 @@ const storage = {
 	delete(data) {
 		return api.delete(`${PREFIX}`, data);
 	}
+	
 }
 export default storage;

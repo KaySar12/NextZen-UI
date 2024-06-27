@@ -30,13 +30,13 @@
 						{{ $t('Upload Folder') }}
 					</b-dropdown-item>
 					<template v-if="hasPasteData">
-						<b-dropdown-item key="system-context4" aria-role="menuitem" class="is-flex is-align-items-center"
-							@click="paste('overwrite')">
+						<b-dropdown-item key="system-context4" aria-role="menuitem"
+							class="is-flex is-align-items-center" @click="paste('overwrite')">
 							<b-icon class="mr-1" custom-size="mdi-18px" icon="content-paste"></b-icon>
 							{{ $t('Paste - Overwrite') }}
 						</b-dropdown-item>
-						<b-dropdown-item key="system-context4-1" aria-role="menuitem" class="is-flex is-align-items-center"
-							@click="paste('skip')">
+						<b-dropdown-item key="system-context4-1" aria-role="menuitem"
+							class="is-flex is-align-items-center" @click="paste('skip')">
 							<b-icon class="mr-1" custom-size="mdi-18px" icon="content-paste"></b-icon>
 							{{ $t('Paste - Skip') }}
 						</b-dropdown-item>
@@ -70,6 +70,10 @@
 					</b-dropdown-item>
 					<b-dropdown-item key="file-context5" aria-role="menuitem" @click="operate('copy', items)">
 						{{ $t('Copy') }}
+					</b-dropdown-item>
+					<b-dropdown-item v-if="!isCompressed"  key="file-context5" aria-role="menuitem"
+						@click="operate('compressed', items)">
+						{{ $t('Compressed') }}
 					</b-dropdown-item>
 					<b-dropdown-item v-if="showSingleEdit && isWallpaperType" aria-role="menuitem"
 						@click="setAsWallpaper(item)">
@@ -131,6 +135,10 @@ export default {
 	computed: {
 		close() {
 			return this.item == undefined
+		},
+		isCompressed() {
+			var ext = this.getFileExt(this.item)
+			return ext === 'gz';
 		},
 		isWallpaperType() {
 			return this.item.is_dir ? false : wallpaperType.includes(this.getFileExt(this.item))

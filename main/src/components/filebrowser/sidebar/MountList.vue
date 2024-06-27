@@ -30,12 +30,10 @@
 						:item="item"></tree-list-item>
 				</ul>
 			</div>
-
 			<!-- Local Storage List Start -->
 			<tree-list-item v-for="item in localStorageList" :key="item.path" :isActive="isActive"
 				:item="item"></tree-list-item>
 			<!-- Local Storage List End -->
-
 			<!-- Network Storage List Start -->
 			<tree-list-item v-for="item in networkStorageList" :key="item.path" :isActive="isActive" :item="item"
 				iconName="eject" @rightIconClick="umountNetwork"></tree-list-item>
@@ -45,7 +43,6 @@
 			<tree-list-item v-for="item in usbStorageList" :key="item.path" :isActive="isActive" :item="item"
 				iconName="eject" @rightIconClick="umountUsb"></tree-list-item>
 			<!-- USB List End -->
-
 			<!-- Cloud List Start -->
 			<tree-list-item v-for="item in cloudStorageList" :key="item.path" :iconType="item.icon_type"
 				:isActive="isActive" :item="item" iconName="eject" @rightIconClick="umountCloud"></tree-list-item>
@@ -264,7 +261,6 @@ export default {
 		},
 		// Cloud Storage
 		async getCloudStorage() {
-			debugger;
 			try {
 				const cloudRes = await this.$api.cloud.list();
 				this.cloudStorageList = cloudRes.data.data.map((storage) => {

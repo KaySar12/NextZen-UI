@@ -273,6 +273,7 @@ export const mixin = {
 		 * @return {void}
 		 */
 		operate(type, items) {
+			debugger;
 			let operateObject = {
 				type: type,
 			}
@@ -359,6 +360,41 @@ export const mixin = {
 			}
 
 			deleteItems(paths);
+		},
+		extractFile(items, ext) {
+			debugger;
+			let paths = items.path;
+			let url = this.getFileUrl(items)
+			var data = {
+				path: paths,
+				ext: ext
+			};
+			const extractItems = async (data) => {
+				try {
+					const res = await this.$api.file.extract(data);
+					if (res.data.success === 200) {
+						this.$buefy.toast.open({
+							message: this.$t('Extract Successfully'),
+							type: 'is-success'
+						})
+						this.$emit("reload");
+						if (typeof this.reload === "function") {
+							this.reload();
+						}
+					}
+					else {
+						this.$buefy.toast.open({
+							message: res.data.message,
+							type: 'is-danger'
+						});
+					}
+				}
+				catch (e) {
+					alert('fail to extract file');
+				}
+
+			}
+			extractItems(data)
 		},
 		/**
 		 * @description: Set an image as wallpaper

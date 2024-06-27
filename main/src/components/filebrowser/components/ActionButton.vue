@@ -18,10 +18,9 @@
 -->
 <template>
 	<div class="action-btn">
-		<b-dropdown :id="'dr-'+index" ref="dropDown" :close-on-click="false"
-					:position="'is-'+verticalPos+'-'+horizontalPos" animation="fade1"
-					append-to-body aria-role="list" class="file-dropdown"
-					@active-change="dorpActiveChange($event,'dr-'+index)">
+		<b-dropdown :id="'dr-' + index" ref="dropDown" :close-on-click="false"
+			:position="'is-' + verticalPos + '-' + horizontalPos" animation="fade1" append-to-body aria-role="list"
+			class="file-dropdown" @active-change="dorpActiveChange($event, 'dr-' + index)">
 			<template #trigger>
 				<p role="button">
 					<b-icon id="das" custom-size="mdi-18px" icon="dots-horizontal">
@@ -38,11 +37,15 @@
 			<b-dropdown-item aria-role="menuitem" @click="rename">
 				{{ $t('Rename') }}
 			</b-dropdown-item>
-			<b-dropdown-item aria-role="menuitem" @click="operate('move',item)">
+			<b-dropdown-item aria-role="menuitem" @click="operate('move', item)">
 				{{ $t('Cut') }}
 			</b-dropdown-item>
-			<b-dropdown-item aria-role="menuitem" @click="operate('copy',item)">
+			<b-dropdown-item aria-role="menuitem" @click="operate('copy', item)">
 				{{ $t('Copy') }}
+			</b-dropdown-item>
+			<b-dropdown-item v-if="!isCompressed" key="file-context5" aria-role="menuitem"
+				@click="operate('compressed', items)">
+				{{ $t('Compressed') }}
 			</b-dropdown-item>
 			<b-dropdown-item v-if="isWallpaperType" aria-role="menuitem" @click="setAsWallpaper(item)">
 				{{ $t('Set as wallpaper') }}
@@ -59,7 +62,7 @@
 
 			<hr class="dropdown-divider">
 			<b-dropdown-item v-if="!isConfirmed" aria-role="menuitem" class="has-text-danger"
-							 @click="isConfirmed = true">
+				@click="isConfirmed = true">
 				{{ $t('Delete') }}
 			</b-dropdown-item>
 			<b-dropdown-item v-else aria-role="menuitem" class="has-text-danger" @click="deleteItem(item)">
@@ -70,8 +73,8 @@
 </template>
 
 <script>
-import {mixin, wallpaperType} from '@/mixins/mixin';
-import has                    from 'lodash/has'
+import { mixin, wallpaperType } from '@/mixins/mixin';
+import has from 'lodash/has'
 
 export default {
 	mixins: [mixin],
@@ -106,6 +109,10 @@ export default {
 					return false
 				}
 			}
+		},
+		isCompressed() {
+			var ext = this.getFileExt(this.item)
+			return ext === 'gz';
 		}
 	},
 	mounted() {
@@ -164,5 +171,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

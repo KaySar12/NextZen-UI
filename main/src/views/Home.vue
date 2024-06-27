@@ -1,7 +1,7 @@
 <template>
 	<div v-if="!isLoading" class="out-container">
 		<!-- NavBar Start -->
-		<top-bar v-animate-css="topBarAni" :initBarData="barData" @showSideBar="showSideBar"></top-bar>
+		<top-bar v-animate-css="topBarAni" :initBarData="barData" @showSideBar="showSideBar" style="background-color: #f2f1ee;"></top-bar>
 		<!-- NavBar End -->
 
 		<!-- Content Start -->

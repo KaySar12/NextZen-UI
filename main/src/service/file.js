@@ -1,4 +1,4 @@
-import {api} from "./service.js";
+import { api } from "./service.js";
 
 const PREFIX = "/file"
 
@@ -42,6 +42,13 @@ const file = {
 			content: content
 		});
 	},
+	extract(data) {
+		debugger;
+		return api.post(`${PREFIX}/extract`, {
+			path: data.path,
+			ext: data.ext
+		});
+	}
 
 }
 

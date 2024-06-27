@@ -407,6 +407,7 @@ export default {
 		},
 		"$store.state.operateObject": {
 			handler(val) {
+				debugger;
 				this.hasPasteData = val != null;
 			},
 			deep: true,
@@ -555,7 +556,6 @@ export default {
 		 * @return {*}
 		 */
 		getFileList(path) {
-			debugger;
 			this.isLoading = true;
 			// path = path.replace("//", "/")
 			this.pageType = "file";
