@@ -56,7 +56,6 @@ export default {
 	},
 	methods: {
 		async parseFeed() {
-			debugger;
 			let test =this.$i18n.locale;
 			let parser = new Parser();
 
@@ -72,10 +71,7 @@ export default {
 				this.rss = []; // Clear existing feed or display an "offline" message
 				return;
 			}
-
 			let feedURL = feedAPI.url;
-			debugger;
-
 			// 3. Prepare Parameters for the Feed Request
 			this.$store.commit('SET_DEVICE_ID', params.i);
 			params.l = localStorage.getItem('lang') || navigator.language.toLowerCase().replace("-", "_");
