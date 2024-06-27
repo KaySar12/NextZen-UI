@@ -2,14 +2,22 @@
 	<div class="home-section has-text-left">
 		<!-- Title Bar Start -->
 		<div class="is-flex is-align-items-center mb-4">
-			<app-section-title-tip id="appTitle1" class="is-flex-grow-1 has-text-sub-04" label="Drag icons to sort."
-				title="Apps">
+			<app-section-title-tip
+				id="appTitle1"
+				class="is-flex-grow-1 has-text-sub-04"
+				label="Drag icons to sort."
+				title="Apps"
+			>
 			</app-section-title-tip>
 
 			<b-dropdown animation="fade1" aria-role="menu" class="file-dropdown" position="is-bottom-left">
 				<template #trigger>
-					<b-icon class="polymorphic is-clickable has-text-grey-100" icon="plus-outline" pack="casa"
-						size="is-24"></b-icon>
+					<b-icon
+						class="polymorphic is-clickable has-text-grey-100"
+						icon="plus-outline"
+						pack="casa"
+						size="is-24"
+					></b-icon>
 				</template>
 				<b-dropdown-item aria-role="menuitem" @click="showInstall(0, 'custom')">
 					{{ $t('Custom Install APP') }}
@@ -22,13 +30,24 @@
 		<!-- Title Bar End -->
 
 		<!-- App List Start -->
-		<draggable v-model="appList" :draggable="draggable" class="app-list contextmenu-canvas" tag="div"
-			v-bind="dragOptions" @end="onSortEnd" @start="drag = true">
+		<draggable
+			v-model="appList"
+			:draggable="draggable"
+			class="app-list contextmenu-canvas"
+			tag="div"
+			v-bind="dragOptions"
+			@end="onSortEnd"
+			@start="drag = true"
+		>
 			<!-- App Icon Card Start -->
 			<template v-if="!isLoading">
 				<div v-for="item in appList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle">
-					<app-card :item="item" @configApp="showConfigPanel" @importApp="showContainerPanel"
-						@updateState="getList"></app-card>
+					<app-card
+						:item="item"
+						@configApp="showConfigPanel"
+						@importApp="showContainerPanel"
+						@updateState="getList"
+					></app-card>
 				</div>
 			</template>
 			<template v-else>
@@ -44,29 +63,30 @@
 		<template v-if="oldAppList.length > 0">
 			<!-- Title Bar Start -->
 			<div class="title-bar is-flex is-align-items-center mt-2rem mb-5">
-				<app-section-title-tip id="appTitle2" class="is-flex-grow-1 has-text-sub-04" label="To be rebuilt."
-					title="Legacy app (To be rebuilt).">
+				<app-section-title-tip
+					id="appTitle2"
+					class="is-flex-grow-1 has-text-sub-04"
+					label="To be rebuilt."
+					title="Legacy app (To be rebuilt)."
+				>
 				</app-section-title-tip>
-				<template>
-				 <b-icon @click.native="toggleLegacyApp()" class="polymorphic is-clickable has-text-grey-100"
-					:icon="!display ? 'minus-outline' : 'plus-outline'" pack="casa" size="is-24"></b-icon>
-				</template>
 			</div>
-
 			<!-- Title Bar End -->
 
 			<!-- App List Start -->
-			<transition name="slide">
-			<div v-if="!display" class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
-
+			<div class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
 				<!-- Application not imported Start -->
-				<div v-for="item in oldAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle ">
-					<app-card :isCasa="false" :item="item" @configApp="showConfigPanel" @importApp="showContainerPanel"
-						@updateState="getList"></app-card>
+				<div v-for="item in oldAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle">
+					<app-card
+						:isCasa="false"
+						:item="item"
+						@configApp="showConfigPanel"
+						@importApp="showContainerPanel"
+						@updateState="getList"
+					></app-card>
 				</div>
 				<!-- Application not imported End -->
 			</div>
-			</transition>
 			<!-- App List End -->
 		</template>
 	</div>
@@ -119,9 +139,8 @@ const orderConfig = 'app_order'
 
 export default {
 	mixins: [business_ShowNewAppTag, business_LinkApp],
-	data() {
+	data () {
 		return {
-			display: true,
 			user_id: localStorage.getItem('user_id'),
 			appList: [],
 			oldAppList: [],
@@ -144,13 +163,13 @@ export default {
 		AppSectionTitleTip,
 		AppCardSkeleton
 	},
-	provide() {
+	provide () {
 		return {
 			openAppStore: this.showInstall
 		}
 	},
 	computed: {
-		dragOptions() {
+		dragOptions () {
 			return {
 				animation: 300,
 				group: 'description',
@@ -158,14 +177,14 @@ export default {
 				ghostClass: 'ghost'
 			}
 		},
-		showDragTip() {
+		showDragTip () {
 			return this.draggable === '.handle'
 		},
-		exsitingAppsShow() {
+		exsitingAppsShow () {
 			return this.$store.state.existingAppsSwitch
 		}
 	},
-	created() {
+	created () {
 		this.getList()
 		this.draggable = this.isMobile() ? '' : '.handle'
 		this.$EventBus.$on(events.OPEN_APP_STORE_AND_GOTO_SYNCTHING, () => {
@@ -180,22 +199,18 @@ export default {
 			this.getList()
 		}, 5000)
 	},
-	beforeDestroy() {
+	beforeDestroy () {
 		this.$EventBus.$off(events.OPEN_APP_STORE_AND_GOTO_SYNCTHING)
 		window.removeEventListener('resize', this.getSkCount)
 
 		clearInterval(this.ListRefreshTimer)
 	},
-	mounted() {
+	mounted () {
 		window.addEventListener('resize', this.getSkCount)
 		this.getSkCount()
 	},
 	methods: {
-		toggleLegacyApp() {
-			debugger;
-			this.display = !this.display;
-		},
-		isMobile() {
+		isMobile () {
 			const userAgent = navigator.userAgent
 			const mobileRegex =
 				/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
@@ -203,7 +218,7 @@ export default {
 			return isMobile !== null
 		},
 
-		getSkCount() {
+		getSkCount () {
 			const windowWidth = window.innerWidth
 			if (windowWidth < 1024) {
 				this.skCount = 4
@@ -220,7 +235,7 @@ export default {
 		 * @description: Fetch the list of installed apps
 		 * @return {*} void
 		 */
-		async getList() {
+		async getList () {
 			try {
 				const orgAppList = await this.$openAPI.appGrid.getAppGrid().then(res => res.data.data || [])
 				let orgOldAppList = [],
@@ -295,7 +310,7 @@ export default {
 		 * @param {Array} newList
 		 * @return {*}
 		 */
-		getNewSortList(oriList, newList) {
+		getNewSortList (oriList, newList) {
 			let xorList = xor(oriList, newList)
 			// xorList.reverse()
 			return concat(oriList, xorList)
@@ -306,7 +321,7 @@ export default {
 		 * @param {*}
 		 * @return {*}
 		 */
-		saveSortData() {
+		saveSortData () {
 			let newList = this.appList.map(item => {
 				// compose milestone :: name is unique, global index.
 				return item.name
@@ -321,7 +336,7 @@ export default {
 		 * @param {*}
 		 * @return {*}
 		 */
-		onSortEnd() {
+		onSortEnd () {
 			this.drag = false
 			this.saveSortData()
 		},
@@ -330,7 +345,7 @@ export default {
 		 * @description: Show Install Panel Programmatic
 		 * @return {*} void
 		 */
-		async showInstall(storeId = 0, mode = '') {
+		async showInstall (storeId = 0, mode = '') {
 			if (mode === 'custom') {
 				this.$messageBus('apps_custominstall')
 			}
@@ -373,8 +388,7 @@ export default {
 		 * @param {Boolean} isCasa
 		 * @return {*}
 		 */
-		async showConfigPanel(item, isCasa) {
-			debugger;
+		async showConfigPanel (item, isCasa) {
 			let name = item.name
 			this.$messageBus('appsexsiting_open', name)
 			try {
@@ -424,8 +438,7 @@ export default {
 			}
 		},
 
-		async showContainerPanel(item) {
-			debugger;
+		async showContainerPanel (item) {
 			this.$messageBus('appsexsiting_open', item.name)
 			let id = item.name
 			const networks = await this.$api.container.getNetworks()
@@ -460,7 +473,7 @@ export default {
 			})
 		},
 
-		async showExternalLinkPanel(item = {}) {
+		async showExternalLinkPanel (item = {}) {
 			this.$buefy.modal.open({
 				parent: this,
 				component: ExternalLinkPanel,
@@ -486,14 +499,14 @@ export default {
 			})
 		},
 
-		scrollToNewApp() {
+		scrollToNewApp () {
 			// business :: scroll to last position
 			let name = last(this.newAppIds)
 			let showEl = document.getElementById('app-' + name)
 			showEl?.scrollIntoView({ behavior: 'smooth', block: 'end' })
 		},
 
-		messageBusToast(message, type) {
+		messageBusToast (message, type) {
 			let duration = 5000
 			this.$buefy.toast.open({
 				message: message,
@@ -503,24 +516,24 @@ export default {
 		}
 	},
 	sockets: {
-		'app:install-end'() {
+		'app:install-end' () {
 			this.getList().then(() => {
 				this.scrollToNewApp()
 			})
 		},
-		'app:install-error'() {
+		'app:install-error' () {
 			this.getList().then(() => {
 				this.scrollToNewApp()
 			})
 		},
-		'app:uninstall-end'() {
+		'app:uninstall-end' () {
 			this.getList()
 		},
-		'app:apply-changes-error'(res) {
+		'app:apply-changes-error' (res) {
 			// toast info
 			this.messageBusToast(res.Properties.message, 'is-danger')
 		},
-		'app:apply-changes-end'(res) {
+		'app:apply-changes-end' (res) {
 			let languages = JSON.parse(res.Properties['app:title'])
 			const title = ice_i18n(languages)
 			// toast info
@@ -538,7 +551,7 @@ export default {
 		 * @param {Object} data
 		 * @return {void}
 		 */
-		'app:update-end'(data) {
+		'app:update-end' (data) {
 			if (data.Properties['docker:image:updated'] === 'true') {
 				// business :: Tagging of new app / scrollIntoView
 				this.addIdToSessionStorage(data.Properties['app:name'])
@@ -554,7 +567,7 @@ export default {
 				})
 			}
 		},
-		'app:update-error'(data) {
+		'app:update-error' (data) {
 			if (data.Properties.cid === this.item.id) {
 				this.isUpdating = false
 				this.$buefy.toast.open({

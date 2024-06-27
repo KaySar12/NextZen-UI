@@ -98,6 +98,7 @@ export default {
 	},
 	methods: {
 		async getDiskInfo(diskInfo) {
+			debugger;
 			// const storageRes = await this.$api.storage.list({ system: "show" }).then(v => v.data.data)
 			// let storageArray = []
 			// storageRes.forEach(item => {
