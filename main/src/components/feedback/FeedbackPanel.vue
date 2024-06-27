@@ -27,11 +27,7 @@
 		<!-- Modal-Card Body End -->
 		<!-- Modal-Card Footer Start-->
 		<footer class="modal-card-foot is-flex is-align-items-center ">
-			<div class="is-flex-grow-1">
-				<a class="is-size-14px" rel="noopener"
-				   href="https://github.com/IceWhaleTech/CasaOS/issues/new/choose"
-				   target="_blank">{{ $t('For more feedback options, visit CasaOS project on GitHub...') }}</a>
-			</div>
+	
 			<div>
 				<b-button :label="$t('Submit')" rounded type="is-primary" @click="submitIssue"/>
 			</div>

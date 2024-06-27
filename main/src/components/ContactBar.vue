@@ -8,7 +8,10 @@
 			<div class="popper  tooltip-content">
 				{{ $t('Submit a feedback or report an issue') }}
 			</div>
-			<a slot="reference" @click="showFeedback">
+			<!-- <a slot="reference" @click="showFeedback">
+				<b-icon icon="eedback" pack="casa"></b-icon>
+			</a> -->
+			<a slot="reference" rel="noopener" href="https://nextzenos.com/contact-us" target="_blank">
 				<b-icon icon="eedback" pack="casa"></b-icon>
 			</a>
 		</popper>
