@@ -42,14 +42,21 @@ const file = {
 			content: content
 		});
 	},
+	//extract file
 	extract(data) {
 		debugger;
 		return api.post(`${PREFIX}/extract`, {
 			path: data.path,
 			ext: data.ext
 		});
+	},
+	//compress file or folder 
+	compress(data) {
+		debugger;
+		return api.post(`${PREFIX}/compress`, {
+			paths: data
+		})
 	}
-
 }
 
 export default file;

@@ -71,9 +71,11 @@
 					<b-dropdown-item key="file-context5" aria-role="menuitem" @click="operate('copy', items)">
 						{{ $t('Copy') }}
 					</b-dropdown-item>
-					<b-dropdown-item v-if="!isCompressed"  key="file-context5" aria-role="menuitem"
-						@click="operate('compressed', items)">
-						{{ $t('Compressed') }}
+					<b-dropdown-item v-if="!isCompressed" key="file-context6" aria-role="menuitem" @click="compress">
+						{{ $t('Compress') }}
+					</b-dropdown-item>
+					<b-dropdown-item v-if="isCompressed" key="file-context7" aria-role="menuitem" @click="extract">
+						{{ $t('Extract') }}
 					</b-dropdown-item>
 					<b-dropdown-item v-if="showSingleEdit && isWallpaperType" aria-role="menuitem"
 						@click="setAsWallpaper(item)">
@@ -138,7 +140,7 @@ export default {
 		},
 		isCompressed() {
 			var ext = this.getFileExt(this.item)
-			return ext === 'gz';
+			return ext === 'gz' || ext === 'zip';
 		},
 		isWallpaperType() {
 			return this.item.is_dir ? false : wallpaperType.includes(this.getFileExt(this.item))
@@ -223,7 +225,19 @@ export default {
 			this.$refs.dropDown.toggle()
 			this.filePanel.showRenameModal(this.item)
 		},
-
+		async compress() {
+			debugger;
+			await this.compressFile(this.items);
+			this.filePanel.handleClose();
+			this.filePanel.reload();
+		},
+		async extract() {
+			debugger;
+			var ext = this.getFileExt(this.item)
+			await this.extractFile(this.item, ext);
+			this.filePanel.handleClose();
+			this.filePanel.reload();
+		},
 		// Paste File
 		paste(style = "overwrite") {
 			this.$refs.dropDown.toggle()

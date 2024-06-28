@@ -5,8 +5,8 @@
 			<section class="modal-card-body is-flex">
 				<!-- Viewer Start -->
 				<transition name="c-zoom-in">
-					<component :is="panelType" v-if="isShowDetial" ref="previewPanel" :item="currentItem" :list="listData"
-						@close="isShowDetial = false; isModalOpen = false;"></component>
+					<component :is="panelType" v-if="isShowDetial" ref="previewPanel" :item="currentItem"
+						:list="listData" @close="isShowDetial = false; isModalOpen = false;"></component>
 				</transition>
 				<!-- Viewer End -->
 
@@ -87,9 +87,9 @@
 									</div>
 									<div class="is-flex is-align-items-center">
 										<!-- Paste Button Start -->
-										<b-button v-if="hasPasteData" :label="$t('Paste')" :loading="isPasting" class="mr-3"
-											icon-left="content-paste" rounded size="is-small" type="is-success"
-											@click="paste('overwrite')" />
+										<b-button v-if="hasPasteData" :label="$t('Paste')" :loading="isPasting"
+											class="mr-3" icon-left="content-paste" rounded size="is-small"
+											type="is-success" @click="paste('overwrite')" />
 										<!-- Paste Button End -->
 
 										<!-- Operation Status Start-->
@@ -98,7 +98,7 @@
 
 										<!-- Upload Button Start -->
 										<global-action-button @showNewFileModal="showNewFileModal"
-											@showNewFolderModal="showNewFolderModal"></global-action-button>
+											@showNewFolderModal="showNewFolderModal" :loading="true"></global-action-button>
 										<!-- Upload Button End -->
 
 										<!--  Close Button Start -->
@@ -120,13 +120,13 @@
 								<!-- Tool Bar Start -->
 								<div v-if="listData.length > 0" class="tool-bar is-flex mb-2 mt-2 is-flex-shrink-0">
 									<div class="is-flex-grow-1 has-text-left is-flex is-align-items-center">
-										<b-field class="ml-1 is-flex is-size-14px mb-0" expanded >
+										<b-field class="ml-1 is-flex is-size-14px mb-0" expanded>
 											<b-checkbox v-model="isSelectAll" :class="selectState" size="is-small"
 												@input="handleSelect">
 												{{
 													selectState != "none"
-													? $t("select-items", selectLabel)
-													: $t("total-items", selectLabel)
+														? $t("select-items", selectLabel)
+														: $t("total-items", selectLabel)
 												}}
 											</b-checkbox>
 										</b-field>
@@ -196,7 +196,9 @@
 							</uploader>
 							<!-- Toolbar Start -->
 							<operation-toolbar v-model="isToolbarShow" @close="handleClose" @copy="handleCopy"
-								@download="handleDownload" @move="handleMove" @remove="handleRemove"></operation-toolbar>
+								@download="handleDownload" @move="handleMove" @remove="handleRemove"
+								@compress="handleCompress" @extract="handleExtract"
+								:selectedArray="selectedArray"></operation-toolbar>
 							<!-- Toolbar End -->
 						</div>
 					</template>
@@ -974,7 +976,24 @@ export default {
 			this.downloadFile(downItem);
 			this.handleClose();
 		},
-
+		async handleCompress() {
+			const extractItem =
+				this.selectedArray.length == 1
+					? this.selectedArray[0]
+					: this.selectedArray;
+			await this.compressFile(extractItem)
+			this.handleClose();
+			this.reload();
+		},
+		async handleExtract() {
+			const extractItem =
+				this.selectedArray.length == 1
+					? this.selectedArray[0]
+					: this.selectedArray;
+			await this.extractFile(extractItem)
+			this.handleClose();
+			this.reload();
+		},
 		/*************************************************
 		 * PART 4  Share Action
 		 **************************************************/

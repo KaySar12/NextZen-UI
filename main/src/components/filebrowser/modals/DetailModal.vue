@@ -19,8 +19,10 @@
 					<p class="title">{{ item.name }}</p>
 					<div class="buttons is-justify-content-center">
 						<b-button type="is-primary" @click="download">{{ $t('Download') }}
-							{{ item.size | renderSize }}
 						</b-button>
+						<!-- <b-button type="is-primary" @click="download">{{ $t('Download') }}
+							{{ item.size | renderSize }}
+						</b-button> -->
 						<b-button v-if="isCompressed" type="is-primary" @click="extract">{{ $t('Extract') }}
 						</b-button>
 					</div>
@@ -58,12 +60,13 @@ export default {
 			// this.$parent.fullScreen = true
 			// console.log(this.$parent);
 		},
-		extract() {
+		async extract() {
 			debugger;
 			var ext = this.getFileExt(this.item)
-			this.extractFile(this.item,ext);
-			this.$emit('close')
+			await this.extractFile(this.item, ext);
 			this.filePanel.reload()
+			this.$emit('close')
+
 		}
 	},
 }

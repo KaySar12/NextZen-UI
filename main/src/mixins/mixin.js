@@ -3,6 +3,7 @@ import has from 'lodash/has'
 import union from 'lodash/union'
 import copy from 'clipboard-copy'
 import dayjs from 'dayjs'
+import { forEach } from 'lodash'
 
 const typeMap = {
 	"image-x-generic": ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'svg', 'tiff'],
@@ -155,6 +156,7 @@ export const mixin = {
 		 * @return {void}
 		 */
 		downloadFile(items) {
+			debugger;
 			this.$buefy.toast.open({
 				message: this.$t('Download in preparation...'),
 				type: 'is-white'
@@ -170,6 +172,7 @@ export const mixin = {
 		},
 		// Download Button Action
 		download() {
+			debugger;
 			this.$refs.dropDown?.toggle()
 			this.downloadFile(this.item)
 		},
@@ -361,15 +364,47 @@ export const mixin = {
 
 			deleteItems(paths);
 		},
-		extractFile(items, ext) {
+		async compressFile(items) {
 			debugger;
+			var data = [];
+			items.forEach(item => {
+				data.push(item.path)
+			})
+			const compressItem = async (paths) => {
+				try {
+					const res = await this.$api.file.compress(JSON.stringify(paths));
+					if (res.data.success === 200) {
+						this.$buefy.toast.open({
+							message: this.$t('Compress Successfully'),
+							type: 'is-success'
+						})
+					}
+					else {
+						this.$buefy.toast.open({
+							message: res.data.message,
+							type: 'is-danger'
+						});
+					}
+				} catch (e) {
+					alert('fail to Compress files');
+				}
+			}
+			let paths = [];
+			if (items.constructor === Object) {
+				paths = [items.path];
+			} else if (items.constructor === Array) {
+				paths = items.map((o) => o.path);
+			}
+			compressItem(paths);
+		},
+		async extractFile(items, ext) {
 			let paths = items.path;
-			let url = this.getFileUrl(items)
+			// let url = this.getFileUrl(items)
 			var data = {
 				path: paths,
 				ext: ext
 			};
-			const extractItems = async (data) => {
+			const extractItem = async (data) => {
 				try {
 					const res = await this.$api.file.extract(data);
 					if (res.data.success === 200) {
@@ -377,10 +412,6 @@ export const mixin = {
 							message: this.$t('Extract Successfully'),
 							type: 'is-success'
 						})
-						this.$emit("reload");
-						if (typeof this.reload === "function") {
-							this.reload();
-						}
 					}
 					else {
 						this.$buefy.toast.open({
@@ -394,7 +425,7 @@ export const mixin = {
 				}
 
 			}
-			extractItems(data)
+			extractItem(data)
 		},
 		/**
 		 * @description: Set an image as wallpaper

@@ -37,6 +37,20 @@
             </span>
           </div>
         </b-tooltip>
+        <b-tooltip :label="$t('Compress')" :type="type">
+          <div class="toolbar-item" @click.stop="compress">
+            <span class="has-text-white block">
+              <b-icon icon="storage-outline" :size="size" pack="casa"></b-icon>
+            </span>
+          </div>
+        </b-tooltip>
+        <b-tooltip v-if="this.selectedArray.length === 1 && isCompressed" :label="$t('Extract')" :type="type">
+          <div class="toolbar-item" @click.stop="extract">
+            <span class="has-text-white block">
+              <b-icon icon="up-arrow" :size="size" pack="casa"></b-icon>
+            </span>
+          </div>
+        </b-tooltip>
       </div>
     </div>
   </transition>
@@ -51,6 +65,7 @@ export default {
   },
   props: {
     active: Boolean,
+    selectedArray: Array
   },
   data() {
     return {
@@ -62,7 +77,7 @@ export default {
   watch: {
     active(value) {
       this.isActive = value
-    },
+    }
   },
   methods: {
     download() {
@@ -77,6 +92,14 @@ export default {
     remove() {
       this.$emit('remove')
     },
+    compress() {
+      //alert(this.selectedArray.length);
+      this.$emit('compress')
+    },
+    extract() {
+      // alert(this.selectedArray.length);
+      this.$emit('extract')
+    },
     close() {
       this.isActive = false
       this.$emit('close')
@@ -86,5 +109,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>
