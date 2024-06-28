@@ -7,11 +7,11 @@
  * Copyright (c) 2022 by IceWhale, All Rights Reserved.
  */
 
-import Vue       from 'vue'
+import Vue from 'vue'
 import VueRouter from 'vue-router'
-import api       from '@/service/api'
-import store     from '@/store'
-import route     from './route.js'
+import api from '@/service/api'
+import store from '@/store'
+import route from './route.js'
 
 Vue.use(VueRouter)
 

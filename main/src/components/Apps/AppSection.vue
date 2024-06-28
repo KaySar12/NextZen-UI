@@ -244,6 +244,7 @@ export default {
 						en_us: item.name
 					}
 				})
+				// Check Role
 				// all app list
 				let casaAppList = concat(builtInApplications, orgNewAppList, listLinkApp)
 				// get app sort info.
