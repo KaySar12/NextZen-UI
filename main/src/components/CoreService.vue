@@ -1,8 +1,9 @@
 <template>
 	<swiper ref="mySwiper" :options="swiperOptions">
-		<!-- <swiper-slide v-for="(noticeCard, key) in noticesData" :key="key" :class="{ _singleWidth: showFullCard }">
+		<!-- Check Role -->
+		<swiper-slide v-for="(noticeCard, key) in noticesData" :key="key" :class="{ _singleWidth: showFullCard }">
 			<noticeBlock :noticeData="noticeCard" :noticeType="key" @deleteNotice="refreshNotice"></noticeBlock>
-		</swiper-slide> -->
+		</swiper-slide>
 		<swiper-slide v-if="recommendShow">
 			<sync-block></sync-block>
 		</swiper-slide>

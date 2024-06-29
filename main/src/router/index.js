@@ -29,12 +29,14 @@ VueRouter.prototype.push = function push(location) {
 }
 
 const needInit = async () => {
+	debugger;
 	if (store.state.needInitialization) {
 		return true
 	}
 	try {
 		let userStatusRes = await api.users.getUserStatus();
-		if (userStatusRes.data.success === 200 && !userStatusRes.data.data.initialized) {
+		// if (userStatusRes.data.success === 200 && !userStatusRes.data.data.initialized) {
+		if (userStatusRes.data.success === 200) {
 			store.commit('SET_NEED_INITIALIZATION', true)
 			store.commit('SET_INIT_KEY', userStatusRes.data.data.key)
 			localStorage.removeItem("access_token");
@@ -54,43 +56,37 @@ router.beforeEach(async (to, from, next) => {
 	const accessToken = localStorage.getItem("access_token");
 	const version = localStorage.getItem("version");
 	const requireAuth = to.matched.some(record => record.meta.requireAuth);
-
-	// 判断是否需要初始化
-	let needInitRes = await needInit();
-
+	debugger;
 	if (to.path !== '/welcome') {
-		if (needInitRes) {
-			next('/welcome');
+		if (requireAuth && !accessToken) {
+			next('/login');
 		} else {
-			if (requireAuth && !accessToken) {
-				next('/login');
-			} else {
-				switch (to.path) {
-					case "/login":
-						if (accessToken) {
-							next('/');
-						}
-						break;
+			switch (to.path) {
+				case "/login":
+					if (accessToken) {
+						next('/');
+					}
+					break;
 
-					case "/logout":
+				case "/logout":
+					localStorage.removeItem("access_token");
+					localStorage.removeItem("refresh_token");
+					localStorage.removeItem("wallpaper");
+					localStorage.removeItem("user");
+					next('/login');
+					break;
+
+				default:
+					if (version == null) {
 						localStorage.removeItem("access_token");
-						localStorage.removeItem("refresh_token");
-						localStorage.removeItem("wallpaper");
-						localStorage.removeItem("user");
 						next('/login');
-						break;
-
-					default:
-						if (version == null) {
-							localStorage.removeItem("access_token");
-							next('/login');
-						}
-						break;
-				}
-				next();
+					}
+					break;
 			}
+			next();
 		}
 	} else {
+		let needInitRes = await needInit();
 		if (needInitRes) {
 			next();
 		} else {

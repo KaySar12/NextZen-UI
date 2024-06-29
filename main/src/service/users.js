@@ -15,6 +15,7 @@ const users = {
 	},
 	// get user status [OK]
 	getUserStatus() {
+		debugger;
 		return api.get(`${PREFIX}/status`);
 	},
 

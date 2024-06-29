@@ -3,32 +3,32 @@
 		<div v-if="!isLoading" class="login-panel step4 is-shadow">
 			<div class="is-flex is-justify-content-center ">
 				<div class="has-text-centered">
-					<b-image :src-fallback="require('@/assets/img/account/ava.svg')" src="/v1/users/image?path=/var/lib/casaos/1/avatar.png" class="is-128x128"
-							 rounded></b-image>
-					<!--					<p class="is-size-5 has-text-weight-bold mt-3">{{ username }}</p>-->
+					<b-image :src="require('@/assets/img/logo/nextzen-dark.png')" class="is-128x128"></b-image>
 				</div>
 
 			</div>
 			<b-notification v-model="notificationShow" aria-close-label="Close notification" auto-close role="alert"
-							type="is-danger">
+				type="is-danger">
 				{{ message }}
 			</b-notification>
 			<ValidationObserver ref="observer" v-slot="{ handleSubmit }">
 				<ValidationProvider v-slot="{ errors, valid }" name="User" rules="required">
 					<b-field :label="$t('Username')" :message="errors"
-							 :type="{ 'is-danger': errors[0], 'is-success': valid }"
-							 class="mt-5">
-						<b-input v-model="username" :autofocus="!username" type="text" v-on:keyup.enter.native="handleSubmit(login)"></b-input>
+						:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-5">
+						<b-input v-model="username" :autofocus="!username" type="text"
+							v-on:keyup.enter.native="handleSubmit(login)"></b-input>
 					</b-field>
 				</ValidationProvider>
 				<ValidationProvider v-slot="{ errors, valid }" name="Password" rules="required|min:5" vid="password">
 					<b-field :label="$t('Password')" :message="$t(errors)"
-							 :type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-2">
-						<b-input v-model="password" :autofocus="username" password-reveal
-								 type="password" v-on:keyup.enter.native="handleSubmit(login)"></b-input>
+						:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-2">
+						<b-input v-model="password" :autofocus="username" password-reveal type="password"
+							v-on:keyup.enter.native="handleSubmit(login)"></b-input>
 					</b-field>
 				</ValidationProvider>
 				<b-button class="mt-5" expanded rounded type="is-primary" @click="handleSubmit(login)">{{ $t('Login') }}
+				</b-button>
+				<b-button class="mt-5" expanded rounded type="is-info" @click="register">{{ $t('Register') }}
 				</b-button>
 			</ValidationObserver>
 		</div>
@@ -36,8 +36,9 @@
 </template>
 
 <script>
-import {ValidationObserver, ValidationProvider} from "vee-validate";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 import "@/plugins/vee-validate";
+import { register } from "jshint/src/style";
 
 export default {
 
@@ -55,7 +56,7 @@ export default {
 		ValidationObserver,
 		ValidationProvider,
 	},
-	beforeMount(){
+	beforeMount() {
 		let userString = localStorage.getItem('user')
 		if (userString) {
 			let name = JSON.parse(userString).username || '';
@@ -67,18 +68,80 @@ export default {
 	},
 
 	methods: {
+		async needInit() {
+			debugger;
+			try {
+				let userStatusRes = await this.$api.users.getUserStatus();
+				// if (userStatusRes.data.success === 200 && !userStatusRes.data.data.initialized) {
+				if (userStatusRes.data.success === 200) {
+					this.$store.commit('SET_NEED_INITIALIZATION', true)
+					this.$store.commit('SET_INIT_KEY', userStatusRes.data.data.key)
+					localStorage.removeItem("access_token");
+					localStorage.removeItem("refresh_token");
+					return true
+				} else {
+					return false
+				}
+			} catch (error) {
+				console.error(error)
+				return false
+			}
+		},
+		async register() {
+			debugger;
+			var init = await this.needInit();
+			if (init) {
+				const initKey = this.$store.state.initKey;
+				this.$api.users.register(this.username, this.password, initKey).then(res => {
+					if (res.data.success == 200) {
+						this.loginAction().then(() => {
+							// First login set default app order
+							this.$api.users.setCustomStorage("app_order", { data: ["App Store", "Files"] })
+							return true;
+						});
+					}
+					else {
+						return false;
+					}
+				}).catch(err => {
+					// this.$buefy.toast.open({
+					// 	message: err.response.data.message,
+					// 	type: 'is-danger',
+					// 	position: 'is-top',
+					// 	duration: 5000,
+					// 	queue: false
+					// })
+				})
+			}
+		},
+
+		async checkSshLogin() {
+			debugger;
+			var register = await this.register()
+			if (!register) {
+				await this.loginAction();
+			}
+			this.$messageBus('terminallogs_connect')
+			this.isConnecting = true
+			let postData = {
+				username: String(this.username),
+				password: String(this.password),
+				port: String(this.sshPort || 22)
+			}
+			try {
+				var ssh = await this.$api.sys.checkSshLogin(postData)
+				return ssh
+			} catch (error) {
+			}
+
+		},
 		async login() {
 			try {
-				const userRes = await this.$api.users.login(this.username, this.password)
-				localStorage.setItem("access_token", userRes.data.data.token.access_token);
-				localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
-				localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
-				localStorage.setItem("user", JSON.stringify(userRes.data.data.user));
-
-				this.$store.commit("SET_USER", userRes.data.data.user);
-				this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
-				this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
-
+				debugger;
+				var ssh = await this.checkSshLogin();
+				if (!ssh) {
+					this.loginAction();
+				}
 				const versionRes = await this.$api.sys.getVersion();
 				if (versionRes.data.success == 200) {
 					localStorage.setItem("version", versionRes.data.data.current_version);
@@ -88,6 +151,20 @@ export default {
 				this.message = this.$t("Username or Password error!")
 				this.notificationShow = true
 			}
+		},
+		async loginAction() {
+			const userRes = await this.$api.users.login(this.username, this.password)
+			localStorage.setItem("access_token", userRes.data.data.token.access_token);
+			localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
+			localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
+			localStorage.setItem("user", JSON.stringify(userRes.data.data.user));
+			this.$store.commit("SET_USER", userRes.data.data.user);
+			this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
+			this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
+		},
+		register()
+		{
+			window.location.href ="#/welcome"
 		}
 	}
 }

@@ -106,6 +106,7 @@ const sys = {
 
 	// Check ssh login
 	checkSshLogin(data) {
+		debugger;
 		return api.post(`${PREFIX}/ssh-login`, data);
 	},
 

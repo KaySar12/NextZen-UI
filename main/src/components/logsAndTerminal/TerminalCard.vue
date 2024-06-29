@@ -130,11 +130,11 @@ export default {
 			const term = new Terminal({
 				// rendererType: 'canvas',
 				fontSize: 13,
-				cursorStyle: 'underline', //光标样式
-				cursorBlink: true, //光标闪烁
+				cursorStyle: 'underline', 
+				cursorBlink: true, 
 				theme: { background: '#1E1E1E' },
-				rows: parseInt(this.rows), //行数
-				cols: parseInt(this.cols), // 不指定行数，自动回车后光标从下一行开始
+				rows: parseInt(this.rows), 
+				cols: parseInt(this.cols), 
 				fontFamily: "Consolas, Monaco, monospace",
 			});
 			const attachAddon = new AttachAddon(this.socket);

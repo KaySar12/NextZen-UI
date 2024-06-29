@@ -146,6 +146,7 @@ export default {
 		 * @return {*}
 		 */
 		register() {
+			debugger;
 			const initKey = this.$store.state.initKey;
 			this.$api.users.register(this.username, this.password, initKey).then(res => {
 				if (res.data.success == 200) {
