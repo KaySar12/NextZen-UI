@@ -253,7 +253,7 @@
 									</div>
 									<div class="is-flex-grow-1 mr-4 is-clickable" @click="
 										showAppDetial(item.id)
-										$messageBus('appstorecommunity_detail', item.title)
+									$messageBus('appstorecommunity_detail', item.title)
 										">
 										<h6 class="title is-6 mb-2">{{ item.title }}</h6>
 										<p class="is-size-7 two-line">{{ item.tagline }}</p>
@@ -1017,7 +1017,7 @@ export default {
 							events: {
 								submit: () => {
 									this.currentInstallId = id
-									alert("Install With tips ")
+									//alert("Install With tips ")
 									//Disable install compose app
 									this.installComposeApp(res.data, id)
 								},
@@ -1032,7 +1032,7 @@ export default {
 						this.currentSlide = 1
 					}
 					else {
-						alert("Install with out tip")
+						//alert("Install with out tip")
 						this.installComposeApp(res.data, id)
 					}
 

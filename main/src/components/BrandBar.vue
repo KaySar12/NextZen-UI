@@ -41,7 +41,7 @@ export default {
 			return -(this.line - 1) / this.line * 100 + '%'
 		},
 		isShow() {
-			return this.$route.path !== '/login' || this.$route.path !== '/welcome'
+			return this.$route.path !== '/login' || this.$route.path !== '/register'
 		},
 	},
 	watch: {

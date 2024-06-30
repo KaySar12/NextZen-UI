@@ -88,12 +88,12 @@ const users = {
 		return api.get(`${PREFIX}/${username}`);
 	},
 
-
 	// register [OK]
-	register(username, password, key) {
+	register(username, password, role, key) {
 		return api.post(`${PREFIX}/register`, {
 			username: username,
 			password: password,
+			role: role,
 			key: key
 		});
 	},

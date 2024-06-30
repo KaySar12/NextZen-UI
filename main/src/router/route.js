@@ -19,12 +19,22 @@ export default [
 		}
 	},
 	{
-		path: '/welcome',
-		name: 'Welcome',
+		path: '/register',
+		name: 'Register',
 		hidden: true,
 		component: () => import('@/views/Welcome.vue'),
 		meta: {
 			requireAuth: false,
+			showBackground: true
+		}
+	},
+	{
+		path: '/home',
+		name: 'Home',
+		hidden: true,
+		component: () => import('@/views/Home.vue'),
+		meta: {
+			requireAuth: true,
 			showBackground: true
 		}
 	},

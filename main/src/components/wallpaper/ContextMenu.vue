@@ -1,14 +1,19 @@
 <template>
 	<div>
-		<div class="home-context-menu" :style="{top:y + 'px',left:x+'px'}">
+		<div class="home-context-menu" :style="{ top: y + 'px', left: x + 'px' }">
 			<b-dropdown aria-role="list" close-on-click ref="dropDown" id="dr2" class="file-dropdown"
-						:position="'is-'+verticalPos+'-'+horizontalPos" :animation="ani" :mobile-modal="false">
+				:position="'is-' + verticalPos + '-' + horizontalPos" :animation="ani" :mobile-modal="false">
 				<!-- Blank Start -->
 				<template>
 					<b-dropdown-item aria-role="menuitem" class="is-flex is-align-items-center" key="system-context11"
-									 @click="showChangeWallpaperModal">
+						@click="showChangeWallpaperModal">
 						<b-icon pack="casa" icon="wallpaper-outline" class="mr-1"></b-icon>
 						{{ $t('Change wallpaper') }}
+					</b-dropdown-item>
+					<b-dropdown-item aria-role="menuitem" class="is-flex is-align-items-center" key="system-context12"
+						@click="refreshPage">
+						<b-icon pack="casa" icon="sync-outline" class="mr-1"></b-icon>
+						{{ $t('Refresh') }}
 					</b-dropdown-item>
 				</template>
 				<!-- Blank End -->
@@ -18,8 +23,8 @@
 </template>
 
 <script>
-import {mixin} from '@/mixins/mixin';
-import events  from '@/events/events';
+import { mixin } from '@/mixins/mixin';
+import events from '@/events/events';
 
 export default {
 	mixins: [mixin],
@@ -61,7 +66,12 @@ export default {
 		},
 		showChangeWallpaperModal() {
 			this.$EventBus.$emit(events.SHOW_CHANGE_WALLPAPER_MODAL);
-		}
+		},
+		refreshPage() {
+			this.$router.go();
+			// Or if you want to refresh current route without any query or parameter changes, you can use:
+			// this.$router.replace({ path: '/' });
+		},
 
 	},
 }

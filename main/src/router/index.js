@@ -39,8 +39,8 @@ const needInit = async () => {
 		if (userStatusRes.data.success === 200) {
 			store.commit('SET_NEED_INITIALIZATION', true)
 			store.commit('SET_INIT_KEY', userStatusRes.data.data.key)
-			localStorage.removeItem("access_token");
-			localStorage.removeItem("refresh_token");
+			// localStorage.removeItem("access_token");
+			// localStorage.removeItem("refresh_token");
 			return true
 		} else {
 			return false
@@ -53,47 +53,49 @@ const needInit = async () => {
 
 
 router.beforeEach(async (to, from, next) => {
-	const accessToken = localStorage.getItem("access_token");
-	const version = localStorage.getItem("version");
-	const requireAuth = to.matched.some(record => record.meta.requireAuth);
 	debugger;
-	if (to.path !== '/welcome') {
-		if (requireAuth && !accessToken) {
+	const accessToken = localStorage.getItem("access_token");
+	const requireAuth = to.matched.some(record => record.meta.requireAuth);
+	if (requireAuth && accessToken) {
+		const userData = JSON.parse(localStorage.getItem('user'));
+		var oguser = await api.users.getUserInfoByName(userData.username)
+		if (userData.role != oguser.data.data.role) {
+			localStorage.removeItem("access_token");
+			localStorage.removeItem("refresh_token");
+			localStorage.removeItem("wallpaper");
+			localStorage.removeItem("user");
 			next('/login');
-		} else {
-			switch (to.path) {
-				case "/login":
-					if (accessToken) {
-						next('/');
-					}
-					break;
-
-				case "/logout":
-					localStorage.removeItem("access_token");
-					localStorage.removeItem("refresh_token");
-					localStorage.removeItem("wallpaper");
-					localStorage.removeItem("user");
-					next('/login');
-					break;
-
-				default:
-					if (version == null) {
-						localStorage.removeItem("access_token");
-						next('/login');
-					}
-					break;
-			}
-			next();
-		}
-	} else {
-		let needInitRes = await needInit();
-		if (needInitRes) {
-			next();
-		} else {
-			next("/login");
 		}
 	}
-});
+	// Prevent direct navigation from /login to /logout and vice versa to avoid redirect loops
+	if ((from.path === '/login' && to.path === '/logout') || (from.path === '/logout' && to.path === '/login')) {
+		// If navigating directly between /login and /logout, stay on the current page to prevent loop
+		return next(false);
+	}
+	if (requireAuth && !accessToken) {
+		// If the route requires authentication and there's no access token, redirect to /login
+		next('/login');
+	} else if (to.path === '/logout') {
+		// Specific handling for /logout to clear tokens and redirect to /login
+		localStorage.removeItem("access_token");
+		localStorage.removeItem("refresh_token");
+		localStorage.removeItem("wallpaper");
+		localStorage.removeItem("user");
+		next('/login');
+	} else if (to.path !== '/login' && !accessToken && to.path !== '/logout') {
 
+		next('/login');
+
+	} else if (to.path === '/login' && accessToken) {
+		// If already on /login with an access token, redirect to homepage or dashboard
+		next('/home');
+	} else {
+		if (to.path === '/register') {
+			await needInit()
+		}
+		// For all other cases, proceed with the navigation
+		next();
+	}
+});
 
 export default router

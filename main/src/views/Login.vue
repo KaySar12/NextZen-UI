@@ -1,5 +1,17 @@
 <template>
 	<div id="login-page" class="is-flex is-justify-content-center is-align-items-center ">
+		<div v-if="isLoading" class="self-building-square-spinner">
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square clear"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+			<div class="square clear"></div>
+			<div class="square"></div>
+			<div class="square"></div>
+		</div>
+
 		<div v-if="!isLoading" class="login-panel step4 is-shadow">
 			<div class="is-flex is-justify-content-center ">
 				<div class="has-text-centered">
@@ -28,8 +40,6 @@
 				</ValidationProvider>
 				<b-button class="mt-5" expanded rounded type="is-primary" @click="handleSubmit(login)">{{ $t('Login') }}
 				</b-button>
-				<b-button class="mt-5" expanded rounded type="is-info" @click="register">{{ $t('Register') }}
-				</b-button>
 			</ValidationObserver>
 		</div>
 	</div>
@@ -39,7 +49,6 @@
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import "@/plugins/vee-validate";
 import { register } from "jshint/src/style";
-
 export default {
 
 	name: "login-page",
@@ -69,7 +78,6 @@ export default {
 
 	methods: {
 		async needInit() {
-			debugger;
 			try {
 				let userStatusRes = await this.$api.users.getUserStatus();
 				// if (userStatusRes.data.success === 200 && !userStatusRes.data.data.initialized) {
@@ -83,16 +91,14 @@ export default {
 					return false
 				}
 			} catch (error) {
-				console.error(error)
 				return false
 			}
 		},
 		async register() {
-			debugger;
 			var init = await this.needInit();
 			if (init) {
 				const initKey = this.$store.state.initKey;
-				this.$api.users.register(this.username, this.password, initKey).then(res => {
+				this.$api.users.register(this.username, this.password, "admin", initKey).then(res => {
 					if (res.data.success == 200) {
 						this.loginAction().then(() => {
 							// First login set default app order
@@ -104,23 +110,15 @@ export default {
 						return false;
 					}
 				}).catch(err => {
-					// this.$buefy.toast.open({
-					// 	message: err.response.data.message,
-					// 	type: 'is-danger',
-					// 	position: 'is-top',
-					// 	duration: 5000,
-					// 	queue: false
-					// })
+					return false;
 				})
 			}
 		},
 
 		async checkSshLogin() {
 			debugger;
-			var register = await this.register()
-			if (!register) {
-				await this.loginAction();
-			}
+			await this.register()
+			await this.loginAction();
 			this.$messageBus('terminallogs_connect')
 			this.isConnecting = true
 			let postData = {
@@ -130,24 +128,22 @@ export default {
 			}
 			try {
 				var ssh = await this.$api.sys.checkSshLogin(postData)
-				return ssh
+				return ssh != null || ssh != undefined
 			} catch (error) {
+				return false
 			}
-
 		},
 		async login() {
 			try {
-				debugger;
+				this.isLoading = true;
 				var ssh = await this.checkSshLogin();
 				if (!ssh) {
-					this.loginAction();
+					await this.loginAction();
 				}
-				const versionRes = await this.$api.sys.getVersion();
-				if (versionRes.data.success == 200) {
-					localStorage.setItem("version", versionRes.data.data.current_version);
-				}
-				this.$router.push("/");
+				this.isLoading = false
+				window.location.href = "#/home"
 			} catch (err) {
+				this.isLoading = false
 				this.message = this.$t("Username or Password error!")
 				this.notificationShow = true
 			}
@@ -161,15 +157,100 @@ export default {
 			this.$store.commit("SET_USER", userRes.data.data.user);
 			this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
 			this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
+			const versionRes = await this.$api.sys.getVersion();
+			if (versionRes.data.success == 200) {
+				localStorage.setItem("version", versionRes.data.data.current_version);
+			}
 		},
-		register()
-		{
-			window.location.href ="#/welcome"
-		}
 	}
 }
 </script>
+<style>
+.self-building-square-spinner,
+.self-building-square-spinner * {
+	box-sizing: border-box;
+}
 
+.self-building-square-spinner {
+	height: 40px;
+	width: 40px;
+	top: calc(-10px * 2 / 3);
+}
+
+.self-building-square-spinner .square {
+	height: 10px;
+	width: 10px;
+	top: calc(-10px * 2 / 3);
+	margin-right: calc(10px / 3);
+	margin-top: calc(10px / 3);
+	background: #0b8ae6;
+	float: left;
+	position: relative;
+	opacity: 0;
+	animation: self-building-square-spinner 6s infinite;
+}
+
+.self-building-square-spinner .square:nth-child(1) {
+	animation-delay: calc(300ms * 6);
+}
+
+.self-building-square-spinner .square:nth-child(2) {
+	animation-delay: calc(300ms * 7);
+}
+
+.self-building-square-spinner .square:nth-child(3) {
+	animation-delay: calc(300ms * 8);
+}
+
+.self-building-square-spinner .square:nth-child(4) {
+	animation-delay: calc(300ms * 3);
+}
+
+.self-building-square-spinner .square:nth-child(5) {
+	animation-delay: calc(300ms * 4);
+}
+
+.self-building-square-spinner .square:nth-child(6) {
+	animation-delay: calc(300ms * 5);
+}
+
+.self-building-square-spinner .square:nth-child(7) {
+	animation-delay: calc(300ms * 0);
+}
+
+.self-building-square-spinner .square:nth-child(8) {
+	animation-delay: calc(300ms * 1);
+}
+
+.self-building-square-spinner .square:nth-child(9) {
+	animation-delay: calc(300ms * 2);
+}
+
+.self-building-square-spinner .clear {
+	clear: both;
+}
+
+@keyframes self-building-square-spinner {
+	0% {
+		opacity: 0;
+	}
+
+	5% {
+		opacity: 1;
+		top: 0;
+	}
+
+	50.9% {
+		opacity: 1;
+		top: 0;
+	}
+
+	55.9% {
+		opacity: 0;
+		top: inherit;
+	}
+}
+</style>
 <style lang="scss">
 #login-page {
 	height: calc(100% - 5.5rem);
@@ -210,6 +291,7 @@ export default {
 		}
 	}
 }
+
 
 @media screen and (max-width: 480px) {
 	.login-panel {

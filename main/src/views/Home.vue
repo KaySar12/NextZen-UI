@@ -26,7 +26,7 @@
 							<!-- SearchBar End -->
 
 							<!-- core-service Start -->
-							<section>
+							<section v-if="isAuthorized">
 								<transition name="fade">
 									<core-service></core-service>
 								</transition>
@@ -116,6 +116,10 @@ export default {
 		searchbarShow() {
 			return this.$store.state.searchEngineSwitch
 		},
+		isAuthorized() {
+			const userData = JSON.parse(localStorage.getItem('user'));
+			return userData && userData.role === 'admin';
+		}
 	},
 	created() {
 		this.getHardwareInfo();
@@ -131,12 +135,11 @@ export default {
 			this.showUpdateCompleteModal()
 			localStorage.removeItem('is_update')
 		}
-		if (sessionStorage.getItem('fromWelcome')) {
-			this.$messageBus('global_newvisit')
-			//this.rssConfirm()
-			// one-off consumption
-			sessionStorage.removeItem('fromWelcome')
-		}
+		// if (sessionStorage.getItem('fromWelcome')) {
+		// 	this.$messageBus('global_newvisit')
+		// 	this.rssConfirm()
+		// 	sessionStorage.removeItem('fromWelcome')
+		// }
 		this.$messageBus('global_visit')
 
 		this.$EventBus.$on('casaUI:openStorageManager', () => {
@@ -312,7 +315,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .top-bar {
 	opacity: 0.7;
 	transition: opacity 0.3s ease;

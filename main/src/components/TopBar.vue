@@ -31,7 +31,7 @@
 			<!-- Account Dropmenu End -->
 
 			<!-- Settings Dropmenu Start -->
-			<b-dropdown ref="settingsDrop" animation="fade1" aria-role="list" class="navbar-item"
+			<b-dropdown ref="settingsDrop" animation="fade1" aria-role="list" class="navbar-item "
 				@active-change="onOpen">
 				<template #trigger>
 					<b-tooltip :active="!$store.state.isMobile" :label="$t('Settings')" position="is-right"
@@ -102,7 +102,7 @@
 					<!-- Language End -->
 
 					<!-- WebUI Port Start -->
-					<div
+					<!-- <div
 						class="is-flex is-align-items-center mb-1 _is-large _box hover-effect _is-radius pr-2 mr-4 ml-4">
 						<div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
 							<b-icon class="mr-1 ml-2" icon="port-outline" pack="casa" size="is-20"></b-icon>
@@ -115,7 +115,7 @@
 							<b-button rounded size="is-small" type="is-dark" @click="showPortPanel">{{ $t("Change") }}
 							</b-button>
 						</div>
-					</div>
+					</div> -->
 					<!-- WebUI Port End -->
 
 					<!-- Background Start -->
@@ -170,7 +170,7 @@
 							</b-field>
 						</div>
 					</div> -->
-					<div
+					<!-- <div
 						class="is-flex is-align-items-center mb-1 _is-large _box hover-effect _is-radius pr-2 mr-4 ml-4">
 						<div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
 							<b-icon class="mr-1 ml-2" icon="display-applications-outline" pack="casa"
@@ -184,7 +184,7 @@
 									@input="saveData"></b-switch>
 							</b-field>
 						</div>
-					</div>
+					</div> -->
 					<!-- Recommended modules Switch End  -->
 
 					<!-- Automount USB Drive Start  -->
@@ -233,7 +233,7 @@
 					</div>
 					<!-- Update End -->
 					<!-- Restart or Shutdown Start -->
-					<div
+					<div v-if="isAuthorized"
 						class="is-flex is-align-content-center is-justify-content-center _footer mt-4 pl-3 pr-3 pt-2 pb-2">
 						<div class="mr-1 column is-half is-flex is-align-items-center is-justify-content-center hover-effect is-clickable _is-radius _is-normal"
 							@click="power('Restart')">
@@ -251,16 +251,29 @@
 				</b-dropdown-item>
 			</b-dropdown>
 			<!-- Settings Dropmenu End -->
-
 			<!-- Terminal  Start -->
-			<div class="is-flex is-align-items-center ml-3 _fixed-height" @click="showTerminalPanel">
+			<div v-if="isAuthorized" class="is-flex is-align-items-center ml-3 _fixed-height"
+				@click="showTerminalPanel">
 				<b-tooltip :active="!$store.state.isMobile" :label="$t('Terminal & Logs')" position="is-right"
 					style="height: 1.25rem" type="is-dark">
 					<b-icon class="picon" icon="terminal-outline" pack="casa" size="is-20"></b-icon>
 				</b-tooltip>
 			</div>
+			<a v-if="isAuthorized" href="#/register" class="is-flex is-align-items-center ml-5 _fixed-height">
+				<b-tooltip :active="!$store.state.isMobile" :label="$t('Create New User')" position="is-right"
+					style="height: 1.25rem" type="is-dark">
+					<b-icon class="picon" icon="user" pack="casa" size="is-20"></b-icon>
+				</b-tooltip>
+			</a>
+			<!-- <div v-if="isAuthorized" class="is-flex is-align-items-center ml-5 _fixed-height" @click="deleteAll">
+				<b-tooltip :active="!$store.state.isMobile" :label="$t('Delete All User')" position="is-right"
+					style="height: 1.25rem" type="is-dark">
+					<b-icon class="picon" icon="trash-outline" pack="casa" size="is-20"></b-icon>
+				</b-tooltip>
+			</div> -->
 			<a :href="this.$i18n.locale === 'vi_vn' ? 'https://doc.nextzenos.com/howtouse/h%C6%B0%E1%BB%9Bng-d%E1%BA%ABn-s%E1%BB%AD-d%E1%BB%A5ng-theo-t%C3%ADnh-n%C4%83ng/giao-di%E1%BB%87n-admin.html' : 'https://doc.nextzenos.com/howtouse-en/instructions-for-use-by-feature/admin-interface.html'"
-				target="_blank" class="is-flex is-align-items-center ml-5 _fixed-height">
+				target="_blank" class="is-flex is-align-items-center _fixed-height"
+				:class="{ 'ml-5': isAuthorized, 'ml-4': !isAuthorized }">
 				<b-tooltip :active="!$store.state.isMobile" :label="$t('Documentation')" position="is-right"
 					style="height: 1.25rem" type="is-dark">
 					<img data-v-f34e36fa="" :src="require('@/assets/img/social/doc.png')" alt="pending" class="is-20x20"
@@ -365,6 +378,7 @@ export default {
 			showPower: false,
 			showPowerTitle: "",
 			showPowerMessage: "",
+
 		};
 	},
 	props: {
@@ -382,6 +396,10 @@ export default {
 		isRaspberryPi() {
 			return this.deviceModel.toLowerCase().indexOf("raspberry") >= 0;
 		},
+		isAuthorized() {
+			const userData = JSON.parse(localStorage.getItem('user'));
+			return userData && userData.role === 'admin';
+		}
 	},
 	watch: {
 		"barData.lang": {
@@ -473,7 +491,10 @@ export default {
 				this.barData = saveRes.data.data;
 			}
 		},
-
+		// async deleteAll() {
+		// 	localStorage.clear();
+		// 	await this.$api.users.deleteAllUser();
+		// },
 		/**
 		 * @description: Handle Dropmenu state
 		 * @param {Boolean} isOpen

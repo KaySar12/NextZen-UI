@@ -11,7 +11,7 @@
 	<div id="login-page" class="is-flex is-justify-content-center is-align-items-center">
 		<div v-if="!isLoading" v-animate-css="initAni" :class="'step' + step" class="login-panel is-shadow">
 
-			<div v-if="step == 1" class="has-text-centered">
+			<!-- <div v-if="step == 1" class="has-text-centered">
 				<div v-animate-css="s1Ani" class=" is-flex is-justify-content-center">
 					<b-image :src="require('@/assets/img/logo/nextzen-dark.png')" class="is-128x128 mb-4"></b-image>
 				</div>
@@ -26,39 +26,43 @@
 						$t(`Go →`)
 					}}
 				</b-button>
-			</div>
+			</div> -->
 
-			<div v-if="step == 2">
+			<div v-if="step == 1">
 				<h2 class="title is-3  has-text-centered">{{ $t('Create Account') }}</h2>
 				<div class="is-flex is-justify-content-center ">
-					<div class="has-text-centered">
-						<b-image :src="require('@/assets/img/account/ava.svg')" class="is-128x128"
-								 rounded></b-image>
-					</div>
 				</div>
 				<ValidationObserver ref="observer" v-slot="{ handleSubmit }">
 					<ValidationProvider v-slot="{ errors, valid }" name="User" rules="required">
 						<b-field :label="$t('Username')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }">
+							:type="{ 'is-danger': errors[0], 'is-success': valid }">
 							<b-input v-model="username" type="text"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
+								v-on:keyup.enter.native="handleSubmit(register)"></b-input>
 						</b-field>
 					</ValidationProvider>
 					<ValidationProvider v-slot="{ errors, valid }" name="Password" rules="required|min:5"
-										vid="password">
+						vid="password">
 						<b-field :label="$t('Password')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }"
-								 class="mt-4">
+							:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-4">
 							<b-input v-model="password" password-reveal type="password"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
+								v-on:keyup.enter.native="handleSubmit(register)"></b-input>
 						</b-field>
 					</ValidationProvider>
 					<ValidationProvider v-slot="{ errors, valid }" name="Password Confirmation"
-										rules="required|confirmed:password">
+						rules="required|confirmed:password">
 						<b-field :label="$t('Confirm Password')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-4">
+							:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-4">
 							<b-input v-model="confirmation" password-reveal type="password"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
+								v-on:keyup.enter.native="handleSubmit(register)"></b-input>
+						</b-field>
+					</ValidationProvider>
+					<ValidationProvider v-slot="{ errors, valid }" name="Role" rules="required">
+						<b-field :label="$t('Select Role')" :message="$t(errors)"
+							:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-4">
+							<b-select v-model="role">
+								<option value="admin">Admin</option>
+								<option value="user">User</option>
+							</b-select>
 						</b-field>
 					</ValidationProvider>
 					<b-button class="mt-5" expanded rounded type="is-primary" @click="handleSubmit(register)">
@@ -67,11 +71,11 @@
 				</ValidationObserver>
 			</div>
 
-			<div v-if="step == 3" class="has-text-centered ">
+			<div v-if="step == 2" class="has-text-centered ">
 				<h2 class="title is-3  has-text-centered">{{ $t('All things done!') }}</h2>
 				<div class="is-flex is-align-items-center is-justify-content-center">
 					<lottie-animation :animationData="require('@/assets/ani/done.json')" :autoPlay="true" :loop="false"
-									  class="animation" @complete="complete"></lottie-animation>
+						class="animation" @complete="complete"></lottie-animation>
 				</div>
 			</div>
 		</div>
@@ -79,10 +83,10 @@
 </template>
 
 <script>
-import {ValidationObserver, ValidationProvider} from "vee-validate";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 import "@/plugins/vee-validate";
-import LottieAnimation                          from "lottie-web-vue";
-import smoothReflow                             from 'vue-smooth-reflow'
+import LottieAnimation from "lottie-web-vue";
+import smoothReflow from 'vue-smooth-reflow'
 
 export default {
 
@@ -93,6 +97,7 @@ export default {
 			step: 1,
 			username: '',
 			password: '',
+			role: '',
 			confirmation: "",
 			isLoading: true,
 			isLogin: false,
@@ -141,20 +146,38 @@ export default {
 	},
 
 	methods: {
-		/**
-		 * @description: register
-		 * @return {*}
-		 */
+		async needInit() {
+			try {
+				let userStatusRes = await this.$api.users.getUserStatus();
+				// if (userStatusRes.data.success === 200 && !userStatusRes.data.data.initialized) {
+				if (userStatusRes.data.success === 200) {
+					this.$store.commit('SET_NEED_INITIALIZATION', true)
+					this.$store.commit('SET_INIT_KEY', userStatusRes.data.data.key)
+					localStorage.removeItem("access_token");
+					localStorage.removeItem("refresh_token");
+					return true
+				} else {
+					return userStatusRes.data.data.key
+				}
+			} catch (error) {
+				return null
+			}
+		},
 		register() {
 			debugger;
-			const initKey = this.$store.state.initKey;
-			this.$api.users.register(this.username, this.password, initKey).then(res => {
+			var initKey = this.$store.state.initKey;
+			if (!initKey) {
+				this.needInit().then(key => {
+					initKey = key
+				})
+			}
+			this.$api.users.register(this.username, this.password, this.role, initKey).then(res => {
 				if (res.data.success == 200) {
 					this.login().then(() => {
 						// First login set default app order
-						this.$api.users.setCustomStorage("app_order", {data: ["App Store", "Files"]})
+						this.$api.users.setCustomStorage("app_order", { data: ["App Store", "Files"] })
 					});
-					this.goToStep(3);
+					this.goToStep(2);
 				}
 			}).catch(err => {
 				this.$buefy.toast.open({
@@ -189,7 +212,7 @@ export default {
 				if (versionRes.data.success == 200) {
 					localStorage.setItem("version", versionRes.data.data.current_version);
 				}
-				sessionStorage.setItem("fromWelcome", true);
+				// sessionStorage.setItem("fromWelcome", true);
 				this.isLogin = true
 
 			} else {
@@ -211,7 +234,13 @@ export default {
 	}
 }
 </script>
-
+<style>
+select,
+option {
+	background: rgba(255, 255, 255, 0.32) !important;
+	border-color: transparent !important;
+}
+</style>
 <style lang="scss">
 .animation {
 	width: 120px;
@@ -305,7 +334,8 @@ export default {
 // Temporary
 .__attached_title {
 	// former color.Not in existing architecture.
-	color: hsl(211, 72%, 20%, 100%);;
+	color: hsl(211, 72%, 20%, 100%);
+	;
 }
 
 .__attached_sub_title {

@@ -220,7 +220,6 @@ export const mixin = {
 			}
 
 		},
-
 		// Get Image Thumb URL
 		getThumbUrl(item) {
 			let apiUrl = `${this.baseUrl}image?`;

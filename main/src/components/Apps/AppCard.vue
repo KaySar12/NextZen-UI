@@ -1,9 +1,17 @@
 <template>
-	<div class="common-card is-flex is-align-items-center is-justify-content-center  app-card"
+	<div class="common-card is-flex is-align-items-center is-justify-content-center  app-card "
 		@mouseleave="hover = true" @mouseover="hover = true">
 
+		<div v-if="item.app_type !== 'system' && !isContainerApp && !isUninstalling && !isAuthorized"
+			class="action-btn">
+			<b-dropdown ref="dro" :mobile-modal="false" :triggers="['contextmenu', 'click']" animation="fade1"
+				append-to-body aria-role="list" class="app-card-drop" :position="dropdownPosition"
+				@active-change="setDropState">
+			</b-dropdown>
+		</div>
 		<!-- Action Button Start -->
-		<div v-if="item.app_type !== 'system' && !isContainerApp && !isUninstalling" class="action-btn">
+		<div v-if="item.app_type !== 'system' && !isContainerApp && !isUninstalling && isAuthorized"
+			class="action-btn">
 			<!-- Check Role -->
 			<b-dropdown ref="dro" :mobile-modal="false" :triggers="['contextmenu', 'click']" animation="fade1"
 				append-to-body aria-role="list" class="app-card-drop" :position="dropdownPosition"
@@ -137,6 +145,7 @@ import tipEditorModal from "@/components/Apps/TipEditorModal.vue";
 import YAML from "yaml";
 import commonI18n, { ice_i18n } from "@/mixins/base/common-i18n";
 import FileSaver from 'file-saver';
+import { mixin } from '@/mixins/mixin';
 
 export default {
 	name: "app-card",
@@ -144,7 +153,7 @@ export default {
 		cTooltip,
 		tipEditorModal,
 	},
-	mixins: [business_ShowNewAppTag, business_OpenThirdApp, business_LinkApp, commonI18n],
+	mixins: [mixin, business_ShowNewAppTag, business_OpenThirdApp, business_LinkApp, commonI18n],
 	inject: ["homeShowFiles", "openAppStore"],
 	data() {
 		return {
@@ -223,7 +232,10 @@ export default {
 		shutDownClass() {
 			return this.item.status !== 'running' ? "shutdown-rounded" : ""
 		},
-
+		isAuthorized() {
+			const userData = JSON.parse(localStorage.getItem('user'));
+			return userData && userData.role === 'admin';
+		}
 	},
 
 	watch: {

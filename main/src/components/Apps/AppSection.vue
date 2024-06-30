@@ -6,7 +6,8 @@
 				title="Apps">
 			</app-section-title-tip>
 
-			<b-dropdown animation="fade1" aria-role="menu" class="file-dropdown" position="is-bottom-left">
+			<b-dropdown v-if="isAuthorized" animation="fade1" aria-role="menu" class="file-dropdown"
+				position="is-bottom-left">
 				<template #trigger>
 					<b-icon class="polymorphic is-clickable has-text-grey-100" icon="plus-outline" pack="casa"
 						size="is-24"></b-icon>
@@ -48,8 +49,8 @@
 					title="Legacy app (To be rebuilt).">
 				</app-section-title-tip>
 				<template>
-				 <b-icon @click.native="toggleLegacyApp()" class="polymorphic is-clickable has-text-grey-100"
-					:icon="!display ? 'minus-outline' : 'plus-outline'" pack="casa" size="is-24"></b-icon>
+					<b-icon @click.native="toggleLegacyApp()" class="polymorphic is-clickable has-text-grey-100"
+						:icon="!display ? 'minus-outline' : 'plus-outline'" pack="casa" size="is-24"></b-icon>
 				</template>
 			</div>
 
@@ -57,15 +58,15 @@
 
 			<!-- App List Start -->
 			<transition name="slide">
-			<div v-if="!display" class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
+				<div v-if="!display" class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
 
-				<!-- Application not imported Start -->
-				<div v-for="item in oldAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle ">
-					<app-card :isCasa="false" :item="item" @configApp="showConfigPanel" @importApp="showContainerPanel"
-						@updateState="getList"></app-card>
+					<!-- Application not imported Start -->
+					<div v-for="item in oldAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle ">
+						<app-card :isCasa="false" :item="item" @configApp="showConfigPanel"
+							@importApp="showContainerPanel" @updateState="getList"></app-card>
+					</div>
+					<!-- Application not imported End -->
 				</div>
-				<!-- Application not imported End -->
-			</div>
 			</transition>
 			<!-- App List End -->
 		</template>
@@ -135,7 +136,7 @@ export default {
 			retryCount: 0,
 			appListErrorMessage: '',
 			skCount: 0,
-			ListRefreshTimer: null
+			ListRefreshTimer: null,
 		}
 	},
 	components: {
@@ -163,6 +164,10 @@ export default {
 		},
 		exsitingAppsShow() {
 			return this.$store.state.existingAppsSwitch
+		},
+		isAuthorized() {
+			const userData = JSON.parse(localStorage.getItem('user'));
+			return userData && userData.role === 'admin';
 		}
 	},
 	created() {
@@ -246,7 +251,13 @@ export default {
 				})
 				// Check Role
 				// all app list
-				let casaAppList = concat(builtInApplications, orgNewAppList, listLinkApp)
+				let casaAppList;
+				let baseAppList = concat(orgNewAppList, listLinkApp);
+				if (this.isAuthorized) {
+					casaAppList = concat(builtInApplications, baseAppList);
+				} else {
+					casaAppList = baseAppList;
+				}
 				// get app sort info.
 				let lateSortList = await this.$api.users
 					.getCustomStorage(orderConfig)
