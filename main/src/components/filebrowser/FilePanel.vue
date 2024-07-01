@@ -449,9 +449,9 @@ export default {
 
 	mounted() {
 		this.init();
-		this.intervalId = setInterval(() => {
-			this.reload();
-		}, 3000);
+		// this.intervalId = setInterval(() => {
+		// 	this.reload();
+		// }, 3000);
 		if (this.$route.path == "/files") {
 			this.init();
 			// this.isLoading = false;
@@ -477,7 +477,7 @@ export default {
 		this.$EventBus.$off(events.SHOW_FILES_SIDEBAR, this.handleShowSideBar);
 		this.$EventBus.$off(events.HIDE_FILES_SIDEBAR, this.handleHideSideBar);
 		this.destroyedAction();
-		clearInterval(this.intervalId);
+		//clearInterval(this.intervalId);
 	},
 
 	methods: {
@@ -988,6 +988,9 @@ export default {
 					: this.selectedArray;
 			await this.compressFile(extractItem)
 			this.handleClose();
+			setTimeout(function () {
+				this.reload()
+			}, 2000);
 		},
 		async handleExtract() {
 			const extractItem =
@@ -996,6 +999,9 @@ export default {
 					: this.selectedArray;
 			await this.extractFile(extractItem)
 			this.handleClose();
+			setTimeout(function () {
+				this.reload()
+			}, 1000);
 		},
 		/*************************************************
 		 * PART 4  Share Action

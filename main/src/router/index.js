@@ -30,9 +30,8 @@ VueRouter.prototype.push = function push(location) {
 
 const needInit = async () => {
 	debugger;
-	if (store.state.needInitialization) {
-		return true
-	}
+	store.state.needInitialization = false;
+	store.state.initKey = "";
 	try {
 		let userStatusRes = await api.users.getUserStatus();
 		// if (userStatusRes.data.success === 200 && !userStatusRes.data.data.initialized) {

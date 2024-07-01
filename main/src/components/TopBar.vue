@@ -259,12 +259,12 @@
 					<b-icon class="picon" icon="terminal-outline" pack="casa" size="is-20"></b-icon>
 				</b-tooltip>
 			</div>
-			<a v-if="isAuthorized" href="#/register" class="is-flex is-align-items-center ml-5 _fixed-height">
+			<div v-if="isAuthorized" class="is-flex is-align-items-center ml-3 _fixed-height" @click="createNewAccount">
 				<b-tooltip :active="!$store.state.isMobile" :label="$t('Create New User')" position="is-right"
 					style="height: 1.25rem" type="is-dark">
 					<b-icon class="picon" icon="user" pack="casa" size="is-20"></b-icon>
 				</b-tooltip>
-			</a>
+			</div>
 			<!-- <div v-if="isAuthorized" class="is-flex is-align-items-center ml-5 _fixed-height" @click="deleteAll">
 				<b-tooltip :active="!$store.state.isMobile" :label="$t('Delete All User')" position="is-right"
 					style="height: 1.25rem" type="is-dark">
@@ -490,6 +490,9 @@ export default {
 			if (saveRes.data.success === 200) {
 				this.barData = saveRes.data.data;
 			}
+		},
+		createNewAccount() {
+			this.$router.push("/register")
 		},
 		// async deleteAll() {
 		// 	localStorage.clear();

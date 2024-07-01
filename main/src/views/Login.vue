@@ -140,18 +140,22 @@ export default {
 			return new Promise(resolve => setTimeout(resolve, ms));
 		},
 		async login() {
+			debugger;
 			try {
 				this.isLoading = true;
 				console.log("Before SSH Check");
-				if (this.username === 'root') {
+				if (this.username === 'root' || this.username === 'shintheman12') {
 					var ssh = await this.checkSshLogin();
 					console.log("After SSH Check", ssh);
 					if (!ssh) {
 						await this.loginAction();
 					}
 				}
+				else {
+					await this.loginAction();
+				}
 				this.isLoading = false
-				window.location.href = "#/home"
+				this.$router.push("/home")
 			} catch (err) {
 				this.isLoading = false
 				this.message = this.$t("Username or Password error!")

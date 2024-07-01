@@ -44,13 +44,13 @@
             </span>
           </div>
         </b-tooltip>
-        <b-tooltip v-if="this.selectedArray.length === 1 && isCompressed" :label="$t('Extract')" :type="type">
+        <!-- <b-tooltip v-if="this.selectedArray.length === 1 && isCompressed" :label="$t('Extract')" :type="type">
           <div class="toolbar-item" @click.stop="extract">
             <span class="has-text-white block">
               <b-icon icon="up-arrow" :size="size" pack="casa"></b-icon>
             </span>
           </div>
-        </b-tooltip>
+        </b-tooltip> -->
       </div>
     </div>
   </transition>

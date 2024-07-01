@@ -237,6 +237,7 @@ export default {
 			await this.extractFile(this.item, ext);
 			this.filePanel.handleClose();
 			this.filePanel.reload();
+
 		},
 		// Paste File
 		paste(style = "overwrite") {

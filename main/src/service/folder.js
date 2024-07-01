@@ -8,7 +8,7 @@
  * 
  * Copyright (c) 2022 by IceWhale, All Rights Reserved. 
  */
-import {api} from "./service.js";
+import { api } from "./service.js";
 
 const PREFIX = "/folder"
 

@@ -64,7 +64,7 @@ export default {
 			debugger;
 			var ext = this.getFileExt(this.item)
 			await this.extractFile(this.item, ext);
-			// this.filePanel.reload()
+			this.filePanel.reload()
 			this.$emit('close')
 
 		}
