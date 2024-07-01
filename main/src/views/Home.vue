@@ -26,11 +26,11 @@
 							<!-- SearchBar End -->
 
 							<!-- core-service Start -->
-							<section v-if="isAuthorized">
+							<!-- <section v-if="isAuthorized">
 								<transition name="fade">
 									<core-service></core-service>
 								</transition>
-							</section>
+							</section> -->
 							<!-- core-service End -->
 
 							<!-- Apps Start -->

@@ -98,7 +98,8 @@
 
 										<!-- Upload Button Start -->
 										<global-action-button @showNewFileModal="showNewFileModal"
-											@showNewFolderModal="showNewFolderModal" :loading="true"></global-action-button>
+											@showNewFolderModal="showNewFolderModal"
+											:loading="true"></global-action-button>
 										<!-- Upload Button End -->
 
 										<!--  Close Button Start -->
@@ -448,6 +449,9 @@ export default {
 
 	mounted() {
 		this.init();
+		this.intervalId = setInterval(() => {
+			this.reload();
+		}, 3000);
 		if (this.$route.path == "/files") {
 			this.init();
 			// this.isLoading = false;
@@ -473,6 +477,7 @@ export default {
 		this.$EventBus.$off(events.SHOW_FILES_SIDEBAR, this.handleShowSideBar);
 		this.$EventBus.$off(events.HIDE_FILES_SIDEBAR, this.handleHideSideBar);
 		this.destroyedAction();
+		clearInterval(this.intervalId);
 	},
 
 	methods: {
@@ -983,7 +988,6 @@ export default {
 					: this.selectedArray;
 			await this.compressFile(extractItem)
 			this.handleClose();
-			this.reload();
 		},
 		async handleExtract() {
 			const extractItem =
@@ -992,7 +996,6 @@ export default {
 					: this.selectedArray;
 			await this.extractFile(extractItem)
 			this.handleClose();
-			this.reload();
 		},
 		/*************************************************
 		 * PART 4  Share Action

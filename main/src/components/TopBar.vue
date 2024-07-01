@@ -210,7 +210,7 @@
 					<!-- Automount USB Drive End  -->
 
 					<!-- Update Start -->
-					<div class="_is-large hover-effect _is-radius pr-2 mr-4 ml-4">
+					<div v-if="isAuthorized" class="_is-large hover-effect _is-radius pr-2 mr-4 ml-4">
 						<div class="is-flex is-align-items-center">
 							<div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
 								<b-icon class="mr-1 ml-2" icon="update-outline" pack="casa" size="is-20"></b-icon>

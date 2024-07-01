@@ -280,6 +280,7 @@
   "Support Samba Address eg : smb://192.168.1.1": "Support Samba address e.g. smb://192.168.1.1",
   "Connect As Guest": "Connect as guest",
   "Username or password cannot be empty.": "Username or password cannot be empty.",
+  "Username or Password error!": "Username or password is invalid",
   "Please enter a correct Samba address!": "Please enter a correct Samba address.",
   "Create Folder": "Create folder",
   "Create File": "Create file",

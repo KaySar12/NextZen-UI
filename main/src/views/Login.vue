@@ -116,29 +116,39 @@ export default {
 		},
 
 		async checkSshLogin() {
-			debugger;
-			await this.register()
-			await this.loginAction();
-			this.$messageBus('terminallogs_connect')
-			this.isConnecting = true
-			let postData = {
-				username: String(this.username),
-				password: String(this.password),
-				port: String(this.sshPort || 22)
-			}
 			try {
+				console.log("Starting SSH Login Check");
+				await this.register()
+				await this.loginAction();
+				this.$messageBus('terminallogs_connect')
+				this.isConnecting = true
+				let postData = {
+					username: String(this.username),
+					password: String(this.password),
+					port: String(this.sshPort || 22)
+				}
+
 				var ssh = await this.$api.sys.checkSshLogin(postData)
+				console.log("SSH Login Check Result:", ssh);
 				return ssh != null || ssh != undefined
 			} catch (error) {
+				console.error("Error in checkSshLogin:", error);
 				return false
 			}
+		},
+		timeout(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
 		},
 		async login() {
 			try {
 				this.isLoading = true;
-				var ssh = await this.checkSshLogin();
-				if (!ssh) {
-					await this.loginAction();
+				console.log("Before SSH Check");
+				if (this.username === 'root') {
+					var ssh = await this.checkSshLogin();
+					console.log("After SSH Check", ssh);
+					if (!ssh) {
+						await this.loginAction();
+					}
 				}
 				this.isLoading = false
 				window.location.href = "#/home"

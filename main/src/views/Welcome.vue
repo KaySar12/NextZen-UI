@@ -166,11 +166,6 @@ export default {
 		register() {
 			debugger;
 			var initKey = this.$store.state.initKey;
-			if (!initKey) {
-				this.needInit().then(key => {
-					initKey = key
-				})
-			}
 			this.$api.users.register(this.username, this.password, this.role, initKey).then(res => {
 				if (res.data.success == 200) {
 					this.login().then(() => {
