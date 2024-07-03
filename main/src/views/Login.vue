@@ -95,26 +95,30 @@ export default {
 			}
 		},
 		async register() {
+			debugger;
 			var init = await this.needInit();
 			if (init) {
 				const initKey = this.$store.state.initKey;
-				this.$api.users.register(this.username, this.password, "admin", initKey).then(res => {
-					if (res.data.success == 200) {
-						this.loginAction().then(() => {
-							// First login set default app order
-							this.$api.users.setCustomStorage("app_order", { data: ["App Store", "Files"] })
-							return true;
-						});
-					}
-					else {
-						return false;
-					}
-				}).catch(err => {
+				var isRes = await this.$api.users.register(this.username, this.password, "admin", initKey)
+				if (isRes.data.success == 200) {
+					await this.loginAction()
+					await this.$api.users.setCustomStorage("app_order", { data: ["App Store", "Files"] })
+					return true;
+				}
+				else {
 					return false;
-				})
+				}
+
 			}
 		},
-
+		async OMVLogin() {
+			try {
+			}
+			catch (error) {
+				console.error("Error in OmvLogin:", error);
+				return false
+			}
+		},
 		async checkSshLogin() {
 			try {
 				console.log("Starting SSH Login Check");
@@ -143,16 +147,21 @@ export default {
 			debugger;
 			try {
 				this.isLoading = true;
-				console.log("Before SSH Check");
-				if (this.username === 'root' || this.username === 'shintheman12') {
-					var ssh = await this.checkSshLogin();
-					console.log("After SSH Check", ssh);
-					if (!ssh) {
-						await this.loginAction();
+				//authenticated through OMV
+				const omv = await this.$api.users.OMVlogin(this.username, this.password)
+				if (omv.data.success == 200) {
+					//if success check exist user
+					var exist = await this.$api.users.getUserInfoByName(this.username)
+					if (exist.data.success == 200) {
+						await this.loginAction()
+					}
+					else {
+						await this.register()
 					}
 				}
 				else {
-					await this.loginAction();
+					//else notify user
+					alert('login fail')
 				}
 				this.isLoading = false
 				this.$router.push("/home")
@@ -163,17 +172,22 @@ export default {
 			}
 		},
 		async loginAction() {
-			const userRes = await this.$api.users.login(this.username, this.password)
-			localStorage.setItem("access_token", userRes.data.data.token.access_token);
-			localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
-			localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
-			localStorage.setItem("user", JSON.stringify(userRes.data.data.user));
-			this.$store.commit("SET_USER", userRes.data.data.user);
-			this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
-			this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
-			const versionRes = await this.$api.sys.getVersion();
-			if (versionRes.data.success == 200) {
-				localStorage.setItem("version", versionRes.data.data.current_version);
+			try {
+				const userRes = await this.$api.users.login(this.username, this.password)
+				localStorage.setItem("access_token", userRes.data.data.token.access_token);
+				localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
+				localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
+				localStorage.setItem("user", JSON.stringify(userRes.data.data.user));
+				this.$store.commit("SET_USER", userRes.data.data.user);
+				this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
+				this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
+				const versionRes = await this.$api.sys.getVersion();
+				if (versionRes.data.success == 200) {
+					localStorage.setItem("version", versionRes.data.data.current_version);
+				}
+				return true;
+			} catch (err) {
+				return false;
 			}
 		},
 	}

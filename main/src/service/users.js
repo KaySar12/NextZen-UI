@@ -105,7 +105,12 @@ const users = {
 			password: password
 		});
 	},
-
+	OMVlogin(username, password) {
+		return api.post(`${PREFIX}/omvlogin`, {
+			username: username,
+			password: password
+		});
+	},
 	// refresh token [OK]
 	refreshToken(refresh_token) {
 		return api.post(`${PREFIX}/refresh`, {
