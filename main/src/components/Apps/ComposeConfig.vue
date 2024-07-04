@@ -1,120 +1,75 @@
 <template>
 	<section style="height: calc(100vh - 12.8125rem)">
-		<b-tabs
-			class="has-text-full-03"
-			style="height: 100%"
-			:value="firstAppName"
-		>
-			<b-tab-item v-for="(service, key) in configData.services" :key="key" :label="key" :value="key" @click="current_service = key">
+		<b-tabs class="has-text-full-03" style="height: 100%" :value="firstAppName">
+			<b-tab-item v-for="(service, key) in configData.services" :key="key" :label="key" :value="key"
+				@click="current_service = key">
 				<ValidationObserver :ref="key + 'valida'">
 					<b-field grouped>
-						<ValidationProvider
-							class="is-flex-grow-1"
-							v-slot="{ errors, valid }"
-							name="Image0"
-							rules="required"
-						>
-							<b-field
-								:label="$t('Docker Image') + ' *'"
-								:message="$t(errors)"
-								:type="{ 'is-danger': errors[0], 'is-success': valid }"
-								class="mb-3"
-							>
-								<b-input
-									:key="service.image"
+						<ValidationProvider class="is-flex-grow-1" v-slot="{ errors, valid }" name="Image0"
+							rules="required">
+							<b-field :label="$t('Docker Image') + ' *'" :message="$t(errors)"
+								:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mb-3">
+								<b-input :key="service.image"
 									:readonly="state == 'update' || serviceStableVersion !== ''"
-									:value="getFirstField(service.image)"
-									:placeholder="$t('e.g.,hello-world:latest')"
-									@input="(V) => changeIcon(V)"
-									@blur="
-										(E) => {
+									:value="getFirstField(service.image)" :placeholder="$t('e.g.,hello-world:latest')"
+									@input="(V) => changeIcon(V)" @blur="(E) => {
 											return (service.image = service.image.split(':')[1]
 												? E.target._value + ':' + service.image.split(':')[1]
 												: E.target._value);
 										}
-									"
-								>
+										">
 								</b-input>
 							</b-field>
 						</ValidationProvider>
 						<b-dropdown aria-role="menu" trap-focus>
 							<template #trigger>
 								<ValidationProvider v-slot="{ errors, valid }" name="Image1" rules="required">
-									<b-field
-										:label="$t('Tag')"
-										:message="$t(errors) || '123'"
-										:type="{ 'is-danger': errors[0], 'is-success': valid }"
-									>
-										<b-input
-											icon-pack="casa"
-											icon-right="down-outline"
-											class="is-flex-grow-1"
-											:value="getLateField(service.image)"
-											@input="
-												(V) => {
+									<b-field :label="$t('Tag')" :message="$t(errors) || '123'"
+										:type="{ 'is-danger': errors[0], 'is-success': valid }">
+										<b-input icon-pack="casa" icon-right="down-outline" class="is-flex-grow-1"
+											:value="getLateField(service.image)" @input="(V) => {
 													service.image = service.image.split(':')[0] + ':' + V;
 												}
-											"
-										>
+												">
 										</b-input>
 									</b-field>
 								</ValidationProvider>
 							</template>
-							<b-dropdown-item
-								key="latest"
-								@click="
-									() => {
-										service.image = service.image.split(':')[0] + ':latest';
-									}
-								"
-							>
+							<b-dropdown-item key="latest" @click="() => {
+									service.image = service.image.split(':')[0] + ':latest';
+								}
+								">
 								latest
 							</b-dropdown-item>
-							<b-dropdown-item
-								key="stable"
-								v-show="serviceStableVersion !== '' && firstAppName === key"
-								@click="
-									() => {
+							<b-dropdown-item key="stable" v-show="serviceStableVersion !== '' && firstAppName === key"
+								@click="() => {
 										service.image = service.image.split(':')[0] + ':' + serviceStableVersion;
 									}
-								"
-							>
+									">
 								stable({{ serviceStableVersion }})
 							</b-dropdown-item>
 						</b-dropdown>
 					</b-field>
 
 					<ValidationProvider v-slot="{ errors, valid }" name="composeAppName" rules="required">
-						<b-field
-							:label="$t('App Name') + ' *'"
-							:message="$t(errors)"
-							:type="{ 'is-danger': errors[0], 'is-success': valid }"
-						>
-							<b-input
-								:placeholder="$t('e.g.,Your App Name')"
+						<b-field :label="$t('App Name') + ' *'" :message="$t(errors)"
+							:type="{ 'is-danger': errors[0], 'is-success': valid }">
+							<b-input :placeholder="$t('e.g.,Your App Name')"
 								:value="ice_i18n(configData['x-casaos'].title)"
-								@blur="(E) => (configData['x-casaos'].title.custom = E.target._value)"
-							></b-input>
+								@blur="(E) => (configData['x-casaos'].title.custom = E.target._value)"></b-input>
 						</b-field>
 					</ValidationProvider>
 
 					<b-field v-if="key === firstAppName" :label="$t('Icon URL')">
 						<p class="control">
 							<span class="button is-static container-icon">
-								<b-image
-									:key="appIcon"
-									:src="appIcon"
-									:src-fallback="require('@/assets/img/app/default.svg')"
-									class="is-32x32"
-									ratio="1by1"
-								></b-image>
+								<b-image :key="appIcon" :src="appIcon"
+									:src-fallback="require('@/assets/img/app/default.svg')" class="is-32x32"
+									ratio="1by1"></b-image>
 							</span>
 						</p>
-						<b-input
-							v-model="configData['x-casaos'].icon"
-							:placeholder="$t('Your custom icon URL')"
-							expanded
-						></b-input>
+						<b-input v-model="configData['x-casaos'].icon" :placeholder="$t('Your custom icon URL')"
+							expanded></b-input>
 					</b-field>
 
 					<b-field v-if="key === firstAppName" label="Web UI">
@@ -123,75 +78,41 @@
 							<option value="https">https://</option>
 						</b-select>
 						<b-input v-model="configData['x-casaos'].hostname" :placeholder="baseUrl" expanded> </b-input>
-						<b-autocomplete
-							v-model="configData['x-casaos'].port_map"
-							:data="bridgePorts(configData.services)"
-							:open-on-focus="true"
-							:placeholder="$t('Port')"
-							class="has-colon"
-							field="hostname"
-							@select="(option) => (portSelected = option)"
-						>
+						<b-autocomplete v-model="configData['x-casaos'].port_map"
+							:data="bridgePorts(configData.services)" :open-on-focus="true" :placeholder="$t('Port')"
+							class="has-colon" field="hostname" @select="(option) => (portSelected = option)">
 						</b-autocomplete>
-						<b-input
-							v-model="configData['x-casaos'].index"
-							:placeholder="'/index.html ' + $t('[Optional]')"
-							expanded
-						>
+						<b-input v-model="configData['x-casaos'].index" :placeholder="'/index.html ' + $t('[Optional]')"
+							expanded>
 						</b-input>
 					</b-field>
 
 					<b-field :label="$t('Network')">
-						<b-select
-							:value="service.network_mode || service?.networks?.[0]"
-							expanded
-							placeholder="Select"
-							@input="(v) => patchNetworkValue(v, service)"
-						>
+						<b-select :value="service.network_mode || service?.networks?.[0]" expanded placeholder="Select"
+							@input="(v) => patchNetworkValue(v, service)">
 							<optgroup v-for="net in appendNetworks" :key="net.driver" :label="net.driver">
-								<option
-									v-for="(option, index) in net.networks"
-									:key="option.name + index"
-									:value="option.name"
-								>
+								<option v-for="(option, index) in net.networks" :key="option.name + index"
+									:value="option.name">
 									{{ option.name }}
 								</option>
 							</optgroup>
 						</b-select>
 					</b-field>
 
-					<ports
-						v-if="showPorts(service)"
-						v-model="service.ports"
-						:ports_in_use="ports_in_use"
-						:showHostPost="showHostPort(service)"
-					></ports>
+					<ports v-if="showPorts(service)" v-model="service.ports" :ports_in_use="ports_in_use"
+						:showHostPost="showHostPort(service)"></ports>
 
-					<volumes-input-group
-						v-model="service.volumes"
-						:label="$t('Volumes')"
-						:message="$t('No volumes now, click “+” to add one.')"
-						type="volume"
-					>
+					<volumes-input-group v-model="service.volumes" :label="$t('Volumes')"
+						:message="$t('No volumes now, click “+” to add one.')" type="volume">
 					</volumes-input-group>
-					<env-input-group
-						v-model="service.environment"
-						:label="$t('Environment Variables')"
-						:message="$t('No environment variables now, click “+” to add one.')"
-					>
+					<env-input-group v-model="service.environment" :label="$t('Environment Variables')"
+						:message="$t('No environment variables now, click “+” to add one.')">
 					</env-input-group>
-					<input-group
-						:devices="service.devices"
-						:label="$t('Devices')"
-						:message="$t('No devices now, click “+” to add one.')"
-						type="device"
-					>
+					<input-group :devices="service.devices" :label="$t('Devices')"
+						:message="$t('No devices now, click “+” to add one.')" type="device">
 					</input-group>
-					<commands-input
-						v-model="service.command"
-						:label="$t('Container Command')"
-						:message="$t('No commands now, click “+” to add one.')"
-					>
+					<commands-input v-model="service.command" :label="$t('Container Command')"
+						:message="$t('No commands now, click “+” to add one.')">
 					</commands-input>
 
 					<b-field :label="$t('Privileged')">
@@ -199,15 +120,9 @@
 					</b-field>
 
 					<b-field :label="$t('Memory Limit')" class="mb-5">
-						<vue-slider
-							:max="totalMemory"
-							:min="memory_min"
-							class="mx-2"
-							:marks="true"
-							:data="markData"
+						<vue-slider :max="totalMemory" :min="memory_min" class="mx-2" :marks="true" :data="markData"
 							:value="service.deploy.resources.limits.memory | duplexDisplay"
-							@change="(v) => (service.deploy.resources.limits.memory = v)"
-						></vue-slider>
+							@change="(v) => (service.deploy.resources.limits.memory = v)"></vue-slider>
 					</b-field>
 
 					<b-field :label="$t('CPU Shares')">
@@ -227,27 +142,15 @@
 					</b-field>
 
 					<b-field :label="$t('Container Capabilities (cap-add)')">
-						<b-taginput
-							ref="taginput"
-							v-model="service.cap_add"
-							:allow-new="false"
-							:data="capArray"
-							:open-on-focus="false"
-							autocomplete
-							@typing="getFilteredTags"
-						>
+						<b-taginput ref="taginput" v-model="service.cap_add" :allow-new="false" :data="capArray"
+							:open-on-focus="false" autocomplete @typing="getFilteredTags">
 							<template slot-scope="props">
 								{{ props.option }}
 							</template>
 							<template #empty> There are no items</template>
 							<template #portSelected="props">
-								<b-tag
-									v-for="(tag, index) in props.tags"
-									:key="index"
-									:tabstop="false"
-									closable
-									@close="$refs.taginput.removeTag(index, $event)"
-								>
+								<b-tag v-for="(tag, index) in props.tags" :key="index" :tabstop="false" closable
+									@close="$refs.taginput.removeTag(index, $event)">
 									{{ tag }}
 								</b-tag>
 							</template>
@@ -255,16 +158,10 @@
 					</b-field>
 
 					<ValidationProvider v-slot="{ errors, valid }" name="Name" rules="ContainerName">
-						<b-field
-							:label="$t('Container Name')"
-							:message="$t(errors)"
-							:type="{ 'is-danger': errors[0], 'is-success': valid && service.container_name }"
-						>
-							<b-input
-								v-model="service.container_name"
-								:placeholder="$t('Name of app container')"
-								value=""
-							></b-input>
+						<b-field :label="$t('Container Name')" :message="$t(errors)"
+							:type="{ 'is-danger': errors[0], 'is-success': valid && service.container_name }">
+							<b-input v-model="service.container_name" :placeholder="$t('Name of app container')"
+								value=""></b-input>
 						</b-field>
 					</ValidationProvider>
 				</ValidationObserver>
@@ -274,29 +171,29 @@
 </template>
 
 <script>
-import debounce                                   from "lodash/debounce";
-import axios                                      from "axios";
+import debounce from "lodash/debounce";
+import axios from "axios";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import "@/plugins/vee-validate";
-import Ports                                      from "../forms/Ports.vue";
-import EnvInputGroup                              from "../forms/EnvInputGroup.vue";
-import CommandsInput                              from "../forms/CommandsInput.vue";
-import InputGroup                                 from "../forms/InputGroup.vue";
-import VolumesInputGroup                          from "@/components/forms/VolumesInputGroup.vue";
-import VueSlider                                  from "vue-slider-component";
+import Ports from "../forms/Ports.vue";
+import EnvInputGroup from "../forms/EnvInputGroup.vue";
+import CommandsInput from "../forms/CommandsInput.vue";
+import InputGroup from "../forms/InputGroup.vue";
+import VolumesInputGroup from "@/components/forms/VolumesInputGroup.vue";
+import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
-import YAML                                       from "yaml";
-import lowerFirst                                 from "lodash/lowerFirst";
-import isNil                                      from "lodash/isNil";
-import { isNumber, isString }                     from "lodash/lang";
-import cloneDeep                                  from "lodash/cloneDeep";
-import merge                                      from "lodash/merge";
-import { ice_i18n }                               from "@/mixins/base/common-i18n";
-import { nanoid }                                 from "nanoid";
-import find                                       from "lodash/find";
-import isArray                                    from "lodash/isArray";
-import isEmpty                                    from "lodash/isEmpty";
-import isObject                                   from "lodash/isObject";
+import YAML from "yaml";
+import lowerFirst from "lodash/lowerFirst";
+import isNil from "lodash/isNil";
+import { isNumber, isString } from "lodash/lang";
+import cloneDeep from "lodash/cloneDeep";
+import merge from "lodash/merge";
+import { ice_i18n } from "@/mixins/base/common-i18n";
+import { nanoid } from "nanoid";
+import find from "lodash/find";
+import isArray from "lodash/isArray";
+import isEmpty from "lodash/isEmpty";
+import isObject from "lodash/isObject";
 
 const data = [
 	"AUDIT_CONTROL",
@@ -422,17 +319,17 @@ export default {
 				this.$emit("updateDockerComposeServiceName", val);
 				if (this.configData.name) {
 					this.$openAPI.appManagement.appStore
-					.composeAppServiceStableTag(this.configData.name, this.current_service)
-					.then((res) => {
-						this.serviceStableVersion = res.data.data.tag;
-					})
-					.catch((e) => {
-						this.serviceStableVersion = "";
-					});
-				}else{
+						.composeAppServiceStableTag(this.configData.name, this.current_service)
+						.then((res) => {
+							this.serviceStableVersion = res.data.data.tag;
+						})
+						.catch((e) => {
+							this.serviceStableVersion = "";
+						});
+				} else {
 					this.serviceStableVersion = "";
 				}
-				
+
 			},
 			immediate: true,
 		},
