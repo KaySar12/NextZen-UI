@@ -560,7 +560,7 @@ export default {
 			authorMenu: [
 				{ count: 0, font: 'author', id: 0, name: 'All' },
 				{ count: 0, font: 'author', id: 1, name: 'official' },
-				{ count: 0, font: 'author', id: 2, name: 'by_casaos' },
+				// { count: 0, font: 'author', id: 2, name: 'by_casaos' },
 				{ count: 0, font: 'author', id: 3, name: 'community' }
 			],
 			sortMenu: [
