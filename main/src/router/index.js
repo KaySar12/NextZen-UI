@@ -52,13 +52,13 @@ const needInit = async () => {
 
 
 router.beforeEach(async (to, from, next) => {
-	debugger;
 	const accessToken = localStorage.getItem("access_token");
 	const requireAuth = to.matched.some(record => record.meta.requireAuth);
 	if (requireAuth && accessToken) {
 		const userData = JSON.parse(localStorage.getItem('user'));
 		var oguser = await api.users.getUserInfoByName(userData.username)
-		if (userData.role != oguser.data.data.role) {
+		var ogrole = oguser.data.data?.role || '';
+		if (userData.role != ogrole) {
 			localStorage.removeItem("access_token");
 			localStorage.removeItem("refresh_token");
 			localStorage.removeItem("wallpaper");
@@ -87,7 +87,7 @@ router.beforeEach(async (to, from, next) => {
 
 	} else if (to.path === '/login' && accessToken) {
 		// If already on /login with an access token, redirect to homepage or dashboard
-		next('/home');
+		next('/');
 	} else {
 		if (to.path === '/register') {
 			await needInit()

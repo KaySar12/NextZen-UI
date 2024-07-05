@@ -29,16 +29,6 @@ export default [
 		}
 	},
 	{
-		path: '/home',
-		name: 'Home',
-		hidden: true,
-		component: () => import('@/views/Home.vue'),
-		meta: {
-			requireAuth: true,
-			showBackground: true
-		}
-	},
-	{
 		path: '/',
 		name: 'Home',
 		hidden: true,

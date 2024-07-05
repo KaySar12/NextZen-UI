@@ -164,7 +164,7 @@ export default {
 					alert('login fail')
 				}
 				this.isLoading = false
-				this.$router.push("/home")
+				this.$router.push("/")
 			} catch (err) {
 				this.isLoading = false
 				this.message = this.$t("Username or Password error!")

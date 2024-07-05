@@ -504,6 +504,7 @@ export default {
 		 * @return {*}
 		 */
 		onOpen(isOpen) {
+			debugger;
 			if (isOpen) {
 				this.$store.commit("SET_SIDEBAR_CLOSE");
 				this.checkVersion();
@@ -641,15 +642,15 @@ export default {
 		 * @description: Get Version info
 		 * @return {*} void
 		 */
-		checkVersion() {
-			this.$api.sys.getVersion().then((res) => {
-				if (res.data.success === 200) {
-					this.updateInfo = res.data.data;
-					if (res.data.data.need_update) {
-						this.$messageBus("dashboardsetting_versionavailable_show", true.toString());
-					}
+		async checkVersion() {
+			debugger;
+			var res = await this.$api.sys.getVersion();
+			if (res.data.success === 200) {
+				this.updateInfo = res.data.data;
+				if (res.data.data.need_update) {
+					this.$messageBus("dashboardsetting_versionavailable_show", true.toString());
 				}
-			});
+			}
 		},
 
 		/**
