@@ -51,10 +51,16 @@
 			</div>
 		</div>
 		<!-- Content End -->
-
+		<b-modal v-model="isStorageActive" has-modal-card :can-cancel="true" full-screen>
+			<media-vault></media-vault>
+		</b-modal>
 		<!-- File Panel Start -->
-		<b-modal v-model="isFileActive" :can-cancel="[]" :destroy-on-hide="false" animation="zoom-in" aria-modal
-			custom-class="file-panel" full-screen has-modal-card @after-enter="afterFileEnter">
+		<b-modal v-model="isFileActive" 
+		:can-cancel="[]" 
+		:destroy-on-hide="false" animation="zoom-in" aria-modal
+			custom-class="file-panel" 
+			full-screen has-modal-card 
+			@after-enter="afterFileEnter">
 			<template #default="props">
 				<file-panel ref="filePanel" @close="props.close"></file-panel>
 			</template>
@@ -75,7 +81,7 @@ import UpdateCompleteModal from '@/components/settings/UpdateCompleteModal.vue';
 import { mixin } from '@/mixins/mixin';
 import events from '@/events/events';
 import { nanoid } from 'nanoid';
-
+import MediaVault from '@/components/iframe/MediaVault.vue';
 
 const wallpaperConfig = "wallpaper"
 
@@ -89,6 +95,7 @@ export default {
 		TopBar,
 		CoreService,
 		FilePanel,
+		MediaVault,
 	},
 	data() {
 		return {
@@ -96,6 +103,7 @@ export default {
 			hardwareInfoLoading: true,
 			user_id: localStorage.getItem("user_id") ? localStorage.getItem("user_id") : 1,
 			isFileActive: false,
+			isStorageActive: false,
 			barData: {},
 			topBarAni: {
 				classes: 'fadeInDown',
@@ -106,6 +114,7 @@ export default {
 	provide() {
 		return {
 			homeShowFiles: this.showFiles,
+			openStorage: this.openStorage,
 		};
 	},
 
@@ -203,7 +212,9 @@ export default {
 				this.$refs.filePanel.init(path)
 			})
 		},
-
+		openStorage() {
+			this.isStorageActive = true
+		},
 		afterFileEnter() {
 			this.$EventBus.$emit(events.AFTER_FILES_ENTER);
 		},

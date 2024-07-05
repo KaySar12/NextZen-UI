@@ -113,6 +113,16 @@ const builtInApplications = [
 		icon: require(`@/assets/img/app/files.svg`),
 		status: 'running',
 		app_type: 'system'
+	},
+	{
+		id: '3',
+		name: 'Storage',
+		title: {
+			en_us: 'Storage Manager'
+		},
+		icon: require(`@/assets/img/app/NAS.jpg`),
+		status: 'running',
+		app_type: 'system'
 	}
 ]
 

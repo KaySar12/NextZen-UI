@@ -10,8 +10,7 @@
 			</b-dropdown>
 		</div>
 		<!-- Action Button Start -->
-		<div v-if="item.app_type !== 'system' && !isContainerApp && !isUninstalling && isAuthorized"
-			class="action-btn">
+		<div v-if="item.app_type !== 'system' && !isContainerApp && !isUninstalling && isAuthorized" class="action-btn">
 			<!-- Check Role -->
 			<b-dropdown ref="dro" :mobile-modal="false" :triggers="['contextmenu', 'click']" animation="fade1"
 				append-to-body aria-role="list" class="app-card-drop" :position="dropdownPosition"
@@ -154,7 +153,7 @@ export default {
 		tipEditorModal,
 	},
 	mixins: [mixin, business_ShowNewAppTag, business_OpenThirdApp, business_LinkApp, commonI18n],
-	inject: ["homeShowFiles", "openAppStore"],
+	inject: ["homeShowFiles", "openAppStore","openStorage"],
 	data() {
 		return {
 			hover: false,
@@ -306,6 +305,9 @@ export default {
 					break;
 				case "Files":
 					this.homeShowFiles()
+					break;
+				case "Storage":
+					this.openStorage()
 					break;
 				default:
 					break;

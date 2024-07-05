@@ -111,14 +111,6 @@ export default {
 
 			}
 		},
-		async OMVLogin() {
-			try {
-			}
-			catch (error) {
-				console.error("Error in OmvLogin:", error);
-				return false
-			}
-		},
 		async checkSshLogin() {
 			try {
 				console.log("Starting SSH Login Check");
@@ -151,6 +143,8 @@ export default {
 				const omv = await this.$api.users.OMVlogin(this.username, this.password)
 				if (omv.data.success == 200) {
 					//if success check exist user
+					sessionStorage.setItem('username', omv.data?.data?.response?.username || '');
+					sessionStorage.setItem('permission', JSON.stringify(omv.data?.data?.response?.permissions || {}));
 					var exist = await this.$api.users.getUserInfoByName(this.username)
 					if (exist.data.success == 200) {
 						await this.loginAction()
