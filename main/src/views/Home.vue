@@ -51,7 +51,7 @@
 			</div>
 		</div>
 		<!-- Content End -->
-		<b-modal v-model="isStorageActive" has-modal-card :can-cancel="true" full-screen>
+		<b-modal v-model="isStorageActive" has-modal-card :can-cancel="true" full-screen style="margin-top:2.75rem;margin-bottom: 2rem;">
 			<media-vault></media-vault>
 		</b-modal>
 		<!-- File Panel Start -->
