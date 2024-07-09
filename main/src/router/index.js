@@ -76,10 +76,12 @@ router.beforeEach(async (to, from, next) => {
 		next('/login');
 	} else if (to.path === '/logout') {
 		// Specific handling for /logout to clear tokens and redirect to /login
+		//Delete Cookie backend
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("refresh_token");
 		localStorage.removeItem("wallpaper");
 		localStorage.removeItem("user");
+		sessionStorage.clear()
 		next('/login');
 	} else if (to.path !== '/login' && !accessToken && to.path !== '/logout') {
 

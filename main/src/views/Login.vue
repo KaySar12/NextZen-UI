@@ -144,7 +144,7 @@ export default {
 				if (omv.data.success == 200) {
 					//if success check exist user
 					sessionStorage.setItem('username', omv.data?.data?.response?.username || '');
-					sessionStorage.setItem('permission', JSON.stringify(omv.data?.data?.response?.permissions || {}));
+					sessionStorage.setItem('permissions', JSON.stringify(omv.data?.data?.response?.permissions || {}));
 					var exist = await this.$api.users.getUserInfoByName(this.username)
 					if (exist.data.success == 200) {
 						await this.loginAction()

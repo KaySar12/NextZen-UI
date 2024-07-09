@@ -51,16 +51,13 @@
 			</div>
 		</div>
 		<!-- Content End -->
-		<b-modal v-model="isStorageActive" has-modal-card :can-cancel="true" full-screen style="margin-top:2.75rem;margin-bottom: 2rem;">
-			<media-vault></media-vault>
+		<b-modal v-model="isStorageActive" has-modal-card :can-cancel="true" full-screen
+			style="margin-top:2.75rem;margin-bottom: 2rem;">
+			<media-vault ></media-vault>
 		</b-modal>
 		<!-- File Panel Start -->
-		<b-modal v-model="isFileActive" 
-		:can-cancel="[]" 
-		:destroy-on-hide="false" animation="zoom-in" aria-modal
-			custom-class="file-panel" 
-			full-screen has-modal-card 
-			@after-enter="afterFileEnter">
+		<b-modal v-model="isFileActive" :can-cancel="[]" :destroy-on-hide="false" animation="zoom-in" aria-modal
+			custom-class="file-panel" full-screen has-modal-card @after-enter="afterFileEnter">
 			<template #default="props">
 				<file-panel ref="filePanel" @close="props.close"></file-panel>
 			</template>

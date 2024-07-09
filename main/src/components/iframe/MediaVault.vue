@@ -30,10 +30,8 @@ export default {
             iframe.contentWindow.postMessage({
                 type: 'setSessionStorage',
                 data: {
-                    username: 'nextzendev',
-                    permissions: {
-                        role: 'admin'
-                    }
+                    username: sessionStorage.getItem("username"),
+                    permissions: JSON.parse(sessionStorage.getItem("permissions")),
                 }
             }, 'http://10.0.0.4:1081');
         },
