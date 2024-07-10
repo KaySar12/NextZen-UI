@@ -99,11 +99,14 @@ const users = {
 	},
 
 	// login [OK]
-	login(username, password) {
+	login(username,password) {
 		return api.post(`${PREFIX}/login`, {
 			username: username,
 			password: password
 		});
+	},
+	logout() {
+		return api.post(`${PREFIX}/logout`)
 	},
 	OMVlogin(username, password) {
 		return api.post(`${PREFIX}/omvlogin`, {

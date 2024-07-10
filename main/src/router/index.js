@@ -76,7 +76,7 @@ router.beforeEach(async (to, from, next) => {
 		next('/login');
 	} else if (to.path === '/logout') {
 		// Specific handling for /logout to clear tokens and redirect to /login
-		//Delete Cookie backend
+		await await api.users.logout()
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("refresh_token");
 		localStorage.removeItem("wallpaper");

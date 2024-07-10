@@ -41,6 +41,8 @@ module.exports = {
 				'process.env.VUE_APP_DEV_IP': JSON.stringify(process.env.VUE_APP_DEV_IP),
 				'process.env.VUE_APP_DEV_PORT': JSON.stringify(process.env.VUE_APP_DEV_PORT),
 				'process.env.VUE_APP_BASE_URL': JSON.stringify(process.env.VUE_APP_BASE_URL),
+				'process.env.OMV_APP_IP': JSON.stringify(process.env.OMV_APP_IP),
+				'process.env.OMV_APP_PORT': JSON.stringify(process.env.OMV_APP_PORT),
 				BUILT_TIME: JSON.stringify(Date()),
 			}]);
 		// Production only

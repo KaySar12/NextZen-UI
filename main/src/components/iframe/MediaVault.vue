@@ -9,7 +9,7 @@
                     style="z-index: 1000;">
                 </b-button>
             </div>
-            <iframe id="omv-iframe" src="http://10.0.0.4:1081" title="OpenMediaVault"
+            <iframe id="omv-iframe" :src="omvAddress" title="OpenMediaVault"
                 style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin-top:2.75rem ; padding:0; overflow:hidden;"
                 @load="setSessionStorage()"></iframe>
         </section>
@@ -21,19 +21,25 @@ export default {
     components: {},
     data() {
         return {
-
+            omvAddress: `${process.env.OMV_APP_IP}:${process.env.OMV_APP_PORT}`,
         }
     },
     methods: {
         setSessionStorage() {
-            const iframe = document.querySelector('iframe');
+            debugger;
+            var username = JSON.parse(localStorage.getItem('user'))?.username || '';
+            var role = JSON.parse(localStorage.getItem('user'))?.role || '';
+            var permissions = {
+                role: role
+            }
+            const iframe = document.getElementById('omv-iframe');
             iframe.contentWindow.postMessage({
                 type: 'setSessionStorage',
                 data: {
-                    username: sessionStorage.getItem("username"),
-                    permissions: JSON.parse(sessionStorage.getItem("permissions")),
+                    username: username,
+                    permissions: permissions,
                 }
-            }, 'http://10.0.0.4:1081');
+            }, this.omvAddress);
         },
         reload() {
             document.getElementById('omv-iframe').src = document.getElementById('omv-iframe').src

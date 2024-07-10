@@ -94,12 +94,12 @@ export default {
 				return false
 			}
 		},
-		async register() {
+		async register(username, password, role) {
 			debugger;
 			var init = await this.needInit();
 			if (init) {
 				const initKey = this.$store.state.initKey;
-				var isRes = await this.$api.users.register(this.username, this.password, "admin", initKey)
+				var isRes = await this.$api.users.register(username, password, role, initKey)
 				if (isRes.data.success == 200) {
 					await this.loginAction()
 					await this.$api.users.setCustomStorage("app_order", { data: ["App Store", "Files"] })
@@ -111,27 +111,27 @@ export default {
 
 			}
 		},
-		async checkSshLogin() {
-			try {
-				console.log("Starting SSH Login Check");
-				await this.register()
-				await this.loginAction();
-				this.$messageBus('terminallogs_connect')
-				this.isConnecting = true
-				let postData = {
-					username: String(this.username),
-					password: String(this.password),
-					port: String(this.sshPort || 22)
-				}
+		// async checkSshLogin() {
+		// 	try {
+		// 		console.log("Starting SSH Login Check");
+		// 		await this.register()
+		// 		await this.loginAction(this.username, this.password);
+		// 		this.$messageBus('terminallogs_connect')
+		// 		this.isConnecting = true
+		// 		let postData = {
+		// 			username: String(this.username),
+		// 			password: String(this.password),
+		// 			port: String(this.sshPort || 22)
+		// 		}
 
-				var ssh = await this.$api.sys.checkSshLogin(postData)
-				console.log("SSH Login Check Result:", ssh);
-				return ssh != null || ssh != undefined
-			} catch (error) {
-				console.error("Error in checkSshLogin:", error);
-				return false
-			}
-		},
+		// 		var ssh = await this.$api.sys.checkSshLogin(postData)
+		// 		console.log("SSH Login Check Result:", ssh);
+		// 		return ssh != null || ssh != undefined
+		// 	} catch (error) {
+		// 		console.error("Error in checkSshLogin:", error);
+		// 		return false
+		// 	}
+		// },
 		timeout(ms) {
 			return new Promise(resolve => setTimeout(resolve, ms));
 		},
@@ -143,19 +143,23 @@ export default {
 				const omv = await this.$api.users.OMVlogin(this.username, this.password)
 				if (omv.data.success == 200) {
 					//if success check exist user
-					sessionStorage.setItem('username', omv.data?.data?.response?.username || '');
-					sessionStorage.setItem('permissions', JSON.stringify(omv.data?.data?.response?.permissions || {}));
-					var exist = await this.$api.users.getUserInfoByName(this.username)
+					var omvUser = omv.data?.data?.response?.username || '';
+					var omvPermission = JSON.stringify(omv.data?.data?.response?.permissions || {});
+					sessionStorage.setItem('username', omvUser);
+					sessionStorage.setItem('permissions', omvPermission);
+					var exist = await this.$api.users.getUserInfoByName(this.username);
 					if (exist.data.success == 200) {
-						await this.loginAction()
+						await this.loginAction(this.username, this.password)
 					}
 					else {
-						await this.register()
+						await this.register(this.username, this.password, JSON.parse(omvPermission).role || "")
 					}
 				}
 				else {
-					//else notify user
-					alert('login fail')
+					this.isLoading = false
+					this.message = this.$t("Username or Password error!")
+					this.notificationShow = true
+					return;
 				}
 				this.isLoading = false
 				this.$router.push("/")
@@ -165,9 +169,10 @@ export default {
 				this.notificationShow = true
 			}
 		},
-		async loginAction() {
+		async loginAction(username, password) {
+			debugger;
 			try {
-				const userRes = await this.$api.users.login(this.username, this.password)
+				const userRes = await this.$api.users.login(username, password)
 				localStorage.setItem("access_token", userRes.data.data.token.access_token);
 				localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
 				localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
