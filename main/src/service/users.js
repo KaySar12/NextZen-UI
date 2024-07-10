@@ -85,6 +85,7 @@ const users = {
 
 	// get user info by user name  [NOT USE]
 	getUserInfoByName(username) {
+		debugger;
 		return api.get(`${PREFIX}/${username}`);
 	},
 

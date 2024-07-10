@@ -101,7 +101,7 @@ export default {
 				const initKey = this.$store.state.initKey;
 				var isRes = await this.$api.users.register(username, password, role, initKey)
 				if (isRes.data.success == 200) {
-					await this.loginAction()
+					await this.loginAction(username, password)
 					await this.$api.users.setCustomStorage("app_order", { data: ["App Store", "Files"] })
 					return true;
 				}
@@ -111,27 +111,6 @@ export default {
 
 			}
 		},
-		// async checkSshLogin() {
-		// 	try {
-		// 		console.log("Starting SSH Login Check");
-		// 		await this.register()
-		// 		await this.loginAction(this.username, this.password);
-		// 		this.$messageBus('terminallogs_connect')
-		// 		this.isConnecting = true
-		// 		let postData = {
-		// 			username: String(this.username),
-		// 			password: String(this.password),
-		// 			port: String(this.sshPort || 22)
-		// 		}
-
-		// 		var ssh = await this.$api.sys.checkSshLogin(postData)
-		// 		console.log("SSH Login Check Result:", ssh);
-		// 		return ssh != null || ssh != undefined
-		// 	} catch (error) {
-		// 		console.error("Error in checkSshLogin:", error);
-		// 		return false
-		// 	}
-		// },
 		timeout(ms) {
 			return new Promise(resolve => setTimeout(resolve, ms));
 		},
@@ -148,11 +127,11 @@ export default {
 					sessionStorage.setItem('username', omvUser);
 					sessionStorage.setItem('permissions', omvPermission);
 					var exist = await this.$api.users.getUserInfoByName(this.username);
-					if (exist.data.success == 200) {
+					if (exist.data.data) {
 						await this.loginAction(this.username, this.password)
 					}
 					else {
-						await this.register(this.username, this.password, JSON.parse(omvPermission).role || "")
+						await this.register(this.username, this.password, JSON.parse(omvPermission).role || "user")
 					}
 				}
 				else {
@@ -170,22 +149,23 @@ export default {
 			}
 		},
 		async loginAction(username, password) {
-			debugger;
 			try {
-				const userRes = await this.$api.users.login(username, password)
-				localStorage.setItem("access_token", userRes.data.data.token.access_token);
-				localStorage.setItem("refresh_token", userRes.data.data.token.refresh_token);
-				localStorage.setItem("expires_at", userRes.data.data.token.expires_at);
-				localStorage.setItem("user", JSON.stringify(userRes.data.data.user));
-				this.$store.commit("SET_USER", userRes.data.data.user);
-				this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
-				this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
-				const versionRes = await this.$api.sys.getVersion();
-				if (versionRes.data.success == 200) {
-					localStorage.setItem("version", versionRes.data.data.current_version);
+				const loginResult = await this.$api.users.login(username, password);
+				localStorage.setItem("access_token", loginResult.data.data.token.access_token);
+				localStorage.setItem("refresh_token", loginResult.data.data.token.refresh_token);
+				localStorage.setItem("expires_at", loginResult.data.data.token.expires_at);
+				localStorage.setItem("user", JSON.stringify(loginResult.data.data.user));
+				this.$store.commit("SET_USER", loginResult.data.data.user);
+				this.$store.commit("SET_ACCESS_TOKEN", loginResult.data.data.token.access_token);
+				this.$store.commit("SET_REFRESH_TOKEN", loginResult.data.data.token.refresh_token);
+				const versionInfo = await this.$api.sys.getVersion();
+				if (versionInfo.data.success !== 200) {
+					throw new Error("Failed to get system version.");
 				}
+				localStorage.setItem("version", versionInfo.data.data.current_version);
 				return true;
-			} catch (err) {
+			} catch (error) {
+				console.error("Login action error:", error);
 				return false;
 			}
 		},
