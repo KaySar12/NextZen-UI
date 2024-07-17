@@ -34,7 +34,8 @@
 			<div class="popper  tooltip-content">
 				{{ $t('youtube') }}
 			</div>
-			<a slot="reference" rel="noopener" href="https://www.youtube.com/channel/UCtNlYbQXQdJYyutXlUJCQCQ" target="_blank">
+			<a slot="reference" rel="noopener" href="https://www.youtube.com/channel/UCtNlYbQXQdJYyutXlUJCQCQ"
+				target="_blank">
 				<img :src="require('@/assets/img/social/youtube.png')" alt="pending" class="is-24x24" />
 			</a>
 		</popper>
@@ -50,7 +51,7 @@
 				<span class="icon is-small"><i class="casa casa-twitter"></i></span>
 			</a>
 		</popper>
-		
+
 		<popper :options="{
 			placement: 'top',
 			modifiers: { offset: { offset: '0,4px' } }
