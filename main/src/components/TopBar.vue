@@ -1,5 +1,5 @@
 <template>
-	<div class="navbar top-bar is-flex is-align-items-center _fixed-height">
+	<div class="blur-background navbar top-bar is-flex is-align-items-center _fixed-height">
 		<div class="navbar-brand ml-4 _fixed-height">
 			<!-- SideBar Button Start -->
 			<div id="sidebar-btn" class="is-flex is-align-items-center navbar-item">
@@ -895,8 +895,7 @@ export default {
 	position: relative;
 	z-index: 20;
 	height: 2.75rem;
-	background: rgba(255, 255, 255, 1);
-
+	opacity: 0.7;
 	.navbar-brand {
 		margin-left: 1.25rem;
 
@@ -1008,7 +1007,7 @@ export default {
 	}
 
 	.icon {
-		color: rgb(74, 74, 74);
+		color: rgb(185, 179, 179);
 	}
 }
 

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode dev",
+    "dev": "turbo run serve",
     "postinstall": "patch-package",
     "build": "node message_bus.build.js && vue-cli-service build --dest ../build/sysroot/var/lib/casaos/www/ --mode production",
     "lint": "vue-cli-service lint",
