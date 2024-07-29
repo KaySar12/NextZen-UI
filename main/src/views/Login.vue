@@ -158,11 +158,21 @@ export default {
 				this.$store.commit("SET_USER", loginResult.data.data.user);
 				this.$store.commit("SET_ACCESS_TOKEN", loginResult.data.data.token.access_token);
 				this.$store.commit("SET_REFRESH_TOKEN", loginResult.data.data.token.refresh_token);
-				const versionInfo = await this.$api.sys.getVersion();
-				if (versionInfo.data.success !== 200) {
-					throw new Error("Failed to get system version.");
+				const versionRes = await new Promise((resolve, reject) => {
+					const timer = setTimeout(() => {
+						console.warn("Version fetch timed out. Using default version 1.0.");
+						resolve({ data: { success: 200, message: "ok", data: { current_version: "1.0", need_update: false, version: { id: 1, change_log: "", version: "1.0", create_at: "", update_at: "" } } } });
+					}, 1000);
+
+					this.$api.sys.getVersion().then(response => {
+						clearTimeout(timer);
+						resolve(response);
+					}).catch(reject);
+				});
+
+				if (versionRes.data.success == 200) {
+					localStorage.setItem("version", versionRes.data.data.current_version);
 				}
-				localStorage.setItem("version", versionInfo.data.data.current_version);
 				return true;
 			} catch (error) {
 				console.error("Login action error:", error);
