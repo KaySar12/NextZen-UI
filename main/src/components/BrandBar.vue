@@ -1,6 +1,6 @@
 <template>
 	<div class="brand-bar is-flex is-align-items-flex-end has-text-white">
-		<figure class="image _is-136x26 mb-3">
+		<figure class="image _is-136x26 mb-5">
 			<img alt="logo" srcset="../assets/img/logo/nextzen.svg 2x, ../assets/img/logo/nextzen.png 1x">
 		</figure>
 		<span v-if="!rssShow || rss.length === 0" class="intro-text ml-4">Power by NextZen!</span>

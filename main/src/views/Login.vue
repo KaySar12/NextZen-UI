@@ -3,29 +3,29 @@
 		<div v-if="!isLoading" class="login-panel step4 is-shadow">
 			<div class="is-flex is-justify-content-center ">
 				<div class="has-text-centered">
-					<b-image :src-fallback="require('@/assets/img/account/ava.svg')" src="/v1/users/image?path=/var/lib/casaos/1/avatar.png" class="is-128x128"
-							 rounded></b-image>
+					<b-image :src-fallback="require('@/assets/img/account/ava.svg')"
+						src="/v1/users/image?path=/var/lib/casaos/1/avatar.png" class="is-128x128" rounded></b-image>
 					<!--					<p class="is-size-5 has-text-weight-bold mt-3">{{ username }}</p>-->
 				</div>
 
 			</div>
 			<b-notification v-model="notificationShow" aria-close-label="Close notification" auto-close role="alert"
-							type="is-danger">
+				type="is-danger">
 				{{ message }}
 			</b-notification>
 			<ValidationObserver ref="observer" v-slot="{ handleSubmit }">
 				<ValidationProvider v-slot="{ errors, valid }" name="User" rules="required">
 					<b-field :label="$t('Username')" :message="errors"
-							 :type="{ 'is-danger': errors[0], 'is-success': valid }"
-							 class="mt-5">
-						<b-input v-model="username" :autofocus="!username" type="text" v-on:keyup.enter.native="handleSubmit(login)"></b-input>
+						:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-5">
+						<b-input v-model="username" :autofocus="!username" type="text"
+							v-on:keyup.enter.native="handleSubmit(login)"></b-input>
 					</b-field>
 				</ValidationProvider>
 				<ValidationProvider v-slot="{ errors, valid }" name="Password" rules="required|min:5" vid="password">
 					<b-field :label="$t('Password')" :message="$t(errors)"
-							 :type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-2">
-						<b-input v-model="password" :autofocus="username" password-reveal
-								 type="password" v-on:keyup.enter.native="handleSubmit(login)"></b-input>
+						:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-2">
+						<b-input v-model="password" :autofocus="username" password-reveal type="password"
+							v-on:keyup.enter.native="handleSubmit(login)"></b-input>
 					</b-field>
 				</ValidationProvider>
 				<b-button class="mt-5" expanded rounded type="is-primary" @click="handleSubmit(login)">{{ $t('Login') }}
@@ -36,8 +36,9 @@
 </template>
 
 <script>
-import {ValidationObserver, ValidationProvider} from "vee-validate";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 import "@/plugins/vee-validate";
+import { create } from "lodash";
 
 export default {
 
@@ -55,7 +56,7 @@ export default {
 		ValidationObserver,
 		ValidationProvider,
 	},
-	beforeMount(){
+	beforeMount() {
 		let userString = localStorage.getItem('user')
 		if (userString) {
 			let name = JSON.parse(userString).username || '';
@@ -68,6 +69,7 @@ export default {
 
 	methods: {
 		async login() {
+			debugger;
 			try {
 				const userRes = await this.$api.users.login(this.username, this.password)
 				localStorage.setItem("access_token", userRes.data.data.token.access_token);
@@ -78,8 +80,18 @@ export default {
 				this.$store.commit("SET_USER", userRes.data.data.user);
 				this.$store.commit("SET_ACCESS_TOKEN", userRes.data.data.token.access_token);
 				this.$store.commit("SET_REFRESH_TOKEN", userRes.data.data.token.refresh_token);
+				const versionRes = await new Promise((resolve, reject) => {
+					const timer = setTimeout(() => {
+						console.warn("Version fetch timed out. Using default version 1.0.");
+						resolve({ data: { success: 200, message: "ok", data: { current_version: "1.0", need_update: false, version: { id: 1, change_log: "", version: "1.0", create_at: "", update_at: "" } } } });
+					}, 1000);
 
-				const versionRes = await this.$api.sys.getVersion();
+					this.$api.sys.getVersion().then(response => {
+						clearTimeout(timer);
+						resolve(response);
+					}).catch(reject);
+				});
+
 				if (versionRes.data.success == 200) {
 					localStorage.setItem("version", versionRes.data.data.current_version);
 				}
