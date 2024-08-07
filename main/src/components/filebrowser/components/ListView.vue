@@ -1,24 +1,25 @@
 <template>
-	<div id="select-container" class="node-list fliebroswer is-flex is-flex-direction-column w-full scroll-container scrollbars-light ">
+	<div id="select-container"
+		class="node-list fliebroswer is-flex is-flex-direction-column w-full scroll-container scrollbars-light ">
 
 
 		<div class=" is-flex-grow-1 is-flex">
-			<div  class="is-relative is-grow-1 w-full" :class="containerHeight"
-				@contextmenu.prevent="openContextMenu" @mousedown.stop="onDragSelectionStart">
+			<div class="is-relative is-grow-1 w-full" :class="containerHeight" @contextmenu.prevent="openContextMenu"
+				@mousedown.stop="onDragSelectionStart">
 				<!-- Empty Content Slot Start -->
 				<div v-if="listData.length == 0 && !isLoading"
 					class="is-flex is-align-items-center is-justify-content-center empty-container">
 					<slot></slot>
 				</div>
 				<!-- Empty Content Slot End -->
-				<div class="select-parent"  >
+				<div class="select-parent">
 					<!-- Table header Start -->
-					<div class="table-thead is-unselectable" >
+					<div class="table-thead is-unselectable">
 						<div class="tr-wrapper">
 							<div class="tr">
 								<div class="th"></div>
-								<div v-for="header in headerList" class="th" v-if="isMobile ? header.showOnMobile : true"
-									@click="onHeaderClick(header)">
+								<div v-for="header in headerList" class="th"
+									v-if="isMobile ? header.showOnMobile : true" @click="onHeaderClick(header)">
 									<div class="one-line">{{ $t(header.text) }}</div>
 									<b-icon v-show="sort === header.sort" icon="expand-down" class="is-18 ml-1"
 										custom-size="casa-18px" :class="{ asc: order === 'asc' }">
@@ -52,13 +53,14 @@
 									</div>
 									<div class="text is-flex-grow-1">
 										{{ item.name }}
-										<span v-if="isMobile" class="is-size-7 is-block has-text-grey-light">{{ item.date |
+										<span v-if="isMobile" class="is-size-7 is-block has-text-grey-light">{{
+											item.date |
 											dateFmt }}</span>
 									</div>
 									<div class="action-wrapper is-flex-shrink-0">
 										<!-- Action Button Start -->
-										<action-button :class="{ show: isMobile }" :cols="cols" :index="index" :item="item"
-											@reload="$emit('reload')"></action-button>
+										<action-button :class="{ show: isMobile }" :cols="cols" :index="index"
+											:item="item" @reload="$emit('reload')"></action-button>
 										<!-- Action Button End -->
 									</div>
 								</div>
@@ -83,14 +85,14 @@
 				</div>
 			</div>
 			<!-- Context Menu Start -->
-			<context-menu ref="ctxMenu" @reload="$emit('reload')"></context-menu>
+			<context-menu ref="ctxMenu" @reload="$emit('reload')" @updateLoading="handleLoadingUpdate"></context-menu>
 			<!-- Context Menu End -->
 		</div>
 
 
 	</div>
 </template>
-  
+
 <script>
 import { mixin } from "@/mixins/mixin";
 import ListViewMixin from "@/mixins/ListViewMixin";
@@ -101,6 +103,7 @@ import ListIconContainer from "./ListIconContainer.vue";
 
 export default {
 	name: "list-view",
+	props: ['isLoading'],
 	components: {
 		ActionButton,
 		ContextMenu,
@@ -134,7 +137,6 @@ export default {
 			],
 		};
 	},
-
 	created() {
 		this.SELECT_BOX = "selection";
 		this.PARENT_BOX = "select-container";
@@ -159,8 +161,11 @@ export default {
 			} else {
 				this.$emit('reorder', { sort: header.sort, order: 'asc' });
 			}
+		},
+		handleLoadingUpdate(value) {
+			this.$emit('updateLoading', value);
+			
 		}
 	},
 };
 </script>
-  

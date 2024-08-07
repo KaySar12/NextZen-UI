@@ -118,9 +118,9 @@ import has from 'lodash/has'
 export default {
 	mixins: [mixin],
 	inject: ['filePanel'],
+	props: ['isLoading'],
 	data() {
 		return {
-			isLoading: true,
 			verticalPos: "bottom",
 			horizontalPos: "right",
 			isConfirmed: false,
@@ -134,14 +134,13 @@ export default {
 			hasPasteData: this.$store.state.operateObject != null
 		}
 	},
-
 	computed: {
 		close() {
 			return this.item == undefined
 		},
 		isCompressed() {
 			var ext = this.getFileExt(this.item)
-			return ext === 'gz' || ext === 'zip'|| ext === 'rar';
+			return ext === 'gz' || ext === 'zip' || ext === 'rar';
 		},
 		isWallpaperType() {
 			return this.item.is_dir ? false : wallpaperType.includes(this.getFileExt(this.item))
@@ -227,19 +226,13 @@ export default {
 			this.filePanel.showRenameModal(this.item)
 		},
 		async compress() {
-			debugger;
 			await this.compressFile(this.items);
 			this.filePanel.handleClose();
-			this.filePanel.reload();
 		},
 		async extract() {
-			debugger;
-			this.isLoading = true;
-			var ext = this.getFileExt(this.item)
-			await this.extractFile(this.item, ext);
-			this.isLoading = false;
+			var ext = this.getFileExt(this.item);
 			this.filePanel.handleClose();
-			this.filePanel.reload();
+			await this.extractFile(this.item, ext)
 		},
 		// Paste File
 		paste(style = "overwrite") {

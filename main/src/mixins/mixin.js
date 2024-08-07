@@ -325,9 +325,13 @@ export const mixin = {
 			};
 
 			const deleteItems = async (paths) => {
+				this.$refs.dropDown?.toggle()
+				await this.$emit('updateLoading', true);
 				try {
 					const res = await this.$api.batch.delete(JSON.stringify(paths));
 					if (res.data.success === 200) {
+						await this.$emit('updateLoading', false);
+						this.$emit("reload");
 						const shotcutData = this.$store.state['shortcutData'];
 						const updatedShotcutData = shotcutData.filter((item) => {
 							if (paths.includes(item.path)) {
@@ -345,12 +349,16 @@ export const mixin = {
 							this.reload();
 						}
 					} else {
+						await this.$emit('updateLoading', false);
+						this.$emit("reload");
 						this.$buefy.toast.open({
 							message: res.data.message,
 							type: 'is-danger'
 						});
 					}
 				} catch (e) {
+					await this.$emit('updateLoading', false);
+					this.$emit("reload");
 					console.log(`${e} in deleteItem`);
 				}
 			};
@@ -371,21 +379,29 @@ export const mixin = {
 				data.push(item.path)
 			})
 			const compressItem = async (paths) => {
+				this.$refs.dropDown?.toggle()
+				this.$emit('updateLoading', true);
 				try {
 					const res = await this.$api.file.compress(JSON.stringify(paths));
 					if (res.data.success === 200) {
+						await this.$emit('updateLoading', false);
+						this.$emit("reload");
 						this.$buefy.toast.open({
 							message: this.$t('Compress Successfully'),
 							type: 'is-success'
 						})
 					}
 					else {
+						await this.$emit('updateLoading', false);
+						this.$emit("reload");
 						this.$buefy.toast.open({
 							message: res.data.message,
 							type: 'is-danger'
 						});
 					}
 				} catch (e) {
+					await this.$emit('updateLoading', false);
+					this.$emit("reload");
 					alert('fail to Compress files');
 				}
 			}
@@ -405,15 +421,21 @@ export const mixin = {
 				ext: ext
 			};
 			const extractItem = async (data) => {
+				this.$refs.dropDown?.toggle()
+				this.$emit('updateLoading', true);
 				try {
 					const res = await this.$api.file.extract(data);
 					if (res.data.success === 200) {
+						await this.$emit('updateLoading', false);
+						this.$emit("reload");
 						this.$buefy.toast.open({
 							message: this.$t('Extract Successfully'),
 							type: 'is-success'
 						})
 					}
 					else {
+						await this.$emit('updateLoading', false);
+						this.$emit("reload");
 						this.$buefy.toast.open({
 							message: res.data.message,
 							type: 'is-danger'
@@ -421,6 +443,8 @@ export const mixin = {
 					}
 				}
 				catch (e) {
+					await this.$emit('updateLoading', false);
+					this.$emit("reload");
 					alert('fail to extract file');
 				}
 

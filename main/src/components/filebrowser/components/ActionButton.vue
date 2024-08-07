@@ -150,9 +150,8 @@ export default {
 		async extract() {
 			debugger;
 			var ext = this.getFileExt(this.item)
+			this.filePanel.handleClose()
 			await this.extractFile(this.item, ext);
-			this.filePanel.handleClose();
-			this.filePanel.reload();
 		},
 		async shareFoler() {
 			this.$refs.dropDown.toggle()

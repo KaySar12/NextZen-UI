@@ -160,7 +160,7 @@
 
 									<component :is="listView" ref="listview" v-model="listData" :isLoading="isLoading"
 										@change="handelListChange" @gotoFolder="getFileList" @reload="reload"
-										@showDetailModal="showDetailModal">
+										@showDetailModal="showDetailModal" @updateLoading="updateLoading" @close="handleClose">
 										<empty-holder v-if="isEmpty" @newFile="showNewFileModal"
 											@newFolder="showNewFolderModal"></empty-holder>
 										<error-holder v-else :error="errorMsg"></error-holder>
@@ -621,7 +621,11 @@ export default {
 			this.isViewGird = !this.$store.state.isViewGird;
 			this.$store.commit("SET_IS_VIEW_GRID", this.isViewGird);
 		},
-
+		updateLoading(value) {
+			debugger;
+			this.isLoading = value;
+			console.log(this.isLoading); // Debugging
+		},
 		/**
 		 * @description: Handle Select All Action
 		 * @param {*} bool
@@ -994,9 +998,9 @@ export default {
 					? this.selectedArray[0]
 					: this.selectedArray;
 			this.isLoading = false;
-			await this.extractFile(extractItem)
 			this.handleClose();
-			this.reload();
+			await this.extractFile(extractItem)
+		
 		},
 		/*************************************************
 		 * PART 4  Share Action
