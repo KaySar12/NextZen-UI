@@ -136,7 +136,7 @@ export default {
 			// one-off consumption
 			sessionStorage.removeItem('fromWelcome')
 		}
-		this.$messageBus('global_visit')
+		// this.$messageBus('global_visit')
 
 		this.$EventBus.$on('casaUI:openStorageManager', () => {
 			this.showStorageManagerPanelModal();

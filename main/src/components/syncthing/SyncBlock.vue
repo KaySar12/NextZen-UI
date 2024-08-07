@@ -61,6 +61,7 @@ export default {
 
 	methods: {
 		async checkSyncStatus() {
+			debugger;
 			// const res = await this.$api.sys.getSystemApps()
 			const listRes = await this.$api.container.getMyAppList();
 			const systemApps = listRes.data ? listRes.data.data.casaos_apps : [];
@@ -98,6 +99,7 @@ export default {
 
 		},
 		async openSyncPanel() {
+			debugger;
 			await this.checkSyncStatus()
 			if (!this.isSyncInstalled) {
 				this.$EventBus.$emit(events.OPEN_APP_STORE_AND_GOTO_SYNCTHING);

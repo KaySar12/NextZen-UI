@@ -54,11 +54,11 @@ export default {
 				if (val === oldValue) {
 					return
 				}
-				if (val === 0) {
-					this.$messageBus('youshouldknow_show', 'false');
-				} else if (oldValue === 0) {
-					this.$messageBus('youshouldknow_show', 'true');
-				}
+				// if (val === 0) {
+				// 	this.$messageBus('youshouldknow_show', 'false');
+				// } else if (oldValue === 0) {
+				// 	this.$messageBus('youshouldknow_show', 'true');
+				// }
 				// skip new notice card
 				this.$nextTick(() => {
 					this.$refs['mySwiper'].$swiper.slideTo(val - 1, 1000, true)

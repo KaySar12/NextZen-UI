@@ -117,7 +117,7 @@ export default {
 
 	methods: {
 		close() {
-			this.$messageBus('youshouldknow_cardclose');
+			// this.$messageBus('youshouldknow_cardclose');
 
 			if (this.noticeData.contentType === 'progress') {
 				this.$emit('deleteNotice', this.noticeData, this.noticeType);
@@ -132,7 +132,7 @@ export default {
 			});
 		},
 		eventBus() {
-			this.$messageBus('youshouldknow_cardaction');
+			// this.$messageBus('youshouldknow_cardaction');
 			this.$EventBus.$emit(this.noticeData.operate.event, this.noticeData.operate.path)
 		}
 	}

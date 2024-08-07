@@ -331,6 +331,7 @@ export default {
 		 * @return {*} void
 		 */
 		async showInstall(storeId = 0, mode = '') {
+			debugger;
 			if (mode === 'custom') {
 				this.$messageBus('apps_custominstall')
 			}

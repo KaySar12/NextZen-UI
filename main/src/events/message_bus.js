@@ -135,18 +135,18 @@ module.exports = {
 		return await intermediateProcessor("casaos-ui:searchbar:searchbar_search")
 	},
 
-	youshouldknow_show: async isShow => {
-		return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_show", {value: isShow})
-	},
-	youshouldknow_slide: async () => {
-		return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_slide")
-	},
-	youshouldknow_cardclose: async () => {
-		return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_cardclose")
-	},
-	youshouldknow_cardaction: async () => {
-		return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_cardaction")
-	},
+	// youshouldknow_show: async isShow => {
+	// 	return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_show", {value: isShow})
+	// },
+	// youshouldknow_slide: async () => {
+	// 	return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_slide")
+	// },
+	// youshouldknow_cardclose: async () => {
+	// 	return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_cardclose")
+	// },
+	// youshouldknow_cardaction: async () => {
+	// 	return await intermediateProcessor("casaos-ui:youshouldknow:youshouldknow_cardaction")
+	// },
 
 	apps_open: async (name) => {
 		return await intermediateProcessor("casaos-ui:app:apps_open", {value: name})
