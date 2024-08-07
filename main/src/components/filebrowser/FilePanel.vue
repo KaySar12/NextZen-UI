@@ -98,7 +98,8 @@
 
 										<!-- Upload Button Start -->
 										<global-action-button @showNewFileModal="showNewFileModal"
-											@showNewFolderModal="showNewFolderModal" :loading="true"></global-action-button>
+											@showNewFolderModal="showNewFolderModal"
+											:loading="true"></global-action-button>
 										<!-- Upload Button End -->
 
 										<!--  Close Button Start -->
@@ -450,7 +451,7 @@ export default {
 		this.init();
 		if (this.$route.path == "/files") {
 			this.init();
-			// this.isLoading = false;
+			this.isLoading = false;
 		}
 
 		if (this.pageType == "file") {
@@ -981,15 +982,18 @@ export default {
 				this.selectedArray.length == 1
 					? this.selectedArray[0]
 					: this.selectedArray;
+			this.isLoading = false;
 			await this.compressFile(extractItem)
 			this.handleClose();
 			this.reload();
 		},
 		async handleExtract() {
+			debugger;
 			const extractItem =
 				this.selectedArray.length == 1
 					? this.selectedArray[0]
 					: this.selectedArray;
+			this.isLoading = false;
 			await this.extractFile(extractItem)
 			this.handleClose();
 			this.reload();

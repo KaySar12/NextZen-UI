@@ -120,6 +120,7 @@ export default {
 	inject: ['filePanel'],
 	data() {
 		return {
+			isLoading: true,
 			verticalPos: "bottom",
 			horizontalPos: "right",
 			isConfirmed: false,
@@ -140,7 +141,7 @@ export default {
 		},
 		isCompressed() {
 			var ext = this.getFileExt(this.item)
-			return ext === 'gz' || ext === 'zip';
+			return ext === 'gz' || ext === 'zip'|| ext === 'rar';
 		},
 		isWallpaperType() {
 			return this.item.is_dir ? false : wallpaperType.includes(this.getFileExt(this.item))
@@ -233,8 +234,10 @@ export default {
 		},
 		async extract() {
 			debugger;
+			this.isLoading = true;
 			var ext = this.getFileExt(this.item)
 			await this.extractFile(this.item, ext);
+			this.isLoading = false;
 			this.filePanel.handleClose();
 			this.filePanel.reload();
 		},

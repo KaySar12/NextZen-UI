@@ -7,11 +7,11 @@
  * Copyright (c) 2022 by IceWhale, All Rights Reserved.
  */
 
-import Vue       from 'vue'
+import Vue from 'vue'
 import VueRouter from 'vue-router'
-import api       from '@/service/api'
-import store     from '@/store'
-import route     from './route.js'
+import api from '@/service/api'
+import store from '@/store'
+import route from './route.js'
 
 Vue.use(VueRouter)
 
@@ -55,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
 	const version = localStorage.getItem("version");
 	const requireAuth = to.matched.some(record => record.meta.requireAuth);
 
-	// 判断是否需要初始化
+	debugger;
 	let needInitRes = await needInit();
 
 	if (to.path !== '/welcome') {

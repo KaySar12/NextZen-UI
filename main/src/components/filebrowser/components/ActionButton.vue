@@ -114,7 +114,7 @@ export default {
 		},
 		isCompressed() {
 			var ext = this.getFileExt(this.item)
-			return ext === 'gz' || ext === 'zip';
+			return ext === 'gz' || ext === 'zip' || ext === 'rar';
 		}
 	},
 	mounted() {

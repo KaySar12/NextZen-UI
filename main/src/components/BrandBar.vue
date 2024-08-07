@@ -56,7 +56,7 @@ export default {
 	},
 	methods: {
 		async parseFeed() {
-			let test =this.$i18n.locale;
+			debugger;
 			let parser = new Parser();
 
 			// 1. Fetch & Parse Configuration
@@ -79,7 +79,6 @@ export default {
 
 			// 4. Fetch & Parse RSS Feed
 			let feed = await parser.parseURL(`${feedURL}/?key=` + stringify);
-
 			// 5. Process Feed Items (Sanitize & Map)
 			const newFeed = feed.items.map(item => ({
 				title: item.title,
@@ -90,6 +89,7 @@ export default {
 		},
 
 		async getfeed() {
+			debugger;
 			try {
 				const response = await fetch('https://api.nextzenos.com/feed');
 				const data = await response.json();
