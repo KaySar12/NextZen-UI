@@ -17,14 +17,14 @@
 				</div>
 
 				<h2 v-animate-css="s2Ani" class="title is-2 mb-5 has-text-centered __attached_title">{{
-						$t('Welcome to Nextzen')
-					}}</h2>
+					$t('Welcome to Nextzen')
+				}}</h2>
 				<h2 v-animate-css="s3Ani" class="subtitle  has-text-centered __attached_sub_title">{{
-						$t(`Let's create your initial account`)
-					}}</h2>
+					$t(`Let's create your initial account`)
+				}}</h2>
 				<b-button v-animate-css="s4Ani" class="mt-2" rounded type="is-primary" @click="goToStep(2)">{{
-						$t(`Go →`)
-					}}
+					$t(`Go →`)
+				}}
 				</b-button>
 			</div>
 
@@ -32,33 +32,31 @@
 				<h2 class="title is-3  has-text-centered">{{ $t('Create Account') }}</h2>
 				<div class="is-flex is-justify-content-center ">
 					<div class="has-text-centered">
-						<b-image :src="require('@/assets/img/account/ava.svg')" class="is-128x128"
-								 rounded></b-image>
+						<b-image :src="require('@/assets/img/account/ava.svg')" class="is-128x128" rounded></b-image>
 					</div>
 				</div>
 				<ValidationObserver ref="observer" v-slot="{ handleSubmit }">
 					<ValidationProvider v-slot="{ errors, valid }" name="User" rules="required">
 						<b-field :label="$t('Username')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }">
+							:type="{ 'is-danger': errors[0], 'is-success': valid }">
 							<b-input v-model="username" type="text"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
+								v-on:keyup.enter.native="handleSubmit(register)"></b-input>
 						</b-field>
 					</ValidationProvider>
 					<ValidationProvider v-slot="{ errors, valid }" name="Password" rules="required|min:5"
-										vid="password">
+						vid="password">
 						<b-field :label="$t('Password')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }"
-								 class="mt-4">
+							:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-4">
 							<b-input v-model="password" password-reveal type="password"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
+								v-on:keyup.enter.native="handleSubmit(register)"></b-input>
 						</b-field>
 					</ValidationProvider>
 					<ValidationProvider v-slot="{ errors, valid }" name="Password Confirmation"
-										rules="required|confirmed:password">
+						rules="required|confirmed:password">
 						<b-field :label="$t('Confirm Password')" :message="$t(errors)"
-								 :type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-4">
+							:type="{ 'is-danger': errors[0], 'is-success': valid }" class="mt-4">
 							<b-input v-model="confirmation" password-reveal type="password"
-									 v-on:keyup.enter.native="handleSubmit(register)"></b-input>
+								v-on:keyup.enter.native="handleSubmit(register)"></b-input>
 						</b-field>
 					</ValidationProvider>
 					<b-button class="mt-5" expanded rounded type="is-primary" @click="handleSubmit(register)">
@@ -71,7 +69,7 @@
 				<h2 class="title is-3  has-text-centered">{{ $t('All things done!') }}</h2>
 				<div class="is-flex is-align-items-center is-justify-content-center">
 					<lottie-animation :animationData="require('@/assets/ani/done.json')" :autoPlay="true" :loop="false"
-									  class="animation" @complete="complete"></lottie-animation>
+						class="animation" @complete="complete"></lottie-animation>
 				</div>
 			</div>
 		</div>
@@ -79,10 +77,10 @@
 </template>
 
 <script>
-import {ValidationObserver, ValidationProvider} from "vee-validate";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 import "@/plugins/vee-validate";
-import LottieAnimation                          from "lottie-web-vue";
-import smoothReflow                             from 'vue-smooth-reflow'
+import LottieAnimation from "lottie-web-vue";
+import smoothReflow from 'vue-smooth-reflow'
 
 export default {
 
@@ -146,24 +144,28 @@ export default {
 		 * @return {*}
 		 */
 		register() {
-			const initKey = this.$store.state.initKey;
-			this.$api.users.register(this.username, this.password, initKey).then(res => {
-				if (res.data.success == 200) {
-					this.login().then(() => {
-						// First login set default app order
-						this.$api.users.setCustomStorage("app_order", {data: ["App Store", "Files"]})
-					});
-					this.goToStep(3);
-				}
-			}).catch(err => {
-				this.$buefy.toast.open({
-					message: err.response.data.message,
-					type: 'is-danger',
-					position: 'is-top',
-					duration: 5000,
-					queue: false
+			debugger;
+			let userStatusRes = this.$api.users.getUserStatus().then(res => {
+				const initKey = res.data.data.key;
+				this.$api.users.register(this.username, this.password, initKey).then(res => {
+					if (res.data.success == 200) {
+						this.login().then(() => {
+							// First login set default app order
+							this.$api.users.setCustomStorage("app_order", { data: ["App Store", "Files"] })
+						});
+						this.goToStep(3);
+					}
+				}).catch(err => {
+					this.$buefy.toast.open({
+						message: err.response.data.message,
+						type: 'is-danger',
+						position: 'is-top',
+						duration: 5000,
+						queue: false
+					})
 				})
 			})
+
 		},
 
 		/**
@@ -304,7 +306,8 @@ export default {
 // Temporary
 .__attached_title {
 	// former color.Not in existing architecture.
-	color: hsl(211, 72%, 20%, 100%);;
+	color: hsl(211, 72%, 20%, 100%);
+	;
 }
 
 .__attached_sub_title {

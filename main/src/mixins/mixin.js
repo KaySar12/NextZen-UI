@@ -325,7 +325,6 @@ export const mixin = {
 			};
 
 			const deleteItems = async (paths) => {
-				this.$refs.dropDown?.toggle()
 				await this.$emit('updateLoading', true);
 				try {
 					const res = await this.$api.batch.delete(JSON.stringify(paths));

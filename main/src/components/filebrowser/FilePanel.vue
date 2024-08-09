@@ -383,11 +383,11 @@ export default {
 	computed: {
 		viewIcon() {
 			return this.$store.state.isViewGird
-				? "view-grid-outline"
-				: "format-list-bulleted";
+				? "format-list-bulleted"
+				: "view-grid-outline";
 		},
 		listView() {
-			return this.$store.state.isViewGird ? "gird-view" : "list-view";
+			return this.$store.state.isViewGird ? "list-view" : "gird-view";
 		},
 		containerClass() {
 			return this.$route.path == "/files" ? "file-panel full-screen " : "";

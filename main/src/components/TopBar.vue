@@ -1,5 +1,5 @@
 <template>
-	<div class="navbar top-bar is-flex is-align-items-center _fixed-height">
+	<div class="blur navbar top-bar is-flex is-align-items-center _fixed-height">
 		<div class="navbar-brand ml-4 _fixed-height">
 			<!-- SideBar Button Start -->
 			<div id="sidebar-btn" class="is-flex is-align-items-center navbar-item">
@@ -753,6 +753,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 ._is-large {
 	// bulma 3rem;
 	//height: 2.5rem;
