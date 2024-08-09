@@ -53,7 +53,7 @@
 
 		<!-- File Panel Start -->
 		<b-modal v-model="isFileActive" :can-cancel="[]" :destroy-on-hide="false" animation="zoom-in" aria-modal
-				 custom-class="file-panel" full-screen has-modal-card @after-enter="afterFileEnter">
+			custom-class="file-panel" full-screen has-modal-card @after-enter="afterFileEnter">
 			<template #default="props">
 				<file-panel ref="filePanel" @close="props.close"></file-panel>
 			</template>
@@ -64,16 +64,16 @@
 
 <script>
 
-import SearchBar           from '@/components/SearchBar.vue';
-import SideBar             from '@/components/SideBar.vue';
-import TopBar              from '@/components/TopBar.vue';
-import CoreService         from '@/components/CoreService.vue';
-import AppSection          from '@/components/Apps/AppSection.vue';
-import FilePanel           from '@/components/filebrowser/FilePanel.vue'
+import SearchBar from '@/components/SearchBar.vue';
+import SideBar from '@/components/SideBar.vue';
+import TopBar from '@/components/TopBar.vue';
+import CoreService from '@/components/CoreService.vue';
+import AppSection from '@/components/Apps/AppSection.vue';
+import FilePanel from '@/components/filebrowser/FilePanel.vue'
 import UpdateCompleteModal from '@/components/settings/UpdateCompleteModal.vue';
-import {mixin}             from '@/mixins/mixin';
-import events              from '@/events/events';
-import {nanoid}            from 'nanoid';
+import { mixin } from '@/mixins/mixin';
+import events from '@/events/events';
+import { nanoid } from 'nanoid';
 
 
 const wallpaperConfig = "wallpaper"
@@ -131,13 +131,12 @@ export default {
 			localStorage.removeItem('is_update')
 		}
 		if (sessionStorage.getItem('fromWelcome')) {
-			// this.$messageBus('global_newvisit')
+			this.$messageBus('global_newvisit')
 			//this.rssConfirm()
 			// one-off consumption
 			sessionStorage.removeItem('fromWelcome')
 		}
-		// this.$messageBus('global_visit')
-
+		 this.$messageBus('global_visit')
 		this.$EventBus.$on('casaUI:openStorageManager', () => {
 			this.showStorageManagerPanelModal();
 		});

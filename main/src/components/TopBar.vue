@@ -392,7 +392,7 @@ export default {
 				if (val === oldValue) {
 					return;
 				}
-				// this.$messageBus("dashboardsetting_searchengine", val.toString());
+				 this.$messageBus("dashboardsetting_searchengine", val.toString());
 				this.$store.commit("SET_SEARCH_ENGINE", val);
 			},
 			deep: true,
@@ -402,7 +402,7 @@ export default {
 				if (val === oldValue) {
 					return;
 				}
-				// this.$messageBus("dashboardsetting_showsearchbar", val.toString());
+				 this.$messageBus("dashboardsetting_showsearchbar", val.toString());
 				this.$store.commit("SET_SEARCH_ENGINE_SWITCH", val);
 			},
 			deep: true,
@@ -430,7 +430,7 @@ export default {
 				if (val === oldValue || val === undefined) {
 					return;
 				}
-				// this.$messageBus("dashboardsetting_news", val.toString());
+				this.$messageBus("dashboardsetting_news", val.toString());
 			},
 			deep: true,
 		},
