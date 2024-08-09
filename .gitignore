@@ -35,3 +35,5 @@ unused-files.json
 .turbo
 
 /packages/icewhale*
+.tar.gz
+.sh
