@@ -13,7 +13,7 @@
 			<!-- SideBar Button Start -->
 
 			<!-- Account Dropmenu Start -->
-			<b-dropdown animation="fade1" aria-role="list" class="navbar-item" @active-change="getUserInfo"
+			<!-- <b-dropdown animation="fade1" aria-role="list" class="navbar-item" @active-change="getUserInfo"
 				:close-on-click="true">
 				<template #trigger>
 					<b-tooltip :active="!$store.state.isMobile" :label="$t('Account')" position="is-right"
@@ -27,7 +27,7 @@
 				<b-dropdown-item :focusable="false" aria-role="menu-item" class="p-0" custom>
 					<account-panel></account-panel>
 				</b-dropdown-item>
-			</b-dropdown>
+			</b-dropdown> -->
 			<!-- Account Dropmenu End -->
 
 			<!-- Settings Dropmenu Start -->

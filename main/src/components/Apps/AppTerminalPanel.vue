@@ -46,9 +46,9 @@ export default {
 		serviceName: String,
 	},
 	mounted() {
-		this.getLogs();
+		// this.getLogs();
 		this.timer = setInterval(() => {
-			this.getLogs();
+			// this.getLogs();
 		}, 1000 * 5);
 	},
 	methods: {

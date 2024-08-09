@@ -19,6 +19,16 @@ export default [
 		}
 	},
 	{
+		path: '/404',
+		name: 'Error',
+		hidden: true,
+		component: () => import('@/views/404.vue'),
+		meta: {
+			requireAuth: false,
+			showBackground: false
+		}
+	},
+	{
 		path: '/welcome',
 		name: 'Welcome',
 		hidden: true,

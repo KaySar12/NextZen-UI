@@ -86,18 +86,18 @@ instance.interceptors.response.use(
 						isRefreshing = false
 						return tokenRes.data.data.access_token
 					} else {
-						logout()
+						//logout()
 					}
 				}).then(token => {
 					requests.forEach(cb => cb(token))
 					requests = []
 				}).catch(error => {
-					logout()
+					//logout()
 					console.log(error);
 				})
 
 			} else if (originalConfig.url === "/v1/users/refresh" && error?.response?.status === 401) {
-				logout()
+				//logout()
 			}
 			return new Promise(resolve => {
 				requests.push((token) => {

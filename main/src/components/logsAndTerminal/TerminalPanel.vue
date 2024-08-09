@@ -68,7 +68,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.getLogs();
+		// this.getLogs();
 		this.timer = setInterval(() => {
 			// this.getLogs();
 			// this.getUserServiceLogs();

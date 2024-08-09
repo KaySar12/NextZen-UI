@@ -147,7 +147,7 @@ export default {
 			debugger;
 			let userStatusRes = this.$api.users.getUserStatus().then(res => {
 				const initKey = res.data.data.key;
-				this.$api.users.register(this.username, this.password, initKey).then(res => {
+				this.$api.users.register(this.username, this.password, '', initKey).then(res => {
 					if (res.data.success == 200) {
 						this.login().then(() => {
 							// First login set default app order
