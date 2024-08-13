@@ -1,5 +1,5 @@
 <template>
-	<div class="blur navbar top-bar is-flex is-align-items-center _fixed-height">
+	<div class="blur-top navbar top-bar is-flex is-align-items-center _fixed-height">
 		<div class="navbar-brand ml-4 _fixed-height">
 			<!-- SideBar Button Start -->
 			<div id="sidebar-btn" class="is-flex is-align-items-center navbar-item">
@@ -24,10 +24,10 @@
 					</b-tooltip>
 				</template>
 
-				<b-dropdown-item :focusable="false" aria-role="menu-item" class="p-0" custom>
-					<account-panel></account-panel>
-				</b-dropdown-item>
-			</b-dropdown> -->
+<b-dropdown-item :focusable="false" aria-role="menu-item" class="p-0" custom>
+	<account-panel></account-panel>
+</b-dropdown-item>
+</b-dropdown> -->
 			<!-- Account Dropmenu End -->
 
 			<!-- Settings Dropmenu Start -->
@@ -227,7 +227,7 @@
 							<div class="is-flex-grow-1 is-size-7">{{ $t(updateText) }}</div>
 							<b-button class="ml-2" rounded size="is-small" type="is-dark" @click="showUpdateModal">{{
 								$t("Update")
-								}}
+							}}
 							</b-button>
 						</div>
 					</div>
@@ -392,7 +392,7 @@ export default {
 				if (val === oldValue) {
 					return;
 				}
-				 this.$messageBus("dashboardsetting_searchengine", val.toString());
+				this.$messageBus("dashboardsetting_searchengine", val.toString());
 				this.$store.commit("SET_SEARCH_ENGINE", val);
 			},
 			deep: true,
@@ -402,7 +402,7 @@ export default {
 				if (val === oldValue) {
 					return;
 				}
-				 this.$messageBus("dashboardsetting_showsearchbar", val.toString());
+				this.$messageBus("dashboardsetting_showsearchbar", val.toString());
 				this.$store.commit("SET_SEARCH_ENGINE_SWITCH", val);
 			},
 			deep: true,
@@ -753,6 +753,12 @@ export default {
 </script>
 
 <style lang="scss">
+// Blur background
+.blur-top {
+	-webkit-box-shadow: -1px 1px 5px 9px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: -1px 1px 5px 9px rgba(0, 0, 0, 0.75);
+	box-shadow: -1px 1px 5px 9px rgba(0, 0, 0, 0.75);
+}
 
 ._is-large {
 	// bulma 3rem;
@@ -807,6 +813,7 @@ export default {
 	position: relative;
 	z-index: 20;
 	height: 2.75rem;
+
 	.navbar-brand {
 		margin-left: 1.25rem;
 
@@ -965,6 +972,7 @@ export default {
 @media (prefers-color-scheme: dark) {
 	.top-bar {
 		background: rgba(53, 54, 58, 1);
+
 		.picon {
 			color: #fff;
 		}

@@ -17,8 +17,6 @@ const users = {
 	getUserStatus() {
 		return api.get(`${PREFIX}/status`);
 	},
-
-
 	// get user current info [OK]
 	getUserInfo() {
 		return api.get(`${PREFIX}/current`);
@@ -97,7 +95,12 @@ const users = {
 			key: key
 		});
 	},
-
+	async oidcLogin(state) {
+		var res = await api.post(`${PREFIX}/oidc/login`, {
+			state: state
+		});
+		window.location.href = res.data?.data || ''
+	},
 	// login [OK]
 	login(username, password) {
 		return api.post(`${PREFIX}/login`, {
