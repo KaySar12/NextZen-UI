@@ -112,6 +112,16 @@ const builtInApplications = [
 		icon: require(`@/assets/img/app/files.svg`),
 		status: 'running',
 		app_type: 'system'
+	},
+	{
+		id: '3',
+		name: 'Access Management',
+		title: {
+			en_us: 'Access Management'
+		},
+		icon: require(`@/assets/img/app/access-management.png`),
+		status: 'running',
+		app_type: 'system'
 	}
 ]
 

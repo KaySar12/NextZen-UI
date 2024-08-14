@@ -13,6 +13,7 @@ import api from '@/service/api'
 import store from '@/store'
 import route from './route.js'
 import { apply } from 'lodash/xor.js'
+import { toPath } from 'lodash'
 
 Vue.use(VueRouter)
 
@@ -52,14 +53,70 @@ const needInit = async () => {
 router.beforeEach(async (to, from, next) => {
 	debugger;
 	const accessToken = localStorage.getItem("access_token");
-	const requireAuth = to.matched.some(record => record.meta.requireAuth);
+	// const requireAuth = to.matched.some(record => record.meta.requireAuth);
 	if (to.path === '/logout') {
+		window.location.href = "https://auth.c14soft.com/application/o/nextzenos-oidc/end-session/"
+	}
+	if (!accessToken && (to.path !== '/oidc' && to.path !== '/profile')) {
+		next('/oidc')
 	}
 	if (to.path === '/oidc') {
-		await api.users.oidcLogin(`/#/callback`);
+		await api.users.oidcLogin(`/#/profile`);
 	}
-	if (to.path === '/callback') {
+	if (to.path === '/profile') {
+		var res = await api.users.oidcProfile()
+		if (res && res.data.success == 200) {
+			localStorage.setItem("access_token", res.data.data.token.access_token);
+			localStorage.setItem("refresh_token", res.data.data.token.refresh_token);
+			localStorage.setItem("expires_at", res.data.data.token.expires_at);
+			localStorage.setItem("user", JSON.stringify(res.data.data.user));
+
+			store.commit("SET_USER", res.data.data.user);
+			store.commit("SET_ACCESS_TOKEN", res.data.data.token.access_token);
+			store.commit("SET_REFRESH_TOKEN", res.data.data.token.refresh_token);
+			try {
+				const versionRes = await new Promise((resolve, reject) => {
+					const timer = setTimeout(() => {
+						console.warn("Version fetch timed out. Using default version 1.0.");
+						resolve({
+							data: {
+								success: 200,
+								message: "ok",
+								data: {
+									current_version: "1.0",
+									need_update: false,
+									version: {
+										id: 1,
+										change_log: "",
+										version: "1.0",
+										create_at: "",
+										update_at: ""
+									}
+								}
+							}
+						});
+					}, 1000); // 1 second timeout
+
+					api.sys.getVersion().then(response => {
+						clearTimeout(timer);
+						resolve(response);
+					}).catch(reject);
+				});
+
+				if (versionRes.data.success == 200) {
+					localStorage.setItem("version", versionRes.data.data.current_version);
+				}
+			} catch (error) {
+				// Handle version fetch error (e.g., log it or show a message)
+				localStorage.clear()
+				window.location.reload()
+				console.error('Error fetching version:', error);
+			}
+
+		}
+		next("/");
 	}
+	next()
 });
 
 // router.beforeEach(async (to, from, next) => {

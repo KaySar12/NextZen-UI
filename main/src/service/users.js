@@ -101,6 +101,9 @@ const users = {
 		});
 		window.location.href = res.data?.data || ''
 	},
+	async oidcProfile() {
+		return await api.get(`${PREFIX}/oidc/profile`);
+	},
 	// login [OK]
 	login(username, password) {
 		return api.post(`${PREFIX}/login`, {

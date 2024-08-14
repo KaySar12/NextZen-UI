@@ -27,11 +27,13 @@
 					}}
 					</b-button>
 
-					<b-button v-if="isV2App && !item.is_uncontrolled" expanded type="is-text" @click="checkAppVersion(item.name)">{{
-						$t('Check then update')
-					}}
+					<b-button v-if="isV2App && !item.is_uncontrolled" expanded type="is-text"
+						@click="checkAppVersion(item.name)">{{
+							$t('Check then update')
+						}}
 						<b-loading :active="isCheckThenUpdate || isUpdating" :is-full-page="false">
-							<img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
+							<img :src="require('@/assets/img/loading/waiting.svg')" alt="pending"
+								class="ml-4 is-24x24" />
 						</b-loading>
 					</b-button>
 
@@ -48,13 +50,15 @@
 					<b-button v-if="isLinkApp" class="mb-1" expanded type="is-text" @click="uninstallApp(true)">
 						{{ $t('Delete') }}
 						<b-loading v-model="isUninstalling" :is-full-page="false">
-							<img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
+							<img :src="require('@/assets/img/loading/waiting.svg')" alt="pending"
+								class="ml-4 is-24x24" />
 						</b-loading>
 					</b-button>
 					<b-button v-else class="has-text-red" expanded type="is-text" @click="uninstallConfirm">
 						{{ $t('Uninstall') }}
 						<b-loading v-model="isUninstalling" :is-full-page="false">
-							<img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
+							<img :src="require('@/assets/img/loading/waiting.svg')" alt="pending"
+								class="ml-4 is-24x24" />
 						</b-loading>
 					</b-button>
 
@@ -86,7 +90,8 @@
 			<b-tooltip :always="isActiveTooltip" :animated="true" :label="tooltipLabel" :triggers="tooltipTriger"
 				animation="fade1" class="in-card" type="is-white">
 
-				<div class="has-text-centered is-flex is-justify-content-center is-flex-direction-column pt-5 pb-3px img-c">
+				<div
+					class="has-text-centered is-flex is-justify-content-center is-flex-direction-column pt-5 pb-3px img-c">
 					<div class="is-flex is-justify-content-center">
 						<div class="is-relative">
 							<b-image :class="dotClass(item.status, isLoading)" :src="item.icon"
@@ -100,7 +105,8 @@
 						<b-loading :active="isLoading" :can-cancel="false" :is-full-page="false"
 							class="has-background-gray-800 op80 is-64x64"
 							style="top: auto;bottom: auto; right: auto; left: auto; border-radius: 11.5px">
-							<img :src="require('@/assets/img/loading/waiting-white.svg')" alt="loading" class="is-20x20" />
+							<img :src="require('@/assets/img/loading/waiting-white.svg')" alt="loading"
+								class="is-20x20" />
 						</b-loading>
 						<!-- Loading Bar End -->
 					</div>
@@ -214,7 +220,7 @@ export default {
 			return this.item.app_type === "LinkApp"
 		},
 		shutDownClass() {
-			return this.item.status !== 'running'? "shutdown-rounded": ""
+			return this.item.status !== 'running' ? "shutdown-rounded" : ""
 		},
 
 	},
@@ -288,11 +294,16 @@ export default {
 				case "Files":
 					this.homeShowFiles()
 					break;
+				case "Access Management":
+					this.openAccessManagement()
+					break;
 				default:
 					break;
 			}
 		},
-
+		openAccessManagement() {
+			window.open('https://auth.c14soft.com', '_blank');
+		},
 		/**
 		 * @description: Set drop-down menu status
 		 * @param {Boolean} e
@@ -727,7 +738,7 @@ export default {
 		 * @return {void}
 		 */
 		'app:update-begin'() {
-			
+
 		},
 
 		'docker:image:pull-end'(data) {

@@ -13,7 +13,7 @@
 			<!-- SideBar Button Start -->
 
 			<!-- Account Dropmenu Start -->
-			<!-- <b-dropdown animation="fade1" aria-role="list" class="navbar-item" @active-change="getUserInfo"
+			<b-dropdown animation="fade1" aria-role="list" class="navbar-item" @active-change="getUserInfo"
 				:close-on-click="true">
 				<template #trigger>
 					<b-tooltip :active="!$store.state.isMobile" :label="$t('Account')" position="is-right"
@@ -24,10 +24,10 @@
 					</b-tooltip>
 				</template>
 
-<b-dropdown-item :focusable="false" aria-role="menu-item" class="p-0" custom>
-	<account-panel></account-panel>
-</b-dropdown-item>
-</b-dropdown> -->
+				<b-dropdown-item :focusable="false" aria-role="menu-item" class="p-0" custom>
+					<account-panel></account-panel>
+				</b-dropdown-item>
+			</b-dropdown>
 			<!-- Account Dropmenu End -->
 
 			<!-- Settings Dropmenu Start -->
@@ -131,6 +131,18 @@
 							</b-button>
 						</div>
 					</div>
+					<div
+						class="is-flex is-align-items-center mb-1 _is-large _box hover-effect _is-radius pr-2 mr-4 ml-4">
+						<div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
+							<b-icon class="mr-1 ml-2" icon="data-outline" pack="casa" size="is-20"></b-icon>
+							{{ $t("Authentik") }}
+						</div>
+						<div class="ml-2">
+							<b-button rounded size="is-small" type="is-dark" @click="showAuthentikConfigModal">{{
+								$t("Update") }}
+							</b-button>
+						</div>
+					</div>
 					<!-- Background End -->
 
 					<!--  Show other Docker container app(s) Switch Start  -->
@@ -214,7 +226,9 @@
 						<div class="is-flex is-align-items-center">
 							<div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
 								<b-icon class="mr-1 ml-2" icon="update-outline" pack="casa" size="is-20"></b-icon>
-								<div :class="{ 'update-text-dot': updateInfo.need_update }">{{ $t("Update") }}</div>
+								<div :class="{ 'update-text-dot': updateInfo.need_update }">
+									{{ $t("Update") }}
+								</div>
 							</div>
 							<div class="_has-text-gray">v{{ updateInfo.current_version }}</div>
 						</div>
@@ -227,7 +241,7 @@
 							<div class="is-flex-grow-1 is-size-7">{{ $t(updateText) }}</div>
 							<b-button class="ml-2" rounded size="is-small" type="is-dark" @click="showUpdateModal">{{
 								$t("Update")
-							}}
+								}}
 							</b-button>
 						</div>
 					</div>
@@ -349,7 +363,10 @@ export default {
 				{ url: "https://duckduckgo.com/?q=", name: "DuckDuckGo" },
 				{ url: "https://www.google.com/search?q=", name: "Google" },
 				{ url: "https://www.bing.com/search?q=", name: "Bing" },
-				{ url: "https://www.startpage.com/do/search?cat=web&pl=chrome&query=", name: "StartPage" },
+				{
+					url: "https://www.startpage.com/do/search?cat=web&pl=chrome&query=",
+					name: "StartPage",
+				},
 				{ url: "https://search.brave.com/search?source=web&q=", name: "Brave" },
 			],
 			restart: "Restart",
@@ -460,7 +477,10 @@ export default {
 		 * @return {*}
 		 */
 		async saveData() {
-			const saveRes = await this.$api.users.setCustomStorage(systemConfigName, this.barData);
+			const saveRes = await this.$api.users.setCustomStorage(
+				systemConfigName,
+				this.barData
+			);
 			if (saveRes.data.success === 200) {
 				this.barData = saveRes.data.data;
 			}
@@ -502,7 +522,9 @@ export default {
 		 * @return {String} lang
 		 */
 		getInitLang() {
-			let lang = localStorage.getItem("lang") ? localStorage.getItem("lang") : this.getLangFromBrowser();
+			let lang = localStorage.getItem("lang")
+				? localStorage.getItem("lang")
+				: this.getLangFromBrowser();
 			lang = lang.includes("_") ? lang : "en_us";
 			return lang;
 		},
@@ -547,7 +569,10 @@ export default {
 			this.$EventBus.$emit(events.SHOW_CHANGE_WALLPAPER_MODAL);
 			this.$refs.settingsDrop.toggle();
 		},
-
+		showAuthentikConfigModal() {
+			this.$EventBus.$emit(events.SHOW_CHANGE_WALLPAPER_MODAL);
+			this.$refs.settingsDrop.toggle();
+		},
 		/*************************************************
 		 * PART 1-4  Dashboard Setting - Auto USB Mount Switch
 		 **************************************************/
@@ -724,7 +749,8 @@ export default {
 					this.$messageBus("dashboardsetting_shutdown");
 					this[key.toLowerCase()] = key;
 					this.showPowerTitle = "Now shutting down";
-					this.showPowerMessage = "Please wait for about 30 seconds before cutting off the power.";
+					this.showPowerMessage =
+						"Please wait for about 30 seconds before cutting off the power.";
 					break;
 			}
 			let timer;
