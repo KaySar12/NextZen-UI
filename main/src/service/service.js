@@ -52,10 +52,11 @@ let isRefreshing = false
 let requests = []
 
 function logout() {
-	store.commit("SET_ACCESS_TOKEN", "");
-	store.commit("SET_REFRESH_TOKEN", "");
-	router.replace({ //Jump to the logout page
-		path: '/logout'
+	// store.commit("SET_ACCESS_TOKEN", "");
+	// store.commit("SET_REFRESH_TOKEN", "");
+	localStorage.clear()
+	router.replace({
+		path: '/oidc'
 	})
 }
 
@@ -64,9 +65,13 @@ instance.interceptors.response.use(
 		return response;
 	},
 	async (error) => {
+		debugger;
 		const originalConfig = error?.config;
 		const refresh_token = localStorage.getItem("refresh_token")
 		if (originalConfig.url !== "/users/register" && error?.response?.status === 401) {
+			if (originalConfig.url === "/v1/users/oidc/validateToken" && error?.response?.status === 401) {
+				logout()
+			}
 			// Access Token was expired
 			if (!isRefreshing) {
 				isRefreshing = true
@@ -78,7 +83,6 @@ instance.interceptors.response.use(
 						localStorage.setItem("access_token", tokenRes.data.data.access_token);
 						localStorage.setItem("refresh_token", tokenRes.data.data.refresh_token);
 						localStorage.setItem("expires_at", tokenRes.data.data.expires_at);
-
 						store.commit("SET_ACCESS_TOKEN", tokenRes.data.data.access_token);
 						store.commit("SET_REFRESH_TOKEN", tokenRes.data.data.refresh_token);
 						originalConfig.headers.Authorization = tokenRes.data.data.access_token
@@ -86,18 +90,18 @@ instance.interceptors.response.use(
 						isRefreshing = false
 						return tokenRes.data.data.access_token
 					} else {
-						//logout()
+						logout()
 					}
 				}).then(token => {
 					requests.forEach(cb => cb(token))
 					requests = []
 				}).catch(error => {
-					//logout()
+					logout()
 					console.log(error);
 				})
 
 			} else if (originalConfig.url === "/v1/users/refresh" && error?.response?.status === 401) {
-				//logout()
+				logout()
 			}
 			return new Promise(resolve => {
 				requests.push((token) => {

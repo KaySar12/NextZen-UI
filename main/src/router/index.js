@@ -53,14 +53,24 @@ const needInit = async () => {
 router.beforeEach(async (to, from, next) => {
 	debugger;
 	const accessToken = localStorage.getItem("access_token");
+	const authentikToken = localStorage.getItem("authentik_token");
+	if (!authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
+		next('/oidc')
+	}
+	if (authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
+		await api.users.oidcValidateToken(authentikToken)
+	}
 	// const requireAuth = to.matched.some(record => record.meta.requireAuth);
 	if (to.path === '/logout') {
-		window.location.href = "https://auth.c14soft.com/application/o/nextzenos-oidc/end-session/"
+		localStorage.clear()
+	     window.location.href = "http://accessmanager.local/application/o/nextzenos-oidc/end-session/"
+		// await api.users.oidcLogout();
 	}
 	if (!accessToken && (to.path !== '/oidc' && to.path !== '/profile')) {
 		next('/oidc')
 	}
 	if (to.path === '/oidc') {
+		localStorage.clear()
 		await api.users.oidcLogin(`/#/profile`);
 	}
 	if (to.path === '/profile') {
@@ -70,7 +80,7 @@ router.beforeEach(async (to, from, next) => {
 			localStorage.setItem("refresh_token", res.data.data.token.refresh_token);
 			localStorage.setItem("expires_at", res.data.data.token.expires_at);
 			localStorage.setItem("user", JSON.stringify(res.data.data.user));
-
+			localStorage.setItem("authentik_token", res.data.data.authToken)
 			store.commit("SET_USER", res.data.data.user);
 			store.commit("SET_ACCESS_TOKEN", res.data.data.token.access_token);
 			store.commit("SET_REFRESH_TOKEN", res.data.data.token.refresh_token);

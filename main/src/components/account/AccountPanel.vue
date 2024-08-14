@@ -29,7 +29,7 @@
             <div class="has-text-emphasis-04 has-text-gray-font mb-2">
               {{ $t("Name") }}
             </div>
-            <div class="is-flex is-align-items-center ">
+            <div class="is-flex is-align-items-center">
               <div class="has-text-emphasis-02 is-flex-grow-1">
                 {{ userInfo.username }}
               </div>
