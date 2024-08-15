@@ -48,8 +48,8 @@
 					title="Legacy app (To be rebuilt).">
 				</app-section-title-tip>
 				<template>
-				 <b-icon @click.native="toggleLegacyApp()" class="polymorphic is-clickable has-text-grey-100"
-					:icon="!display ? 'minus-outline' : 'plus-outline'" pack="casa" size="is-24"></b-icon>
+					<b-icon @click.native="toggleLegacyApp()" class="polymorphic is-clickable has-text-grey-100"
+						:icon="!display ? 'minus-outline' : 'plus-outline'" pack="casa" size="is-24"></b-icon>
 				</template>
 			</div>
 
@@ -57,15 +57,15 @@
 
 			<!-- App List Start -->
 			<transition name="slide">
-			<div v-if="!display" class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
+				<div v-if="!display" class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
 
-				<!-- Application not imported Start -->
-				<div v-for="item in oldAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle ">
-					<app-card :isCasa="false" :item="item" @configApp="showConfigPanel" @importApp="showContainerPanel"
-						@updateState="getList"></app-card>
+					<!-- Application not imported Start -->
+					<div v-for="item in oldAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle ">
+						<app-card :isCasa="false" :item="item" @configApp="showConfigPanel"
+							@importApp="showContainerPanel" @updateState="getList"></app-card>
+					</div>
+					<!-- Application not imported End -->
 				</div>
-				<!-- Application not imported End -->
-			</div>
 			</transition>
 			<!-- App List End -->
 		</template>
@@ -120,6 +120,56 @@ const builtInApplications = [
 			en_us: 'Access Management'
 		},
 		icon: require(`@/assets/img/app/access-management.png`),
+		status: 'running',
+		app_type: 'system'
+	},
+	{
+		id: '4',
+		name: 'NextNAS',
+		title: {
+			en_us: 'NextNAS'
+		},
+		icon: require(`@/assets/img/app/nextnas.jpg`),
+		status: 'running',
+		app_type: 'system'
+	},
+	{
+		id: '5',
+		name: 'App Manager',
+		title: {
+			en_us: 'App Manager'
+		},
+		icon: require(`@/assets/img/app/portainer.png`),
+		status: 'running',
+		app_type: 'system'
+	},
+	{
+		id: '6',
+		name: 'NextDNS',
+		title: {
+			en_us: 'NextDNS'
+		},
+		icon: require(`@/assets/img/app/nextdns.png`),
+		status: 'running',
+		app_type: 'system'
+	},
+	{
+		id: '7',
+		name: 'Proxmox',
+		title: {
+			en_us: 'Proxmox'
+		},
+		icon: require(`@/assets/img/app/proxmox.png`),
+		status: 'running',
+		app_type: 'system'
+	},
+	{
+		id: '8',
+		name: 'NextFirewall',
+		title: {
+			en_us: 'NextFirewall'
+		},
+		icon: require(`@/assets/img/app/nextfirewall.png`),
 		status: 'running',
 		app_type: 'system'
 	}

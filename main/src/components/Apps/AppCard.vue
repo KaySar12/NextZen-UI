@@ -295,15 +295,31 @@ export default {
 					this.homeShowFiles()
 					break;
 				case "Access Management":
-					this.openAccessManagement()
+					this.openLink('http://accessmanager.local/')
+					break;
+				case "NextNAS":
+					this.openLink('http://nextnas.local/')
+					break;
+				case "Proxmox":
+					this.openLink('http://promox.local/')
+					break;
+				case "NextDNS":
+					this.openLink('http://nextdns.local/')
+					break;
+				case "App Manager":
+					this.openLink('http://appmanager.local/')
+					break;
+				case "NextFirewall":
+					this.openLink('http://nextfirewall.local/')
 					break;
 				default:
 					break;
 			}
 		},
-		openAccessManagement() {
-			window.open('https://auth.c14soft.com', '_blank');
+		openLink(link) {
+			window.open(link, '_blank');
 		},
+
 		/**
 		 * @description: Set drop-down menu status
 		 * @param {Boolean} e
