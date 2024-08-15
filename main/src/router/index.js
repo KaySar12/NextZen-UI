@@ -57,7 +57,7 @@ router.beforeEach(async (to, from, next) => {
 	if ((to.path === '/logout' || !authentikToken) && (to.path !== '/oidc' && to.path !== '/profile')) {
 		localStorage.clear()
 		var res = await api.users.oidcLogout(authentikToken);
-		window.location.href = "http://10.0.0.26:9000/if/flow/default-authentication-flow/?next=%2Fapplication%2Fo%2Fauthorize%2F%3Fclient_id%3D6KwKSxLCtaQ4r6HoAn3gdNMbNOAf75j3SejLIAx7%26redirect_uri%3Dhttp%253A%252F%252F172.26.157.79%253A8080%252Fv1%252Fusers%252Foidc%252Fcallback%26response_type%3Dcode%26scope%3Dopenid%2Bprofile%2Bemail%2Bgoauthentik.io%252Fapi%26state%3D%252F%2523%252Fprofile"
+		window.location.href = res.data.data
 		return
 	}
 	// if (!authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
