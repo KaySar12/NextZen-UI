@@ -105,7 +105,12 @@ const users = {
 		return await api.get(`${PREFIX}/oidc/profile`);
 	},
 	async oidcUserInfo() {
-		return await api.get(`${PREFIX}/oi dc/userinfo`);
+		return await api.get(`${PREFIX}/oidc/userinfo`);
+	},
+	async oidcLogout(token){
+	return await api.post(`${PREFIX}/oidc/logout`,{
+		authentikToken:token
+	  });
 	},
 	async oidcValidateToken(authentikToken) {
 		return await api.post(`${PREFIX}/oidc/validateToken`, {

@@ -56,7 +56,7 @@ function logout() {
 	// store.commit("SET_REFRESH_TOKEN", "");
 	localStorage.clear()
 	router.replace({
-		path: '/oidc'
+		path: '/logout'
 	})
 }
 
