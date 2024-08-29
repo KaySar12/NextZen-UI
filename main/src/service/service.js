@@ -59,7 +59,12 @@ function logout() {
 		path: '/logout'
 	})
 }
-
+function offlineService() {
+	localStorage.clear()
+	router.replace({
+		path: '/503'
+	})
+}
 instance.interceptors.response.use(
 	(response) => {
 		return response;
@@ -110,6 +115,9 @@ instance.interceptors.response.use(
 					resolve(instance(originalConfig))
 				})
 			})
+		}
+		if (error?.response?.status === 503) {
+			offlineService()
 		}
 		return Promise.reject(error)
 

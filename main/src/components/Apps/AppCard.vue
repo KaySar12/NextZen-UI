@@ -301,7 +301,7 @@ export default {
 					this.openLink('http://nextnas.local/')
 					break;
 				case "Proxmox":
-					this.openLink('http://promox.local/')
+					this.openLink('http://proxmox.local/')
 					break;
 				case "NextDNS":
 					this.openLink('http://nextdns.local/')

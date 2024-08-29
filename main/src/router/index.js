@@ -54,9 +54,12 @@ router.beforeEach(async (to, from, next) => {
 	debugger;
 	const accessToken = localStorage.getItem("access_token");
 	const authentikToken = localStorage.getItem("authentik_token");
+	if (to.path === '/503') {
+		next()
+	}
 	if ((to.path === '/logout' || !authentikToken) && (to.path !== '/oidc' && to.path !== '/profile')) {
 		localStorage.clear()
-		var res = await api.users.oidcLogout(authentikToken);
+		var res = await api.users.oidcLogout(authentikToken || '');
 		window.location.href = res.data.data
 		return
 	}
