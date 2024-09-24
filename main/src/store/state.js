@@ -32,7 +32,7 @@ const state = {
 	// Files
 	operateObject: null,
 	currentPath: "",
-	isViewGird: true,
+	isViewGird: false,
 
 	// Wallpaper
 	wallpaperObject: {

@@ -425,7 +425,7 @@ export default {
       dataPath: "/DATA",
       currentPath: "",
       currentPathName: "",
-      isViewGird: true,
+      isViewGird: false,
       listData: [],
       selectedArray: [],
       file: null,
@@ -485,10 +485,10 @@ export default {
 
   computed: {
     viewIcon() {
-      return this.$store.state.isViewGird ? "format-list-bulleted" : "view-grid-outline";
+      return this.$store.state.isViewGird ? "view-grid-outline" : "format-list-bulleted";
     },
     listView() {
-      return this.$store.state.isViewGird ? "list-view" : "gird-view";
+      return this.$store.state.isViewGird ? "gird-view" : "list-view";
     },
     containerClass() {
       return this.$route.path == "/files" ? "file-panel full-screen " : "";
@@ -658,6 +658,7 @@ export default {
      * @return {*}
      */
     getFileList(path) {
+      debugger;
       this.isLoading = true;
       // path = path.replace("//", "/")
       this.pageType = "file";

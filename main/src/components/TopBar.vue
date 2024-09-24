@@ -131,18 +131,7 @@
 							</b-button>
 						</div>
 					</div>
-					<div
-						class="is-flex is-align-items-center mb-1 _is-large _box hover-effect _is-radius pr-2 mr-4 ml-4">
-						<div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
-							<b-icon class="mr-1 ml-2" icon="data-outline" pack="casa" size="is-20"></b-icon>
-							{{ $t("Authentik") }}
-						</div>
-						<div class="ml-2">
-							<b-button rounded size="is-small" type="is-dark" @click="showAuthentikConfigModal">{{
-								$t("Update") }}
-							</b-button>
-						</div>
-					</div>
+			
 					<!-- Background End -->
 
 					<!--  Show other Docker container app(s) Switch Start  -->

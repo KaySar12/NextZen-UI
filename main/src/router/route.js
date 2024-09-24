@@ -8,21 +8,31 @@
  */
 
 export default [
-	{
-		path: '/login',
-		name: 'Login',
-		hidden: true,
-		component: () => import('@/views/Login.vue'),
-		meta: {
-			requireAuth: false,
-			showBackground: true
-		}
-	},
+	// {
+	// 	path: '/login',
+	// 	name: 'Login',
+	// 	hidden: true,
+	// 	component: () => import('@/views/Login.vue'),
+	// 	meta: {
+	// 		requireAuth: false,
+	// 		showBackground: true
+	// 	}
+	// },
 	{
 		path: '/407',
 		name: 'Error',
 		hidden: true,
 		component: () => import('@/views/407.vue'),
+		meta: {
+			requireAuth: false,
+			showBackground: false
+		}
+	},
+	{
+		path: '/profile',
+		name: 'Profile',
+		hidden: true,
+		component: () => import('@/views/Profile.vue'),
 		meta: {
 			requireAuth: false,
 			showBackground: false
@@ -48,16 +58,16 @@ export default [
 			showBackground: true
 		}
 	},
-	// {
-	// 	path: '/files',
-	// 	name: 'Files',
-	// 	hidden: true,
-	// 	component: () => import('@/components/filebrowser/FilePanel.vue'),
-	// 	meta: {
-	// 		requireAuth: true,
-	// 		showBackground: true
-	// 	}
-	// },
+	{	name: 'file-browser',
+		path: '/files/:path*',
+		hidden: true,
+		component: () => import('@/components/filebrowser/FilePanel.vue'),
+		props: (route) => ({ path: route.params.path }),
+		meta: {
+			requireAuth: true,
+			showBackground: true
+		}
+	},
 	{
 		path: '/launch',
 		name: 'AppLauncherCheck',

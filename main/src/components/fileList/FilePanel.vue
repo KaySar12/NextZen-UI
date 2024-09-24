@@ -110,6 +110,7 @@ export default {
 	methods: {
 		// get file list from api
 		getFileList(path, locate = false) {
+			debugger;
 			this.$api.folder.getList(path).then(res => {
 				if (res.data.success == 200) {
 					this.path = path
