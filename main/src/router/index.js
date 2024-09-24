@@ -54,83 +54,85 @@ router.beforeEach(async (to, from, next) => {
 	debugger;
 	const accessToken = localStorage.getItem("access_token");
 	const authentikToken = localStorage.getItem("authentik_token");
-	if (to.path === '/503') {
+	if (to.path === '/407') {
 		next()
 	}
-	if ((to.path === '/logout' || !authentikToken) && (to.path !== '/oidc' && to.path !== '/profile')) {
-		localStorage.clear()
-		var res = await api.users.oidcLogout(authentikToken || '');
-		window.location.href = res.data.data
-		return
-	}
-	// if (!authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
-	// 	next('/oidc')
-	// }
-	if (authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
-		await api.users.oidcValidateToken(authentikToken)
-	}
-	// const requireAuth = to.matched.some(record => record.meta.requireAuth);
-	if (!accessToken && (to.path !== '/oidc' && to.path !== '/profile')) {
-		next('/oidc')
-	}
-	if (to.path === '/oidc') {
-		localStorage.clear()
-		await api.users.oidcLogin(`/#/profile`);
-	}
-	if (to.path === '/profile') {
-		var res = await api.users.oidcProfile()
-		if (res && res.data.success == 200) {
-			localStorage.setItem("access_token", res.data.data.token.access_token);
-			localStorage.setItem("refresh_token", res.data.data.token.refresh_token);
-			localStorage.setItem("expires_at", res.data.data.token.expires_at);
-			localStorage.setItem("user", JSON.stringify(res.data.data.user));
-			localStorage.setItem("authentik_token", res.data.data.authToken)
-			store.commit("SET_USER", res.data.data.user);
-			store.commit("SET_ACCESS_TOKEN", res.data.data.token.access_token);
-			store.commit("SET_REFRESH_TOKEN", res.data.data.token.refresh_token);
-			try {
-				const versionRes = await new Promise((resolve, reject) => {
-					const timer = setTimeout(() => {
-						console.warn("Version fetch timed out. Using default version 1.0.");
-						resolve({
-							data: {
-								success: 200,
-								message: "ok",
+	else {
+		if ((to.path === '/logout' || !authentikToken) && (to.path !== '/oidc' && to.path !== '/profile')) {
+			localStorage.clear()
+			var res = await api.users.oidcLogout(authentikToken || '');
+			window.location.href = res.data.data
+			return
+		}
+		// if (!authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
+		// 	next('/oidc')
+		// }
+		if (authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
+			await api.users.oidcValidateToken(authentikToken)
+		}
+		// const requireAuth = to.matched.some(record => record.meta.requireAuth);
+		if (!accessToken && (to.path !== '/oidc' && to.path !== '/profile')) {
+			next('/oidc')
+		}
+		if (to.path === '/oidc') {
+			localStorage.clear()
+			await api.users.oidcLogin(`/#/profile`);
+		}
+		if (to.path === '/profile') {
+			var res = await api.users.oidcProfile()
+			if (res && res.data.success == 200) {
+				localStorage.setItem("access_token", res.data.data.token.access_token);
+				localStorage.setItem("refresh_token", res.data.data.token.refresh_token);
+				localStorage.setItem("expires_at", res.data.data.token.expires_at);
+				localStorage.setItem("user", JSON.stringify(res.data.data.user));
+				localStorage.setItem("authentik_token", res.data.data.authToken)
+				store.commit("SET_USER", res.data.data.user);
+				store.commit("SET_ACCESS_TOKEN", res.data.data.token.access_token);
+				store.commit("SET_REFRESH_TOKEN", res.data.data.token.refresh_token);
+				try {
+					const versionRes = await new Promise((resolve, reject) => {
+						const timer = setTimeout(() => {
+							console.warn("Version fetch timed out. Using default version 1.0.");
+							resolve({
 								data: {
-									current_version: "1.0",
-									need_update: false,
-									version: {
-										id: 1,
-										change_log: "",
-										version: "1.0",
-										create_at: "",
-										update_at: ""
+									success: 200,
+									message: "ok",
+									data: {
+										current_version: "1.0",
+										need_update: false,
+										version: {
+											id: 1,
+											change_log: "",
+											version: "1.0",
+											create_at: "",
+											update_at: ""
+										}
 									}
 								}
-							}
-						});
-					}, 1000); // 1 second timeout
+							});
+						}, 1000); // 1 second timeout
 
-					api.sys.getVersion().then(response => {
-						clearTimeout(timer);
-						resolve(response);
-					}).catch(reject);
-				});
+						api.sys.getVersion().then(response => {
+							clearTimeout(timer);
+							resolve(response);
+						}).catch(reject);
+					});
 
-				if (versionRes.data.success == 200) {
-					localStorage.setItem("version", versionRes.data.data.current_version);
+					if (versionRes.data.success == 200) {
+						localStorage.setItem("version", versionRes.data.data.current_version);
+					}
+				} catch (error) {
+					// Handle version fetch error (e.g., log it or show a message)
+					localStorage.clear()
+					window.location.reload()
+					console.error('Error fetching version:', error);
 				}
-			} catch (error) {
-				// Handle version fetch error (e.g., log it or show a message)
-				localStorage.clear()
-				window.location.reload()
-				console.error('Error fetching version:', error);
-			}
 
+			}
+			next("/");
 		}
-		next("/");
+		next()
 	}
-	next()
 });
 
 // router.beforeEach(async (to, from, next) => {

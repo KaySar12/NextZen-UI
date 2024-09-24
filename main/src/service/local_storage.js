@@ -29,11 +29,13 @@ const local_storage = {
 
 	// init mergerfs
 	initMergerfs(data) {
+		debugger
 		return api.post(`${PREFIX}/merge/init`, data);
 	},
 
 	// get mergerfs status
 	getInitMergerfsStatus() {
+		debugger
 		return api.get(`${PREFIX}/merge/init`);
 	},
 
@@ -44,6 +46,7 @@ const local_storage = {
 
 	// get mergerfs info
 	getMergerfsInfo(data) {
+		debugger
 		return api.get(`${PREFIX}/merge`, data);
 	},
 

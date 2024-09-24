@@ -19,10 +19,10 @@ export default [
 		}
 	},
 	{
-		path: '/503',
+		path: '/407',
 		name: 'Error',
 		hidden: true,
-		component: () => import('@/views/503.vue'),
+		component: () => import('@/views/407.vue'),
 		meta: {
 			requireAuth: false,
 			showBackground: false

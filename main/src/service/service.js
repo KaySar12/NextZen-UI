@@ -59,10 +59,10 @@ function logout() {
 		path: '/logout'
 	})
 }
-function offlineService() {
+function AuthentikOffline() {
 	localStorage.clear()
 	router.replace({
-		path: '/503'
+		path: '/407'
 	})
 }
 instance.interceptors.response.use(
@@ -116,8 +116,8 @@ instance.interceptors.response.use(
 				})
 			})
 		}
-		if (error?.response?.status === 503) {
-			offlineService()
+		if (error?.response?.status === 407) {
+			AuthentikOffline()
 		}
 		return Promise.reject(error)
 

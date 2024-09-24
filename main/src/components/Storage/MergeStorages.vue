@@ -355,15 +355,15 @@ export default {
 					}
 				})
 			})
-		}
-		,
+		},
 
 		// get the storage list be mounted of mergerfs
-		async getMerageStorage() {
+		async getMergeStorage() {
+			debugger;
 			try {
 				// TODO merge can't be used
-				this.mergeInfo = await this.$api.local_storage.getMergerfsInfo().then(res => res.data.data[0]["source_volume_uuids"]).catch(() => [])
-				this.checkBoxGroup.push(...this.mergeInfo)
+				// this.mergeInfo = await this.$api.local_storage.getMergerfsInfo().then(res => res.data.data[0]["source_volume_uuids"]).catch(() => [])
+				//this.checkBoxGroup.push(...this.mergeInfo)
 			} catch (e) {
 				console.log(e)
 			}
