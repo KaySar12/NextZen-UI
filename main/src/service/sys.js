@@ -63,7 +63,7 @@ const sys = {
 	getProxyRequestContent(url) {
 		return api.get(`${PREFIX}/proxy?url=${url}`)
 	},
-
+	
 	// get casaos server port
 	getServerPort() {
 		return api.get(`/gateway/port`);

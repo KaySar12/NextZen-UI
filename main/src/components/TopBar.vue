@@ -131,7 +131,7 @@
 							</b-button>
 						</div>
 					</div>
-			
+
 					<!-- Background End -->
 
 					<!--  Show other Docker container app(s) Switch Start  -->
@@ -230,7 +230,7 @@
 							<div class="is-flex-grow-1 is-size-7">{{ $t(updateText) }}</div>
 							<b-button class="ml-2" rounded size="is-small" type="is-dark" @click="showUpdateModal">{{
 								$t("Update")
-								}}
+							}}
 							</b-button>
 						</div>
 					</div>
@@ -263,6 +263,56 @@
 				</b-tooltip>
 			</div>
 			<!-- Terminal  End -->
+			<b-dropdown ref="serviceDrops" animation="fade1" aria-role="list" class="ml-3 navbar-item"
+				@active-change="onOpen">
+				<template #trigger>
+					<b-tooltip :active="!$store.state.isMobile" :label="$t('Services')" position="is-right"
+						type="is-dark" @click.native="$messageBus('service_setting')">
+						<p role="button">
+							<b-icon :class="{ 'update-icon-dot': updateInfo.need_update }" class="picon"
+								icon="system-outline" pack="casa" size="is-20"></b-icon>
+						</p>
+					</b-tooltip>
+				</template>
+				<b-dropdown-item :focusable="false" aria-role="menu-item" class="p-0" custom>
+					<h2 class="_title mb-4">{{ $t("External Services") }}</h2>
+					<div
+						class="is-flex is-align-items-center mb-1 _is-large _box hover-effect _is-radius pr-2 mr-4 ml-4">
+						<div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
+							<b-icon class="mr-1 ml-2" icon="" pack="casa" size="is-20"></b-icon>
+							{{ $t("Authentik") }}
+						</div>
+						<div
+							:class="[authentik_health === 'Live' ? 'status open' : authentik_health === 'Starting' ? 'status in-progress' : 'status dead']">
+						</div>
+						<div class="ml-2">
+							<b-button rounded size="is-small" type="is-dark" @click="showAuthentikPanel">{{ $t("Settings") }}
+							</b-button>
+						</div>
+					</div>
+					<div
+						class="is-flex is-align-items-center mb-1 _is-large _box hover-effect _is-radius pr-2 mr-4 ml-4">
+						<div class="is-flex is-align-items-center is-flex-grow-1 _is-normal">
+							<b-icon class="mr-1 ml-2" icon="" pack="casa" size="is-20"></b-icon>
+							{{ $t("NextWeb") }}
+						</div>
+						<div class="status dead">
+						</div>
+						<div class="ml-2">
+							<b-button rounded size="is-small" type="is-dark">{{ $t("Settings") }}
+							</b-button>
+						</div>
+					</div>
+					<div
+						class="is-flex is-align-content-center is-justify-content-center _footer mt-4 pl-3 pr-3 pt-2 pb-2">
+						<div
+							class="mr-1 column is-half is-flex is-align-items-center is-justify-content-center hover-effect is-clickable _is-radius _is-normal">
+							<b-icon class="mr-1" icon="restart-outline" pack="casa"></b-icon>
+							Refresh
+						</div>
+					</div>
+				</b-dropdown-item>
+			</b-dropdown>
 		</div>
 
 		<div class="navbar-menu">
@@ -302,7 +352,7 @@ import PortPanel from "./settings/PortPanel.vue";
 import UpdateModal from "./settings/UpdateModal.vue";
 import { mixin } from "@/mixins/mixin";
 import messages from "@/assets/lang";
-
+import Authentik from "./externalServices/Authentik.vue";
 import events from "@/events/events";
 
 const systemConfigName = "system";
@@ -338,7 +388,8 @@ export default {
 			isUpdating: false,
 			latestText: "Currently at the latest version",
 			updateText: "A new version is available!",
-
+			authentik_health: "Offline",
+			panel_health: "Offline",
 			port: "",
 			autoUsbMount: false,
 			deviceModel: "",
@@ -450,6 +501,8 @@ export default {
 		this.getPort();
 	},
 	mounted() {
+		this.checkOIDCHealth();
+		// setInterval(this.checkOIDCHealth, 5000); 
 		this.checkVersion();
 		this.getUserInfo();
 		this.getUsbStatus();
@@ -533,7 +586,11 @@ export default {
 				}
 			});
 		},
-
+		checkOIDCHealth() {
+			this.$api.users.oidcHealth().then((res) => {
+				this.authentik_health = res.data.data;
+			})
+		},
 		/**
 		 * @description: Show Port panel
 		 * @return {*}
@@ -554,11 +611,8 @@ export default {
 				},
 			});
 		},
+	
 		showChangeWallpaperModal() {
-			this.$EventBus.$emit(events.SHOW_CHANGE_WALLPAPER_MODAL);
-			this.$refs.settingsDrop.toggle();
-		},
-		showAuthentikConfigModal() {
 			this.$EventBus.$emit(events.SHOW_CHANGE_WALLPAPER_MODAL);
 			this.$refs.settingsDrop.toggle();
 		},
@@ -696,7 +750,19 @@ export default {
 				animation: "zoom-in",
 			});
 		},
-
+		showAuthentikPanel() {
+			this.$refs.serviceDrops.toggle();
+			this.$buefy.modal.open({
+				parent: this,
+				component: Authentik,
+				hasModalCard: true,
+				customClass: "terminal-modal",
+				trapFocus: true,
+				canCancel: [],
+				scroll: "keep",
+				animation: "zoom-in",
+			});
+		},
 		rssConfirm() {
 			if (this.rss_switch == false) {
 				this.barData.rss_switch = false;
@@ -769,6 +835,36 @@ export default {
 
 <style lang="scss">
 // Blur background
+.status {
+	&.open:before {
+		background-color: #94E185;
+		border-color: #78D965;
+		box-shadow: 0px 0px 4px 1px #94E185;
+	}
+
+	&.in-progress:before {
+		background-color: #FFC182;
+		border-color: #FFB161;
+		box-shadow: 0px 0px 4px 1px #FFC182;
+	}
+
+	&.dead:before {
+		background-color: #C9404D;
+		border-color: #C42C3B;
+		box-shadow: 0px 0px 4px 1px #C9404D;
+	}
+
+	&:before {
+		content: ' ';
+		display: inline-block;
+		width: 7px;
+		height: 7px;
+		margin-right: 10px;
+		border: 1px solid #000;
+		border-radius: 7px;
+	}
+}
+
 .blur-top {
 	-webkit-box-shadow: -1px 1px 5px 9px rgba(0, 0, 0, 0.75);
 	-moz-box-shadow: -1px 1px 5px 9px rgba(0, 0, 0, 0.75);

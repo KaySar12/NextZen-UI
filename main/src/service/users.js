@@ -95,6 +95,9 @@ const users = {
 			key: key
 		});
 	},
+	async oidcHealth() {
+		return await api.get(`${PREFIX}/oidc/health`);
+	},
 	async oidcLogin(state) {
 		var res = await api.post(`${PREFIX}/oidc/login`, {
 			state: state
@@ -107,11 +110,11 @@ const users = {
 	async oidcUserInfo() {
 		return await api.get(`${PREFIX}/oidc/userinfo`);
 	},
-	async oidcLogout(token){
-	debugger;
-	return await api.post(`${PREFIX}/oidc/logout`,{
-		authentikToken:token
-	  });
+	async oidcLogout(token) {
+		debugger;
+		return await api.post(`${PREFIX}/oidc/logout`, {
+			authentikToken: token
+		});
 	},
 	async oidcValidateToken(authentikToken) {
 		return await api.post(`${PREFIX}/oidc/validateToken`, {
@@ -152,7 +155,6 @@ const users = {
 	delLetter(uuid) {
 		return api.delete(`${PREFIX2}/event/${uuid}`);
 	},
-
 	// save user avatar 
 	saveAvatar(data) {
 		return api.put(`${PREFIX}/avatar`, data);
