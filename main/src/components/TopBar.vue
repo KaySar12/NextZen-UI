@@ -286,7 +286,8 @@
 							:class="[authentik_health === 'Live' ? 'status open' : authentik_health === 'Starting' ? 'status in-progress' : 'status dead']">
 						</div>
 						<div class="ml-2">
-							<b-button rounded size="is-small" type="is-dark" @click="showAuthentikPanel">{{ $t("Settings") }}
+							<b-button rounded size="is-small" type="is-dark" @click="showAuthentikPanel">{{
+								$t("Settings") }}
 							</b-button>
 						</div>
 					</div>
@@ -352,7 +353,7 @@ import PortPanel from "./settings/PortPanel.vue";
 import UpdateModal from "./settings/UpdateModal.vue";
 import { mixin } from "@/mixins/mixin";
 import messages from "@/assets/lang";
-import Authentik from "./externalServices/Authentik.vue";
+import Authentik from "./externalServices/AuthentikPanel.vue";
 import events from "@/events/events";
 
 const systemConfigName = "system";
@@ -384,6 +385,13 @@ export default {
 				current_version: "0",
 				need_update: false,
 				version: Object,
+			},
+			authentikSettings: {
+				clientId: "",
+				clientSecret: "",
+				issuer: "",
+				authUrl: "",
+				callbackUrl: ""
 			},
 			isUpdating: false,
 			latestText: "Currently at the latest version",
@@ -420,6 +428,11 @@ export default {
 		initBarData: {
 			type: Object,
 		},
+	},
+	provide() {
+		return {
+			authentikSettings: this.authentikSettings
+		}
 	},
 	computed: {
 		sidebarIcon() {
@@ -499,9 +512,11 @@ export default {
 		this.barData = this.initBarData;
 		// this.getConfig();
 		this.getPort();
+	
 	},
 	mounted() {
 		this.checkOIDCHealth();
+		this.getOIDCSettings();
 		// setInterval(this.checkOIDCHealth, 5000); 
 		this.checkVersion();
 		this.getUserInfo();
@@ -611,7 +626,7 @@ export default {
 				},
 			});
 		},
-	
+
 		showChangeWallpaperModal() {
 			this.$EventBus.$emit(events.SHOW_CHANGE_WALLPAPER_MODAL);
 			this.$refs.settingsDrop.toggle();
@@ -750,6 +765,22 @@ export default {
 				animation: "zoom-in",
 			});
 		},
+		/*************************************************
+		 * PART 4  External Service
+		 **************************************************/
+		 getOIDCSettings() {
+			debugger;
+			this.$api.users.getOIDCSettings().then((res) => {
+				if (res.data.success == 200) {
+				this.authentikSettings.clientId = res.data?.data?.clientId || ""
+				this.authentikSettings.clientSecret = res.data?.data?.clientSecret || ""
+				this.authentikSettings.issuer = res.data?.data?.issuer || ""
+				this.authentikSettings.authUrl = res.data?.data?.authUrl || ""
+				this.authentikSettings.callbackUrl = res.data?.data?.callbackUrl || ""
+				}
+				
+			});
+		},
 		showAuthentikPanel() {
 			this.$refs.serviceDrops.toggle();
 			this.$buefy.modal.open({
@@ -761,8 +792,16 @@ export default {
 				canCancel: [],
 				scroll: "keep",
 				animation: "zoom-in",
+				props: {
+					initClientId: this.authentikSettings.clientId,
+					clientSecret: this.authentikSettings.clientSecret,
+					issuer: this.authentikSettings.issuer,
+					authUrl: this.authentikSettings.authUrl,
+					callbackUrl: this.authentikSettings.callbackUrl,
+				},
 			});
 		},
+
 		rssConfirm() {
 			if (this.rss_switch == false) {
 				this.barData.rss_switch = false;

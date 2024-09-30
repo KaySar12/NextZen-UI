@@ -95,6 +95,9 @@ const users = {
 			key: key
 		});
 	},
+	async getOIDCSettings() {
+		return await api.get(`${PREFIX}/oidc/settings`);
+	},
 	async oidcHealth() {
 		return await api.get(`${PREFIX}/oidc/health`);
 	},
@@ -119,6 +122,11 @@ const users = {
 	async oidcValidateToken(authentikToken) {
 		return await api.post(`${PREFIX}/oidc/validateToken`, {
 			authentikToken: authentikToken
+		})
+	},
+	async saveOIDCSettings(settings) {
+		return await api.post(`${PREFIX}/oidc/saveSettings`, {
+			settings: settings
 		})
 	},
 	// login [OK]

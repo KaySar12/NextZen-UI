@@ -62,7 +62,7 @@ function logout() {
 function AuthentikOffline() {
 	localStorage.clear()
 	router.replace({
-		path: '/407'
+		path: '/authentik-offline'
 	})
 }
 instance.interceptors.response.use(
@@ -116,7 +116,7 @@ instance.interceptors.response.use(
 				})
 			})
 		}
-		if (error?.response?.status === 407) {
+		if (error?.response?.status === 503 && error.config.url === '/v1/users/oidc/logout') {
 			AuthentikOffline()
 		}
 		return Promise.reject(error)

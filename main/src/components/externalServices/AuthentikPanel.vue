@@ -8,17 +8,20 @@
 		</header>
 		<section class="modal-card-body " style="overflow:hidden">
 			<b-tabs :animated="false" @input="onInput">
-				<b-tab-item :label="$t('Server')" value="server">
+				<b-tab-item :label="$t('Provider')" value="provider">
+					<authentik-provider-card></authentik-provider-card>
 				</b-tab-item>
 			</b-tabs>
 		</section>
 	</div>
 </template>
 <script>
+import AuthentikProviderCard from './AuthentikProviderCard.vue';
 export default {
 	name: 'authentik-panel',
-	components: {},
+	components: { AuthentikProviderCard },
 	data() {
+		return{};
 	},
 	mounted() {
 	},

@@ -19,10 +19,10 @@ export default [
 	// 	}
 	// },
 	{
-		path: '/407',
+		path: '/authentik-offline',
 		name: 'Error',
 		hidden: true,
-		component: () => import('@/views/407.vue'),
+		component: () => import('@/views/AuthentikOffline.vue'),
 		meta: {
 			requireAuth: false,
 			showBackground: false

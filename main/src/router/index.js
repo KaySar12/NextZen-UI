@@ -54,22 +54,22 @@ router.beforeEach(async (to, from, next) => {
 	debugger;
 	const accessToken = localStorage.getItem("access_token");
 	const authentikToken = localStorage.getItem("authentik_token");
-	if (to.path === '/407') {
+	if (to.path === '/authentik-offline') {
 		next()
 	}
 	else {
-		if ((to.path === '/logout' || !authentikToken) && (to.path !== '/oidc' && to.path !== '/profile')) {
-			localStorage.clear()
-			var res = await api.users.oidcLogout(authentikToken || '');
-			window.location.href = res.data.data
-			return
-		}
-		// if (!authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
-		// 	next('/oidc')
+		// if ((to.path === '/logout' || !authentikToken) && (to.path !== '/oidc' && to.path !== '/profile')) {
+		// 	localStorage.clear()
+		// 	var res = await api.users.oidcLogout(authentikToken || '');
+		// 	window.location.href = res.data.data
+		// 	return
 		// }
-		if (authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
-			await api.users.oidcValidateToken(authentikToken)
-		}
+
+	
+		// if (authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
+		// 	await api.users.oidcValidateToken(authentikToken)
+		// }
+		
 		// const requireAuth = to.matched.some(record => record.meta.requireAuth);
 		if (!accessToken && (to.path !== '/oidc' && to.path !== '/profile')) {
 			next('/oidc')
