@@ -114,8 +114,8 @@ export default {
 	},
 	methods: {
 		/*
-		* 1、进入编辑状态
-		* 2、保存
+		* 1、Enter the editor state
+		* 2, Conservation
 		* */
 		toggle() {
 			this.isEditing = !this.isEditing

@@ -297,10 +297,17 @@
 							<b-icon class="mr-1 ml-2" icon="" pack="casa" size="is-20"></b-icon>
 							{{ $t("NextWeb") }}
 						</div>
-						<div 	:class="[panel_health === 'Live' ? 'status open' : panel_health === 'Starting' ? 'status in-progress' : 'status dead']">
+						<div
+							:class="[panel_health === 'Live' ? 'status open' : panel_health === 'Starting' ? 'status in-progress' : 'status dead']">
 						</div>
 						<div class="ml-2">
-							<b-button rounded size="is-small" type="is-dark">{{ $t("Settings") }}
+							<b-button rounded size="is-small" type="is-dark" @click="showNextWebPanel">
+								{{ $t("Settings") }}
+							</b-button>
+						</div>
+						<div class="ml-2">
+							<b-button rounded size="is-small" type="is-dark" @click="loginOnePanel">
+								{{ $t("login") }}
 							</b-button>
 						</div>
 					</div>
@@ -354,6 +361,7 @@ import UpdateModal from "./settings/UpdateModal.vue";
 import { mixin } from "@/mixins/mixin";
 import messages from "@/assets/lang";
 import Authentik from "./externalServices/AuthentikPanel.vue";
+import OnePanel from "./externalServices/OnePanel.vue";
 import events from "@/events/events";
 
 const systemConfigName = "system";
@@ -512,10 +520,11 @@ export default {
 		this.barData = this.initBarData;
 		// this.getConfig();
 		this.getPort();
-	
+
 	},
 	mounted() {
 		this.checkOIDCHealth();
+		this.checkOnePanelHealth();
 		this.getOIDCSettings();
 		// setInterval(this.checkOIDCHealth, 5000); 
 		this.checkVersion();
@@ -604,6 +613,11 @@ export default {
 		checkOIDCHealth() {
 			this.$api.users.oidcHealth().then((res) => {
 				this.authentik_health = res.data.data;
+			})
+		},
+		checkOnePanelHealth() {
+			this.$api.users.onePanelHealth().then((res) => {
+				this.panel_health = res.data.data;
 			})
 		},
 		/**
@@ -768,17 +782,17 @@ export default {
 		/*************************************************
 		 * PART 4  External Service
 		 **************************************************/
-		 getOIDCSettings() {
+		getOIDCSettings() {
 			debugger;
 			this.$api.users.getOIDCSettings().then((res) => {
 				if (res.data.success == 200) {
-				this.authentikSettings.clientId = res.data?.data?.clientId || ""
-				this.authentikSettings.clientSecret = res.data?.data?.clientSecret || ""
-				this.authentikSettings.issuer = res.data?.data?.issuer || ""
-				this.authentikSettings.authUrl = res.data?.data?.authUrl || ""
-				this.authentikSettings.callbackUrl = res.data?.data?.callbackUrl || ""
+					this.authentikSettings.clientId = res.data?.data?.clientId || ""
+					this.authentikSettings.clientSecret = res.data?.data?.clientSecret || ""
+					this.authentikSettings.issuer = res.data?.data?.issuer || ""
+					this.authentikSettings.authUrl = res.data?.data?.authUrl || ""
+					this.authentikSettings.callbackUrl = res.data?.data?.callbackUrl || ""
 				}
-				
+
 			});
 		},
 		showAuthentikPanel() {
@@ -801,7 +815,35 @@ export default {
 				},
 			});
 		},
-
+		loginOnePanel() {
+			this.$api.users.onePanelLogin().then((res) => {
+				this.$buefy.toast.open({
+					message: "login success",
+					duration: 3000,
+					type: "is-success"
+				})
+			})
+		},
+		showNextWebPanel() {
+			this.$refs.serviceDrops.toggle();
+			this.$buefy.modal.open({
+				parent: this,
+				component: OnePanel,
+				hasModalCard: true,
+				customClass: "terminal-modal",
+				trapFocus: true,
+				canCancel: [],
+				scroll: "keep",
+				animation: "zoom-in",
+				props: {
+					initClientId: this.authentikSettings.clientId,
+					clientSecret: this.authentikSettings.clientSecret,
+					issuer: this.authentikSettings.issuer,
+					authUrl: this.authentikSettings.authUrl,
+					callbackUrl: this.authentikSettings.callbackUrl,
+				},
+			});
+		},
 		rssConfirm() {
 			if (this.rss_switch == false) {
 				this.barData.rss_switch = false;

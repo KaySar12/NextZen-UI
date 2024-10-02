@@ -15,9 +15,12 @@
 				@click.native="removeItem(index)"></b-icon>
 			<template v-if="index < 1">
 				<b-field grouped>
+					<b-checkbox size="is-small">
+					</b-checkbox>
 					<b-select v-model="item.scheme" :placeholder="$t(name1)">
 						<option value="http">http</option>
 						<option value="https">https</option>
+						<option value="https">https+ssl</option>
 					</b-select>
 					<b-field :label="$t(name1)" expanded>
 						<b-input v-model="item.container" :placeholder="$t(name2)" expanded></b-input>
@@ -26,9 +29,12 @@
 			</template>
 			<template v-else>
 				<b-field grouped>
+					<b-checkbox size="is-small">
+					</b-checkbox>
 					<b-select v-model="item.scheme" :placeholder="$t(name1)">
 						<option value="http">http</option>
 						<option value="https">https</option>
+						<option value="https">https+ssl</option>
 					</b-select>
 					<b-input v-model="item.container" :placeholder="$t(name1)" expanded></b-input>
 				</b-field>

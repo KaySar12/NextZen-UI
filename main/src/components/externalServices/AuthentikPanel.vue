@@ -8,8 +8,11 @@
 		</header>
 		<section class="modal-card-body " style="overflow:hidden">
 			<b-tabs :animated="false" @input="onInput">
-				<b-tab-item :label="$t('Provider')" value="provider">
+				<b-tab-item :label="$t('Credentials')" value="credentials">
 					<authentik-provider-card></authentik-provider-card>
+				</b-tab-item>
+				<b-tab-item :label="$t('Providers')" value="providers">
+
 				</b-tab-item>
 			</b-tabs>
 		</section>
@@ -21,15 +24,18 @@ export default {
 	name: 'authentik-panel',
 	components: { AuthentikProviderCard },
 	data() {
-		return{};
+		return {};
 	},
 	mounted() {
 	},
 	methods: {
 		onInput(e) {
 			switch (e) {
-				case "server":
-					this.$refs.server.active(true)
+				case "credentials":
+					this.$refs.credentials.active(true)
+					break;
+				case "providers":
+					this.$refs.providers.active(true)
 					break;
 				default:
 					break;

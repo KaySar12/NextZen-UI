@@ -101,6 +101,14 @@ const users = {
 	async oidcHealth() {
 		return await api.get(`${PREFIX}/oidc/health`);
 	},
+	async onePanelHealth() {
+		debugger;
+		return await api.get(`${PREFIX}/1panel/health`);
+	},
+	async onePanelLogin() {
+		debugger;
+		return await api.post(`${PREFIX}/1panel/login`, {});
+	},
 	async oidcLogin(state, baseUrl) {
 		var res = await api.post(`${PREFIX}/oidc/login`, {
 			state: state,

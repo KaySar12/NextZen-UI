@@ -491,7 +491,8 @@ export default {
       return this.$store.state.isViewGird ? "gird-view" : "list-view";
     },
     containerClass() {
-      return this.$route.path == "/files" ? "file-panel full-screen " : "";
+    //   return this.$route.path == "/files" ? "file-panel full-screen " : "";
+	return "file-panel full-screen "
     },
     sideBarPosition() {
       return this.isMobile ? "fixed" : "static";
