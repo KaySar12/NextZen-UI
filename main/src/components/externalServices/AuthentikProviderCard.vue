@@ -16,7 +16,7 @@
 					<b-input v-model="authUrl" name="authUrl"></b-input>
 				</b-field>
 				<b-field :label="$t('Callback URL')">
-					<b-input v-model="callbackUrl" name="callbackUrl" :disabled="true"></b-input>
+					<b-input v-model="callbackUrl" name="callbackUrl" ></b-input>
 				</b-field>
 			</div>
 		</section>

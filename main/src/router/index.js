@@ -53,30 +53,29 @@ const needInit = async () => {
 router.beforeEach(async (to, from, next) => {
 	debugger;
 	const accessToken = localStorage.getItem("access_token");
-	const authentikToken = localStorage.getItem("authentik_token");
+	// const authentikToken = localStorage.getItem("authentik_token");
 	if (to.path === '/authentik-offline') {
 		next()
 	}
 	else {
-		// if ((to.path === '/logout' || !authentikToken) && (to.path !== '/oidc' && to.path !== '/profile')) {
-		// 	localStorage.clear()
-		// 	var res = await api.users.oidcLogout(authentikToken || '');
-		// 	window.location.href = res.data.data
-		// 	return
-		// }
+		if ((to.path === '/logout') && (to.path !== '/oidc' && to.path !== '/profile')) {
+			localStorage.clear()
+			var res = await api.users.oidcLogout(authentikToken || '');
+			window.location.href = res.data.data
+			return
+		}
 
-	
+
 		// if (authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
 		// 	await api.users.oidcValidateToken(authentikToken)
 		// }
-		
-		// const requireAuth = to.matched.some(record => record.meta.requireAuth);
+
 		if (!accessToken && (to.path !== '/oidc' && to.path !== '/profile')) {
 			next('/oidc')
 		}
 		if (to.path === '/oidc') {
 			localStorage.clear()
-			await api.users.oidcLogin(`/#/profile`);
+			await api.users.oidcLogin(`/#/profile`, window.location.origin);
 		}
 		if (to.path === '/profile') {
 			var res = await api.users.oidcProfile()
@@ -85,7 +84,7 @@ router.beforeEach(async (to, from, next) => {
 				localStorage.setItem("refresh_token", res.data.data.token.refresh_token);
 				localStorage.setItem("expires_at", res.data.data.token.expires_at);
 				localStorage.setItem("user", JSON.stringify(res.data.data.user));
-				localStorage.setItem("authentik_token", res.data.data.authToken)
+				// localStorage.setItem("authentik_token", res.data.data.authToken)
 				store.commit("SET_USER", res.data.data.user);
 				store.commit("SET_ACCESS_TOKEN", res.data.data.token.access_token);
 				store.commit("SET_REFRESH_TOKEN", res.data.data.token.refresh_token);

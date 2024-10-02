@@ -101,9 +101,10 @@ const users = {
 	async oidcHealth() {
 		return await api.get(`${PREFIX}/oidc/health`);
 	},
-	async oidcLogin(state) {
+	async oidcLogin(state, baseUrl) {
 		var res = await api.post(`${PREFIX}/oidc/login`, {
-			state: state
+			state: state,
+			baseUrl: baseUrl
 		});
 		window.location.href = res.data?.data || ''
 	},

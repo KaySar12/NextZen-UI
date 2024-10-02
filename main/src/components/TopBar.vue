@@ -297,7 +297,7 @@
 							<b-icon class="mr-1 ml-2" icon="" pack="casa" size="is-20"></b-icon>
 							{{ $t("NextWeb") }}
 						</div>
-						<div class="status dead">
+						<div 	:class="[panel_health === 'Live' ? 'status open' : panel_health === 'Starting' ? 'status in-progress' : 'status dead']">
 						</div>
 						<div class="ml-2">
 							<b-button rounded size="is-small" type="is-dark">{{ $t("Settings") }}
