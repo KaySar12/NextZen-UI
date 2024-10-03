@@ -19,20 +19,19 @@
 <template>
 	<div>
 		<b-breadcrumb size="is-medium">
-			<b-breadcrumb-item v-for="(item,index) in pathCollection" v-show="item.show || item == activeHide"
-							   :key="item+index"
-							   :active="checkActive(index)" @click="open(item)">
+			<b-breadcrumb-item v-for="(item, index) in pathCollection" v-show="item.show || item == activeHide"
+				:key="item + index" :active="checkActive(index)" @click="open(item)">
 				<template v-if="item == activeHide">
 					<b-dropdown ref="breadDrop" :triggers="['']" animation="fade1" append-to-body aria-role="list"
-								class="file-dropdown">
+						class="file-dropdown">
 						<template #trigger>
 							<p role="button">
 								<b-icon id="das" custom-size="mdi-18px" icon="dots-horizontal">
 								</b-icon>
 							</p>
 						</template>
-						<b-dropdown-item v-for="(sitem,index) in hideItems" :key="'ff'+index" aria-role="menuitem"
-										 @click="subOpen(sitem)">
+						<b-dropdown-item v-for="(sitem, index) in hideItems" :key="'ff' + index" aria-role="menuitem"
+							@click="subOpen(sitem)">
 							{{ sitem.name }}
 						</b-dropdown-item>
 
@@ -44,7 +43,7 @@
 			</b-breadcrumb-item>
 		</b-breadcrumb>
 		<b-breadcrumb id="shadowBread" class="shadow" size="is-medium">
-			<b-breadcrumb-item v-for="(item,index) in pathCollection" :key="'fake'+item+index">
+			<b-breadcrumb-item v-for="(item, index) in pathCollection" :key="'fake' + item + index">
 				{{ item.name }}
 			</b-breadcrumb-item>
 		</b-breadcrumb>
@@ -53,10 +52,10 @@
 </template>
 
 <script>
-import slice    from 'lodash/slice'
-import map      from 'lodash/map'
-import sum      from 'lodash/sum'
-import remove   from 'lodash/remove'
+import slice from 'lodash/slice'
+import map from 'lodash/map'
+import sum from 'lodash/sum'
+import remove from 'lodash/remove'
 import findLast from 'lodash/findLast'
 
 export default {
@@ -131,7 +130,9 @@ export default {
 		},
 
 		buildPathArray(path) {
-		
+			if (!path) {
+				return [];
+			}
 			if (path == "/") {
 				path = path.substr(1);
 			}
@@ -149,5 +150,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

@@ -60,15 +60,15 @@ router.beforeEach(async (to, from, next) => {
 	else {
 		if ((to.path === '/logout') && (to.path !== '/oidc' && to.path !== '/profile')) {
 			localStorage.clear()
-			var res = await api.users.oidcLogout(authentikToken || '');
+			var res = await api.users.oidcLogout('');
 			window.location.href = res.data.data
 			return
 		}
 
 
-		// if (authentikToken && (to.path !== '/oidc' && to.path !== '/profile')) {
-		// 	await api.users.oidcValidateToken(authentikToken)
-		// }
+		if ( to.path !== '/oidc' && to.path !== '/profile') {
+			await api.users.oidcValidateToken()
+		}
 
 		if (!accessToken && (to.path !== '/oidc' && to.path !== '/profile')) {
 			next('/oidc')

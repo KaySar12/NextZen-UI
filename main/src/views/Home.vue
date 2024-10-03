@@ -53,7 +53,7 @@
 
 		<!-- File Panel Start -->
 		<b-modal v-model="isFileActive" :can-cancel="[]" :destroy-on-hide="false" animation="zoom-in" aria-modal
-				 custom-class="file-panel" full-screen has-modal-card @after-enter="afterFileEnter">
+			custom-class="file-panel" full-screen has-modal-card @after-enter="afterFileEnter">
 			<template #default="props">
 				<file-panel ref="filePanel" @close="props.close"></file-panel>
 			</template>
@@ -64,16 +64,16 @@
 
 <script>
 
-import SearchBar           from '@/components/SearchBar.vue';
-import SideBar             from '@/components/SideBar.vue';
-import TopBar              from '@/components/TopBar.vue';
-import CoreService         from '@/components/CoreService.vue';
-import AppSection          from '@/components/Apps/AppSection.vue';
-import FilePanel           from '@/components/filebrowser/FilePanel.vue'
+import SearchBar from '@/components/SearchBar.vue';
+import SideBar from '@/components/SideBar.vue';
+import TopBar from '@/components/TopBar.vue';
+import CoreService from '@/components/CoreService.vue';
+import AppSection from '@/components/Apps/AppSection.vue';
+import FilePanel from '@/components/filebrowser/FilePanel.vue'
 import UpdateCompleteModal from '@/components/settings/UpdateCompleteModal.vue';
-import {mixin}             from '@/mixins/mixin';
-import events              from '@/events/events';
-import {nanoid}            from 'nanoid';
+import { mixin } from '@/mixins/mixin';
+import events from '@/events/events';
+import { nanoid } from 'nanoid';
 
 
 const wallpaperConfig = "wallpaper"
@@ -107,7 +107,13 @@ export default {
 			homeShowFiles: this.showFiles,
 		};
 	},
-
+	watch: {
+		isFileActive(newValue) {
+			if (!newValue) {
+				this.cleanUrlPath();
+			}
+		}
+	},
 	computed: {
 		sidebarOpen() {
 			return this.$store.state.sidebarOpen
@@ -120,7 +126,9 @@ export default {
 		this.getHardwareInfo();
 		this.getWallpaperConfig();
 		this.getConfig();
-
+		if (!this.isFileActive) {
+			this.cleanUrlPath();
+		}
 		this.$store.commit('SET_ACCESS_ID', nanoid());
 	},
 	mounted() {
@@ -131,7 +139,7 @@ export default {
 			localStorage.removeItem('is_update')
 		}
 		if (sessionStorage.getItem('fromWelcome')) {
-			 this.$messageBus('global_newvisit')
+			this.$messageBus('global_newvisit')
 			//this.rssConfirm()
 			// one-off consumption
 			sessionStorage.removeItem('fromWelcome')
@@ -144,7 +152,12 @@ export default {
 
 	},
 	methods: {
-
+		cleanUrlPath() {
+			const currentRoute = this.$route;
+			const query = { ...currentRoute.query };
+			delete query.path;
+			this.$router.replace({ query });
+		},
 		/**
 		 * @description: Get CasaOS Configs
 		 * @param {*}
@@ -185,7 +198,6 @@ export default {
 		 * @return {*} void
 		 */
 		showSideBar() {
-			console.log("showSidebar");
 		},
 
 		/**
@@ -311,7 +323,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .out-container {
 	position: relative;
 	height: 100%;

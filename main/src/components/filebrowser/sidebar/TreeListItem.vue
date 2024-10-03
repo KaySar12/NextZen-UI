@@ -67,10 +67,14 @@ export default {
 			if (!this.isActive) {
 				return false;
 			}
-			if (this.item.path == this.$store.state.currentPath) {
+			const currentPath = this.$store.state.currentPath;
+			if (!currentPath) {
+				return false;
+			}
+			if (this.item.path == currentPath) {
 				return true
-			} else if (this.item.path != this.$store.state.currentPath && this.item.path != "/" && this.item.path != "/DATA") {
-				if (this.$store.state.currentPath.indexOf(`${this.item.path}/`) != -1) {
+			} else if (this.item.path != currentPath && this.item.path != "/" && this.item.path != "/DATA") {
+				if (currentPath.indexOf(`${this.item.path}/`) != -1) {
 					return true
 				} else {
 					return false
