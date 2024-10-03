@@ -156,7 +156,7 @@ export const mixin = {
 		 * @return {void}
 		 */
 		downloadFile(items) {
-			debugger;
+			
 			this.$buefy.toast.open({
 				message: this.$t('Download in preparation...'),
 				type: 'is-white'
@@ -172,7 +172,7 @@ export const mixin = {
 		},
 		// Download Button Action
 		download() {
-			debugger;
+			
 			this.$refs.dropDown?.toggle()
 			this.downloadFile(this.item)
 		},
@@ -276,7 +276,7 @@ export const mixin = {
 		 * @return {void}
 		 */
 		operate(type, items) {
-			debugger;
+			
 			let operateObject = {
 				type: type,
 			}
@@ -372,7 +372,7 @@ export const mixin = {
 			deleteItems(paths);
 		},
 		async compressFile(items) {
-			debugger;
+			
 			var data = [];
 			items.forEach(item => {
 				data.push(item.path)

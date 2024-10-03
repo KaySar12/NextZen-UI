@@ -655,7 +655,7 @@ export default {
 			this.showAppDetial(this.storeId)
 		}
 
-		// 这是 选择应用安装位置。 这块功能不被使用，暂且保留。
+		// This is to choose the application installation location.This function is not used, and it is retained for the time being.
 		// close the function - APPs Installation Location
 		// prepare data - APPs Installation Location requirement document
 		// this.getDiskList();
@@ -992,7 +992,7 @@ export default {
 		 * @return {*} void
 		 */
 		quickInstall(id) {
-			debugger
+			
 			this.sidebarOpen = false;
 			this.$openAPI.appManagement.appStore.composeApp(id, {
 				headers: {
@@ -1000,7 +1000,7 @@ export default {
 					'accept': 'application/yaml'
 				}
 			}).then(res => {
-				debugger
+				
 				if (res.status == 200) {
 					let composeJSON = parse(res.data)
 					//x-casaos
@@ -1017,8 +1017,6 @@ export default {
 							events: {
 								submit: () => {
 									this.currentInstallId = id
-									// alert("Install With tips ")
-									//Disable install compose app
 									this.installComposeApp(res.data, id)
 								},
 							},
@@ -1027,12 +1025,10 @@ export default {
 							}
 						})
 					}
-					//!important
 					else if (composeJSON["x-casaos"]["install-wizard"] === 'advance') {
 						this.currentSlide = 1
 					}
 					else {
-						// alert("Install with out tip")
 						this.installComposeApp(res.data, id)
 					}
 

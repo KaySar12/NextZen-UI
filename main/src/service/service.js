@@ -70,7 +70,7 @@ instance.interceptors.response.use(
 		return response;
 	},
 	async (error) => {
-		debugger;
+		
 		const originalConfig = error?.config;
 		const refresh_token = localStorage.getItem("refresh_token")
 		if (originalConfig.url !== "/users/register" && error?.response?.status === 401) {

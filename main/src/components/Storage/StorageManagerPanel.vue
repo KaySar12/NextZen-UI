@@ -338,7 +338,7 @@ export default {
      * @return {void}
      */
     async getDiskList(showDefault = false) {
-      debugger;
+      
       // get disk list
       try {
         const diskRes = await this.$api.disks.getDiskList();

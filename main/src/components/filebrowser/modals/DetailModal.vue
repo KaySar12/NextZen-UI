@@ -61,7 +61,7 @@ export default {
 			// console.log(this.$parent);
 		},
 		async extract() {
-			debugger;
+			
 			var ext = this.getFileExt(this.item)
 			await this.extractFile(this.item, ext);
 			this.filePanel.reload()

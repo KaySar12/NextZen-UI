@@ -37,13 +37,13 @@ const container = {
 
 	//v2:: get my app list
 	getMyAppListV2(data) {
-		debugger;
+		
 		return api.get(`${PREFIX2COMPOSE}`, data);
 	},
 
 	// get container info
 	getInfo(id) {
-		debugger;
+		
 		var url = `${PREFIX}/${id}`;
 		return api.get(url);
 	},
@@ -85,7 +85,7 @@ const container = {
 
 	//v2:: install container
 	installV2(data, config) {
-		debugger;
+		
 		return api.post(`${PREFIX2COMPOSE}`, data, config);
 	},
 
@@ -147,7 +147,7 @@ const container = {
 
 	// export container as compose file
 	exportAsCompose(id) {
-		debugger;
+		
 		return api.get(`${PREFIX}/${id}/compose`);
 	},
 

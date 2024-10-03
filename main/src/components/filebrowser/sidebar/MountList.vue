@@ -114,7 +114,7 @@ export default {
 		},
 		// Local Storage (include Mergerfs)
 		async getLocalStorage() {
-			debugger
+			
 			let mergeRes;
 			try {
 				mergeRes = await this.$api.local_storage

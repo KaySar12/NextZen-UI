@@ -69,7 +69,7 @@ export default {
 
 	methods: {
 		async login() {
-			debugger;
+			
 			try {
 				const userRes = await this.$api.users.login(this.username, this.password)
 				localStorage.setItem("access_token", userRes.data.data.token.access_token);

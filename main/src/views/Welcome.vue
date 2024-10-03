@@ -200,7 +200,7 @@ export default {
      * @return {*}
      */
     register() {
-      debugger;
+      
       let userStatusRes = this.$api.users.getUserStatus().then((res) => {
         const initKey = res.data.data.key;
         this.$api.users

@@ -523,7 +523,7 @@ export default {
 			}
 		},
 		async openTips(name) {
-			debugger;
+			
 			try {
 				const res = await this.$openAPI.appManagement.compose
 					.myComposeApp(name, {

@@ -102,11 +102,11 @@ const users = {
 		return await api.get(`${PREFIX}/oidc/health`);
 	},
 	async onePanelHealth() {
-		debugger;
+		
 		return await api.get(`${PREFIX}/1panel/health`);
 	},
 	async onePanelLogin() {
-		debugger;
+		
 		return await api.post(`${PREFIX}/1panel/login`, {});
 	},
 	async oidcLogin(state, baseUrl) {
@@ -123,7 +123,7 @@ const users = {
 		return await api.get(`${PREFIX}/oidc/userinfo`);
 	},
 	async oidcLogout(token) {
-		debugger;
+		
 		return await api.post(`${PREFIX}/oidc/logout`, {
 			authentikToken: token
 		});

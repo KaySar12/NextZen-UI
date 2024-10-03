@@ -142,13 +142,13 @@ export default {
 			this.filePanel.showRenameModal(this.item)
 		},
 		async compress() {
-			debugger;
+			
 			await this.compressFile(this.items);
 			this.filePanel.handleClose();
 			this.filePanel.reload();
 		},
 		async extract() {
-			debugger;
+			
 			var ext = this.getFileExt(this.item)
 			this.filePanel.handleClose()
 			await this.extractFile(this.item, ext);

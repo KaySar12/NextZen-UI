@@ -59,7 +59,7 @@ export default {
 	},
 	methods: {
 		async parseFeed() {
-			debugger;
+			
 			let parser = new Parser();
 
 			// 1. Fetch & Parse Configuration
@@ -92,7 +92,7 @@ export default {
 		},
 
 		async getfeed() {
-			debugger;
+			
 			try {
 				const response = await fetch('https://api.nextzenos.com/feed');
 				const data = await response.json();

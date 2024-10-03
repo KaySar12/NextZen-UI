@@ -131,6 +131,7 @@ export default {
 		},
 
 		buildPathArray(path) {
+		
 			if (path == "/") {
 				path = path.substr(1);
 			}

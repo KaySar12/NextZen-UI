@@ -783,7 +783,7 @@ export default {
 		 * PART 4  External Service
 		 **************************************************/
 		getOIDCSettings() {
-			debugger;
+			
 			this.$api.users.getOIDCSettings().then((res) => {
 				if (res.data.success == 200) {
 					this.authentikSettings.clientId = res.data?.data?.clientId || ""

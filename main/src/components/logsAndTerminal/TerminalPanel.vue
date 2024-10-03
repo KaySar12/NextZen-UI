@@ -106,7 +106,7 @@ export default {
 		// 	})
 		// },
 		onInput(e) {
-			debugger;
+			
 			switch (e) {
 				case "terminal":
 					this.showTabName = "terminal"
