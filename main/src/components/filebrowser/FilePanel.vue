@@ -108,7 +108,7 @@
 										<!--  Close Button Start -->
 										<div
 											class="is-flex is-align-items-center modal-close-container modal-close-container-line">
-											<div class="close-button" @click="$emit('close')">
+											<div class="close-button" @click="closeFilePanel">
 												<b-icon icon="close-outline" pack="casa"></b-icon>
 											</div>
 										</div>
@@ -354,7 +354,7 @@ export default {
 		};
 	},
 	async created() {
-		this.isOpen=true
+		this.isOpen = true
 		this.options = {
 			target: this.getTargetUrl(),
 			testChunks: false,
@@ -408,7 +408,7 @@ export default {
 		"$route.query.path": {
 			handler(newPath) {
 				debugger;
-			
+
 				if (newPath == undefined && this.isOpen) {
 					this.$emit('close')
 				}
@@ -565,7 +565,16 @@ export default {
 				this.isCreated = true;
 			}
 		},
-
+		closeFilePanel() {
+			const currentPath = this.$route.path;
+			if (currentPath.includes('/files')) {
+				this.$emit('close');
+				window.close();
+			} else {
+				// Emit close event
+				this.$emit('close');
+			}
+		},
 		/**
 		 * @description: Get File Tree List
 		 * @param {String} path

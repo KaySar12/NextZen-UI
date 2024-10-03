@@ -287,6 +287,7 @@ export default {
 		 * @return {*} void
 		 */
 		openFileNewTab() {
+			this.$refs.dro.isActive = false;
 			window.open(
 				`${window.location.origin}/#/files`, "_blank");
 		},
