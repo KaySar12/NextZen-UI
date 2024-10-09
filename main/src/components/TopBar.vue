@@ -306,14 +306,14 @@
 							</b-button>
 						</div>
 					</div>
-					<div
+					<!-- <div
 						class="is-flex is-align-content-center is-justify-content-center _footer mt-4 pl-3 pr-3 pt-2 pb-2">
 						<div
 							class="mr-1 column is-half is-flex is-align-items-center is-justify-content-center hover-effect is-clickable _is-radius _is-normal">
 							<b-icon class="mr-1" icon="restart-outline" pack="casa"></b-icon>
 							Refresh
 						</div>
-					</div>
+					</div> -->
 				</b-dropdown-item>
 			</b-dropdown>
 		</div>

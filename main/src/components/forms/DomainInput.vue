@@ -19,7 +19,6 @@
 					<b-select v-model="item.scheme">
 						<option value="http">http</option>
 						<option value="https">https</option>
-						<option value="https">https+ssl</option>
 					</b-select>
 					<b-field expanded>
 						<b-input v-model="item.domain" :placeholder="$t(placeholder)" expanded></b-input>

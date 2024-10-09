@@ -108,6 +108,10 @@ const users = {
 	async createOnePanelWebsite(data) {
 		return await api.post(`${PANELPREFIX}/website/create`, data);
 	},
+	
+	async deleteOnePanelWebsite(data) {
+		return await api.post(`${PANELPREFIX}/website/delete`, data);
+	},
 	async oidcLogin(state, baseUrl) {
 		var res = await api.post(`${PREFIX}/oidc/login`, {
 			state: state,
