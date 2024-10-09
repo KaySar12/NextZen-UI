@@ -305,11 +305,6 @@
 								{{ $t("Settings") }}
 							</b-button>
 						</div>
-						<div class="ml-2">
-							<b-button rounded size="is-small" type="is-dark" @click="loginOnePanel">
-								{{ $t("login") }}
-							</b-button>
-						</div>
 					</div>
 					<div
 						class="is-flex is-align-content-center is-justify-content-center _footer mt-4 pl-3 pr-3 pt-2 pb-2">
@@ -814,15 +809,6 @@ export default {
 					callbackUrl: this.authentikSettings.callbackUrl,
 				},
 			});
-		},
-		loginOnePanel() {
-			this.$api.users.onePanelLogin().then((res) => {
-				this.$buefy.toast.open({
-					message: "login success",
-					duration: 3000,
-					type: "is-success"
-				})
-			})
 		},
 		showNextWebPanel() {
 			this.$refs.serviceDrops.toggle();

@@ -2,7 +2,7 @@ import { api } from "./service.js";
 
 const PREFIX = "/users"
 const PREFIX2 = "/v2/users"
-
+const PANELPREFIX = "/1panel"
 const users = {
 	// get all user name [OK]
 	getAllUserName() {
@@ -102,12 +102,11 @@ const users = {
 		return await api.get(`${PREFIX}/oidc/health`);
 	},
 	async onePanelHealth() {
-		
-		return await api.get(`${PREFIX}/1panel/health`);
+
+		return await api.get(`${PANELPREFIX}/health`);
 	},
-	async onePanelLogin() {
-		
-		return await api.post(`${PREFIX}/1panel/login`, {});
+	async createOnePanelWebsite(data) {
+		return await api.post(`${PANELPREFIX}/website/create`, data);
 	},
 	async oidcLogin(state, baseUrl) {
 		var res = await api.post(`${PREFIX}/oidc/login`, {
@@ -123,7 +122,7 @@ const users = {
 		return await api.get(`${PREFIX}/oidc/userinfo`);
 	},
 	async oidcLogout(token) {
-		
+
 		return await api.post(`${PREFIX}/oidc/logout`, {
 			authentikToken: token
 		});

@@ -113,6 +113,33 @@ export default {
 
 		save() {
 			let realComposeData = this.getCompleteComposeData();
+			var domains = realComposeData["x-casaos"]["domains"]
+			domains.forEach((item) => {
+				this.$api.users.createOnePanelWebsite({
+					domain: item.domain,
+					protocol: item.scheme,
+					port: realComposeData["x-casaos"]["port_map"] || 8080
+
+				})
+					.then((res) => {
+						if (res.status === 200) {
+							this.$buefy.toast.open({
+								message: res.data.message,
+								type: "is-success",
+								position: "is-top",
+								duration: 5000,
+							});
+						}
+					})
+					.catch((e) => {
+						this.$buefy.toast.open({
+							message: e.response.data.data,
+							type: "is-danger",
+							position: "is-top",
+							duration: 5000,
+						});
+					});
+			})
 			this.$openAPI.appManagement.compose
 				.applyComposeAppSettings(this.name, YAML.stringify(realComposeData))
 				.then((res) => {
