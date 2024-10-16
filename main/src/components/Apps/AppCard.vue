@@ -292,6 +292,7 @@ export default {
 				`${window.location.origin}/#/files`, "_blank");
 		},
 		openApp(item) {
+			debugger;
 			if (this.isContainerApp) {
 				this.$emit("importApp", item, false);
 				return false;

@@ -252,7 +252,7 @@ export default {
 	},
 	methods: {
 		toggleLegacyApp() {
-			
+
 			this.display = !this.display;
 		},
 		isMobile() {
@@ -391,7 +391,7 @@ export default {
 		 * @return {*} void
 		 */
 		async showInstall(storeId = 0, mode = '') {
-			
+
 			if (mode === 'custom') {
 				this.$messageBus('apps_custominstall')
 			}
@@ -435,7 +435,7 @@ export default {
 		 * @return {*}
 		 */
 		async showConfigPanel(item, isCasa) {
-			
+
 			let name = item.name
 			this.$messageBus('appsexsiting_open', name)
 			try {
@@ -486,7 +486,7 @@ export default {
 		},
 
 		async showContainerPanel(item) {
-			
+
 			this.$messageBus('appsexsiting_open', item.name)
 			let id = item.name
 			const networks = await this.$api.container.getNetworks()

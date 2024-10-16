@@ -85,20 +85,20 @@
 							<swiper ref="featureSwiper" :options="featureSwiperOptions" class="swiper">
 								<swiper-slide v-for="(item, index) in recommendList" :key="index + item.title + item.id"
 									class="pb-5">
-									<div class="gap" @click="showAppDetial(item.id)">
+									<div class="gap" @click="showAppDetail(item.id)">
 										<b-image :placeholder="require('@/assets/img/app/swiper_placeholder.png')"
 											:src="item.thumbnail"
 											:src-fallback="require('@/assets/img/app/swiper_placeholder.png')"
 											class="border-8 is-clickable" ratio="16by9"></b-image>
 									</div>
 									<div class="is-flex pt-5 is-align-items-center">
-										<div class="mr-3" @click="showAppDetial(item.id)">
+										<div class="mr-3" @click="showAppDetail(item.id)">
 											<b-image :placeholder="require('@/assets/img/app/default.svg')"
 												:src="item.icon" :src-fallback="require('@/assets/img/app/default.svg')"
 												class="is-64x64 is-clickable icon-shadow"></b-image>
 										</div>
 										<div class="is-flex-grow-1 mr-4 is-clickable" @click="
-											showAppDetial(item.id)
+											showAppDetail(item.id)
 										$messageBus('appstore_detail', item.title)
 											">
 											<h6 class="title is-6 mb-2">{{ item.title }}</h6>
@@ -205,13 +205,13 @@
 						<div v-for="(item, index) in filteredPageList" :key="index + item.title + item.id"
 							class="column app-item is-one-quarter">
 							<div class="is-flex">
-								<div class="mr-4 is-clickable" @click="showAppDetial(item.id)">
+								<div class="mr-4 is-clickable" @click="showAppDetail(item.id)">
 									<b-image :src="item.icon" :src-fallback="require('@/assets/img/app/default.svg')"
 										class="is-64x64 icon-shadow" style="display: flex; align-items: center"
 										webp-fallback=".jpg"></b-image>
 								</div>
 								<div class="is-flex-grow-1 mr-4 is-clickable" @click="
-									showAppDetial(item.id)
+									showAppDetail(item.id)
 								$messageBus('appstore_detail', item.title)
 									">
 									<h6 class="title is-6 mb-2">{{ item.title }}</h6>
@@ -246,13 +246,13 @@
 							<div v-for="(item, index) in communityList" :key="index + item.title + item.id"
 								class="column is-one-quarter">
 								<div class="is-flex is-align-items-center">
-									<div class="mr-4 is-clickable" @click="showAppDetial(item.id)">
+									<div class="mr-4 is-clickable" @click="showAppDetail(item.id)">
 										<b-image :src="item.icon"
 											:src-fallback="require('@/assets/img/app/default.svg')"
 											class="is-64x64 icon-shadow" webp-fallback=".jpg"></b-image>
 									</div>
 									<div class="is-flex-grow-1 mr-4 is-clickable" @click="
-										showAppDetial(item.id)
+										showAppDetail(item.id)
 									$messageBus('appstorecommunity_detail', item.title)
 										">
 										<h6 class="title is-6 mb-2">{{ item.title }}</h6>
@@ -309,7 +309,7 @@
 
 				<section v-else :class="{ _hideOverflow: !isCasa }" class="modal-card-body pt-3">
 					<!--	导入"已存在的容器"，进行初始化操作	-->
-					<ValidationObserver ref="containerValida">
+					<ValidationObserver ref="containerValidate">
 						<ValidationProvider v-slot="{ errors, valid }" name="appName" rules="required">
 							<b-field :label="$t('App name') + ' *'" :message="$t(errors)"
 								:type="{ 'is-danger': errors[0], 'is-success': valid }">
@@ -415,6 +415,7 @@ import { ice_i18n } from '@/mixins/base/common-i18n'
 import { parse } from 'yaml'
 import AppStoreSourceManagement from '@/components/Apps/AppStoreSourceManagement.vue'
 import { vOnClickOutside } from '@vueuse/components'
+import { isTemplateExpression } from 'typescript'
 
 const data = [
 	'AUDIT_CONTROL',
@@ -652,7 +653,7 @@ export default {
 
 		// If StoreId is not 0
 		if (this.storeId != 0) {
-			this.showAppDetial(this.storeId)
+			this.showAppDetail(this.storeId)
 		}
 
 		// This is to choose the application installation location.This function is not used, and it is retained for the time being.
@@ -938,7 +939,7 @@ export default {
 		 * @param {id} String
 		 * @return {*} void
 		 */
-		async showAppDetial(id) {
+		async showAppDetail(id) {
 			this.isLoading = true
 			let { min_memory, compose } = await this.$openAPI.appManagement.appStore.composeApp(id).then(res => {
 				// A district that is reserved for resource.
@@ -992,7 +993,7 @@ export default {
 		 * @return {*} void
 		 */
 		quickInstall(id) {
-			
+
 			this.sidebarOpen = false;
 			this.$openAPI.appManagement.appStore.composeApp(id, {
 				headers: {
@@ -1000,7 +1001,7 @@ export default {
 					'accept': 'application/yaml'
 				}
 			}).then(res => {
-				
+
 				if (res.status == 200) {
 					let composeJSON = parse(res.data)
 					//x-casaos
@@ -1102,6 +1103,7 @@ export default {
 		 * @return {*} void
 		 */
 		installComposeApp(dockerComposeCommands, appName) {
+			debugger;
 			return this.$openAPI.appManagement.compose
 				.installComposeApp(dockerComposeCommands, false, true)
 				.then(res => {
@@ -1128,8 +1130,9 @@ export default {
 					})
 				})
 		},
-
+		// TODO Update Proxy 
 		checkComposeAppAndInstallComposeApp(dockerComposeCommands, appName) {
+			debugger;
 			this.$refs.ComposeConfig.checkStep().then(valid => {
 				if (valid.every(v => v === true)) {
 					this.isLoading = true
@@ -1159,8 +1162,15 @@ export default {
 		 * @return {*} void
 		 */
 		updateApp() {
+			debugger;
+			var app = YAML.parse(this.settingComposeData);
+			var appNew = YAML.parse(this.dockerComposeCommands);
+			var oldPortMap = app['x-casaos']?.port_map || ''
+			var newPortMap = appNew['x-casaos']?.port_map || ''
+			var domains = app['x-casaos']?.domains || []
 			this.$refs.ComposeConfig.checkStep().then(valid => {
 				if (valid.every(v => v === true)) {
+					// TODO update proxies if port change
 					this.$openAPI.appManagement.compose
 						.applyComposeAppSettings(this.id, this.dockerComposeCommands, false, true)
 						.then(res => {
@@ -1188,6 +1198,34 @@ export default {
 								type: 'is-warning'
 							})
 						})
+					if (newPortMap != oldPortMap && newPortMap != '' && domains.length > 0) {
+						domains.forEach((item) => {
+							this.$api.users.updateOnePanelProxyWebsite(
+								{
+									domain: item.domain,
+									hostname: window.location.hostname,
+									port: newPortMap,
+									protocol: item.scheme,
+								}
+							).then((res) => {
+								if (res.status === 200) {
+									this.$buefy.toast.open({
+										message: res.data.message,
+										type: "is-success",
+										position: "is-top",
+										duration: 5000,
+									});
+								}
+							}).catch((e) => {
+								this.$buefy.toast.open({
+									message: e.response.data.data,
+									type: "is-danger",
+									position: "is-top",
+									duration: 5000,
+								});
+							});
+						})
+					}
 				} else {
 					// toast info error.
 					this.$buefy.toast.open({
@@ -1200,7 +1238,7 @@ export default {
 		},
 
 		updateContainer() {
-			this.$refs.containerValida.validate().then(valid => {
+			this.$refs.containerValidate.validate().then(valid => {
 				if (valid) {
 					this.isLoading = true
 					this.$api.container

@@ -510,17 +510,17 @@ export default {
 			try {
 				const yaml = YAML.parse(val);
 
-				// 其他配置
+				// Other configuration
 				this.volumes = yaml.volumes || {};
 
 				// set main app name
 				this.configData.name = yaml?.name || "";
 				this.configData.services = {};
-				// 删除掉原默认主应用。
+				// Delete the default main application.
 				this.$delete(this.configData.services, "main_app");
 				// this.current_service = yaml["x-casaos"].main;
 				this.current_service = Object.keys(yaml.services)[0];
-				// 解析 services，并将其赋值到 configData.services中。
+				// Analyze services and assign it to configdata.Services.
 				for (const serviceKey in yaml.services) {
 					this.$set(this.configData.services, serviceKey, this.parseComposeItem(yaml.services[serviceKey]));
 				}

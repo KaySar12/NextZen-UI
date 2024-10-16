@@ -105,10 +105,12 @@ const users = {
 
 		return await api.get(`${PANELPREFIX}/health`);
 	},
+	async updateOnePanelProxyWebsite(data) {
+		return await api.post(`${PANELPREFIX}/website/update-proxy`, data);
+	},
 	async createOnePanelWebsite(data) {
 		return await api.post(`${PANELPREFIX}/website/create`, data);
 	},
-	
 	async deleteOnePanelWebsite(data) {
 		return await api.post(`${PANELPREFIX}/website/delete`, data);
 	},
