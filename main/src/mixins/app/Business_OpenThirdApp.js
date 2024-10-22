@@ -7,19 +7,43 @@
  * Copyright (c) 2022 by IceWhale, All Rights Reserved.
  */
 
+import Yaml from "yamljs";
+
 export default {
 	methods: {
 		openAppToNewWindow(appInfo) {
+			debugger;
 			this.hasNewTag(appInfo.name) ? this.firstOpenThirdApp(appInfo) : this.openThirdApp(appInfo, true);
 		},
-		openThirdApp(appInfo, isNewWindows) {
+		async openThirdApp(appInfo, isNewWindows) {
+			debugger;
+			const composeData = await this.$openAPI.appManagement.compose
+				.myComposeApp(appInfo.name, {
+					headers: {
+						"content-type": "application/yaml",
+						accept: "application/yaml",
+					},
+				})
+				.then((res) => res.data);
+			let app = YAML.parse(composeData)
+			let domains = app['x-casaos']?.domains || []
 			this.$messageBus('apps_open', appInfo.name);
 			if (appInfo.hostname !== "" || appInfo.port !== "" || appInfo.index !== "") {
 				const hostIp = appInfo.hostname || this.$baseIp
 				const scheme = appInfo.scheme || 'http'
 				const port = appInfo.port ? `:${appInfo.port}` : ''
-				const url = `${scheme}://${hostIp}${port}${appInfo.index}`
+				let url = ''
+				if (domains.length > 0) {
+					domains.forEach(item => {
+						if (item.mainLink === true) {
+							url = `${item.scheme || 'http'}://${item.domain || `${hostIp}${port}${appInfo.index}`}`
+						}
+					})
 
+				}
+				if (domains.length === 0 || url === '') {
+					url = `${scheme}://${hostIp}${port}${appInfo.index}`
+				}
 				if (isNewWindows) {
 					window.open(url);
 				} else {
@@ -48,10 +72,10 @@ export default {
 					image: allinfo.compose.services[appInfo.id].image,
 				}
 
-				if (allinfo.status.indexOf('running') === -1) { 
+				if (allinfo.status.indexOf('running') === -1) {
 					await this.$openAPI.appManagement.compose.setComposeAppStatus(allinfo.compose.name, 'start')
 					this.firstOpenThirdApp(app)
-				}else{
+				} else {
 					this.openAppToNewWindow(app)
 				}
 			} catch (e) {

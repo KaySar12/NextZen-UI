@@ -128,19 +128,22 @@ export default {
 			this.$emit("close");
 		},
 		createWebsite(addedDomains, realComposeData) {
+			debugger;
 			addedDomains.forEach((item) => {
 				this.$api.users
 					.createOnePanelWebsite({
 						domain: item.domain,
 						protocol: item.scheme,
 						port: realComposeData["x-casaos"]["port_map"] || 80,
-						hostname: window.location.hostname
+						hostname: window.location.hostname,
+						sslProvider: item.sslProvider
 					})
 					.then((res) => {
 						if (res.status === 200) {
+
 							this.$buefy.toast.open({
 								message: res.data.message,
-								type: "is-success",
+								type: res.data.data === false ? "is-danger" : "is-success",
 								position: "is-top",
 								duration: 5000,
 							});
