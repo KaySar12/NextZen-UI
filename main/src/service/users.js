@@ -111,6 +111,9 @@ const users = {
 	async createOnePanelWebsite(data) {
 		return await api.post(`${PANELPREFIX}/website/create`, data);
 	},
+	async updateOnePanelWebsite(data) {
+		return await api.post(`${PANELPREFIX}/website/update`, data);
+	},
 	async deleteOnePanelWebsite(data) {
 		return await api.post(`${PANELPREFIX}/website/delete`, data);
 	},

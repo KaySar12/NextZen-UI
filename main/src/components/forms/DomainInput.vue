@@ -23,7 +23,9 @@
 						<option value="http">Let's Encrypt</option>
 					</b-select>
 					<b-field expanded>
-						<b-input v-model="item.domain" :placeholder="$t(placeholder)" expanded></b-input>
+						<b-input v-model="item.domain" :placeholder="$t(placeholder)" @input="validateDomain(item)"
+							:class="{ 'is-danger': !item.isValid && item.domain !== '' }"></b-input>
+						<p v-if="!item.isValid && item.domain !== ''" class="help is-danger">Invalid domain</p>
 					</b-field>
 				</b-field>
 			</template>
@@ -38,7 +40,9 @@
 						<option value="selfSigned">Self Signed</option>
 						<option value="http">Let's Encrypt</option>
 					</b-select>
-					<b-input v-model="item.domain" :placeholder="$t(placeholder)" expanded></b-input>
+					<b-input v-model="item.domain" :placeholder="$t(placeholder)" @input="validateDomain(item)"
+						:class="{ 'is-danger': !item.isValid && item.domain !== '' }" expanded></b-input>
+					<p v-if="!item.isValid && item.domain !== ''" class="help is-danger">Invalid domain</p>
 				</b-field>
 			</template>
 		</div>
@@ -74,12 +78,16 @@ export default {
 			set(val) {
 				this.$emit("change", val);
 			},
+
 		},
+
 	},
 	methods: {
 		addItem() {
+			debugger;
 			console.log(this.vData);
 			const itemObj = {
+				id: this.vData.length + 1,
 				domain: "",
 				scheme: "http",
 				sslProvider: "selfSigned",
@@ -100,6 +108,11 @@ export default {
 					item.mainLink = false;
 				}
 			});
+		},
+		validateDomain(item) {
+			// Basic domain validation regex
+			const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+(\.[a-zA-Z0-9-_]+)+.*)$/i;
+			item.isValid = domainRegex.test(item.domain.trim());
 		},
 	},
 };

@@ -19,8 +19,10 @@
 			</VMdEditor> -->
 			<DomainInput v-model="domains"></DomainInput>
 			<div v-if="name" class="is-flex is-flex-direction-row-reverse mt-2">
-				<b-icon class="is-clickable has-text-green-default" icon="check-outline" pack="casa"
-					@click.native="save"></b-icon>
+				<b-icon class="is-clickable" icon="check-outline" pack="casa" :class="{
+					'has-text-green-default': isDifferentiation && areAllDomainsValid,
+					'has-text-grey-400': !isDifferentiation || !areAllDomainsValid,
+				}" @click.native="save"></b-icon>
 			</div>
 		</section>
 		<!-- Modal-Card Body End -->
@@ -74,7 +76,15 @@ export default {
 			// required: true
 		},
 	},
-	computed: {},
+	computed: {
+		isDifferentiation() {
+			debugger;
+			return JSON.stringify(this.originalDomains) !== JSON.stringify(this.domains);
+		},
+		areAllDomainsValid() {
+			return this.domains.every((item) => this.isValidDomain(item.domain));
+		},
+	},
 	watch: {
 		isEditing(val) {
 			if (val) {
@@ -106,26 +116,69 @@ export default {
 		},
 	},
 	methods: {
-		/*
-		 * 1、Enter the editor state
-		 * 2, Conservation
-		 * */
-
+		isValidDomain(domain) {
+			const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+(\.[a-zA-Z0-9-_]+)+.*)$/i;
+			var valid = domainRegex.test(domain.trim());
+			return valid
+		},
 		save() {
 			debugger;
-			let realComposeData = this.getCompleteComposeData();
-			let original = this.originalDomains;
-			let newDomains = this.domains;
-			let addedDomains = newDomains.filter(
-				(d) => !original.some((o) => o.domain === d.domain)
-			);
-			let removedDomains = original.filter(
-				(o) => !newDomains.some((d) => d.domain === o.domain)
-			);
-			this.createWebsite(addedDomains, realComposeData);
-			this.deleteWebsite(removedDomains);
-			this.applyComposeSettings(realComposeData);
-			this.$emit("close");
+			if (this.isDifferentiation && this.areAllDomainsValid) {
+				let realComposeData = this.getCompleteComposeData();
+				let original = this.originalDomains;
+				let newDomains = this.domains;
+				let addedDomains = newDomains.filter(
+					(d) => !original.some((o) => o.domain === d.domain)
+				);
+				let removedDomains = original.filter(
+					(o) => !newDomains.some((d) => d.domain === o.domain)
+				);
+				let editedDomains = newDomains.filter((d) =>
+					original.some((o) => o.id === d.id && JSON.stringify(o) !== JSON.stringify(d))
+				);
+
+				if (addedDomains.length > 0) {
+					this.createWebsite(addedDomains, realComposeData);
+				}
+				if (removedDomains.length > 0) {
+					this.deleteWebsite(removedDomains);
+				}
+				if (editedDomains.length > 0) {
+					this.updateWebsite(editedDomains, realComposeData)
+				}
+				this.applyComposeSettings(realComposeData);
+				this.$emit("close");
+			}
+		},
+		updateWebsite(editedDomains, realComposeData) {
+			editedDomains.forEach((item) => {
+				this.$api.users
+					.updateOnePanelWebsite({
+						domain: item.domain,
+						protocol: item.scheme,
+						port: realComposeData["x-casaos"]["port_map"] || 80,
+						hostname: window.location.hostname,
+						sslProvider: item.sslProvider,
+					})
+					.then((res) => {
+						if (res.status === 200) {
+							this.$buefy.toast.open({
+								message: res.data.message,
+								type: res.data.data === false ? "is-danger" : "is-success",
+								position: "is-top",
+								duration: 5000,
+							});
+						}
+					})
+					.catch((e) => {
+						this.$buefy.toast.open({
+							message: e.response.data.data,
+							type: "is-danger",
+							position: "is-top",
+							duration: 5000,
+						});
+					});
+			});
 		},
 		createWebsite(addedDomains, realComposeData) {
 			debugger;
@@ -136,11 +189,10 @@ export default {
 						protocol: item.scheme,
 						port: realComposeData["x-casaos"]["port_map"] || 80,
 						hostname: window.location.hostname,
-						sslProvider: item.sslProvider
+						sslProvider: item.sslProvider,
 					})
 					.then((res) => {
 						if (res.status === 200) {
-
 							this.$buefy.toast.open({
 								message: res.data.message,
 								type: res.data.data === false ? "is-danger" : "is-success",
@@ -199,7 +251,6 @@ export default {
 					}
 				})
 				.catch((e) => {
-					console.log("Error in saving tips:", e);
 					this.$buefy.toast.open({
 						message: e.response.data.data,
 						type: "is-danger",
@@ -211,14 +262,14 @@ export default {
 		getCompleteComposeData() {
 			debugger;
 			/*let lines = this.tips.split('\n');
-				let body = [];
-		  
-				lines.forEach(line => {
-				  let splitArray = line.split(':');
-				  let value = splitArray.length > 1 ? splitArray[0] : 'user input';
-				  let content = splitArray.length > 1 ? splitArray[1] : splitArray[0];
-				  body.push({value, content: {default: content}});
-				});*/
+					  let body = [];
+			    
+					  lines.forEach(line => {
+						let splitArray = line.split(':');
+						let value = splitArray.length > 1 ? splitArray[0] : 'user input';
+						let content = splitArray.length > 1 ? splitArray[1] : splitArray[0];
+						body.push({value, content: {default: content}});
+					  });*/
 
 			let result = merge(this.composeData, {
 				"x-casaos": {
