@@ -119,11 +119,12 @@ export default {
 		isValidDomain(domain) {
 			const domainRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+(\.[a-zA-Z0-9-_]+)+.*)$/i;
 			var valid = domainRegex.test(domain.trim());
-			return valid
+			return valid;
 		},
 		save() {
 			debugger;
 			if (this.isDifferentiation && this.areAllDomainsValid) {
+				this.domains.forEach((item) => (item.isEditable = false));
 				let realComposeData = this.getCompleteComposeData();
 				let original = this.originalDomains;
 				let newDomains = this.domains;
@@ -136,18 +137,44 @@ export default {
 				let editedDomains = newDomains.filter((d) =>
 					original.some((o) => o.id === d.id && JSON.stringify(o) !== JSON.stringify(d))
 				);
-
-				if (addedDomains.length > 0) {
-					this.createWebsite(addedDomains, realComposeData);
-				}
 				if (removedDomains.length > 0) {
-					this.deleteWebsite(removedDomains);
+					this.$buefy.dialog.confirm({
+						title: this.$t("Attention"),
+						message: `Domain cannot be recovered after deletion! 
+						<br/>Continue on to delete this domain?<br/>
+						<div class="is-flex is-align-items-center mt-4">
+							<input type="checkbox" id="checkDelSSL" style="margin-right: 3px;"> Delete SSL Certificate
+						</input>
+						</div>`,
+						type: "is-dark",
+						confirmText: this.$t("Confirm"),
+						cancelText: this.$t("Cancel"),
+						onConfirm: () => {
+							let checkDelSSL = document.getElementById("checkDelSSL")
+								? document.getElementById("checkDelSSL").checked
+								: false;
+
+							this.deleteWebsite(removedDomains, checkDelSSL);
+							if (addedDomains.length > 0) {
+								this.createWebsite(addedDomains, realComposeData);
+							}
+							if (editedDomains.length > 0) {
+								this.updateWebsite(editedDomains, realComposeData);
+							}
+							this.applyComposeSettings(realComposeData);
+							this.$emit("close");
+						},
+					});
+				} else {
+					if (addedDomains.length > 0) {
+						this.createWebsite(addedDomains, realComposeData);
+					}
+					if (editedDomains.length > 0) {
+						this.updateWebsite(editedDomains, realComposeData);
+					}
+					this.applyComposeSettings(realComposeData);
+					this.$emit("close");
 				}
-				if (editedDomains.length > 0) {
-					this.updateWebsite(editedDomains, realComposeData)
-				}
-				this.applyComposeSettings(realComposeData);
-				this.$emit("close");
 			}
 		},
 		updateWebsite(editedDomains, realComposeData) {
@@ -211,11 +238,13 @@ export default {
 					});
 			});
 		},
-		deleteWebsite(removedDomains) {
+		deleteWebsite(removedDomains, checkDelSSL) {
+			debugger;
 			removedDomains.forEach((item) => {
 				this.$api.users
 					.deleteOnePanelWebsite({
 						domain: item.domain,
+						deleteSSL: checkDelSSL.toString(),
 					})
 					.then((res) => {
 						if (res.status === 200) {
@@ -262,14 +291,14 @@ export default {
 		getCompleteComposeData() {
 			debugger;
 			/*let lines = this.tips.split('\n');
-					  let body = [];
-			    
-					  lines.forEach(line => {
-						let splitArray = line.split(':');
-						let value = splitArray.length > 1 ? splitArray[0] : 'user input';
-						let content = splitArray.length > 1 ? splitArray[1] : splitArray[0];
-						body.push({value, content: {default: content}});
-					  });*/
+							let body = [];
+					  
+							lines.forEach(line => {
+							  let splitArray = line.split(':');
+							  let value = splitArray.length > 1 ? splitArray[0] : 'user input';
+							  let content = splitArray.length > 1 ? splitArray[1] : splitArray[0];
+							  body.push({value, content: {default: content}});
+							});*/
 
 			let result = merge(this.composeData, {
 				"x-casaos": {

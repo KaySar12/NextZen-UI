@@ -356,7 +356,7 @@ import UpdateModal from "./settings/UpdateModal.vue";
 import { mixin } from "@/mixins/mixin";
 import messages from "@/assets/lang";
 import Authentik from "./externalServices/AuthentikPanel.vue";
-import OnePanel from "./externalServices/OnePanel.vue";
+import NextWeb from "./externalServices/NextWebPanel.vue";
 import events from "@/events/events";
 
 const systemConfigName = "system";
@@ -814,7 +814,7 @@ export default {
 			this.$refs.serviceDrops.toggle();
 			this.$buefy.modal.open({
 				parent: this,
-				component: OnePanel,
+				component: NextWeb,
 				hasModalCard: true,
 				customClass: "terminal-modal",
 				trapFocus: true,

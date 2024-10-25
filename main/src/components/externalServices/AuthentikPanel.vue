@@ -11,9 +11,6 @@
 				<b-tab-item :label="$t('Credentials')" value="credentials">
 					<authentik-provider-card></authentik-provider-card>
 				</b-tab-item>
-				<b-tab-item :label="$t('Providers')" value="providers">
-
-				</b-tab-item>
 			</b-tabs>
 		</section>
 	</div>
@@ -33,9 +30,6 @@ export default {
 			switch (e) {
 				case "credentials":
 					this.$refs.credentials.active(true)
-					break;
-				case "providers":
-					this.$refs.providers.active(true)
 					break;
 				default:
 					break;

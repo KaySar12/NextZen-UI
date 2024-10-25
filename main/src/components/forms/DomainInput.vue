@@ -19,11 +19,12 @@
 						<option value="https">https</option>
 					</b-select>
 					<b-select v-model="item.sslProvider" v-if="shouldShowSSLProvider(item)">
-						<option value="selfSigned">Self Signed</option>
-						<option value="http">Let's Encrypt</option>
+						<option value="selfSigned">Local SSL</option>
+						<option value="http">Global SSL</option>
 					</b-select>
 					<b-field expanded>
-						<b-input v-model="item.domain" :placeholder="$t(placeholder)" @input="validateDomain(item)"
+						<b-input :disabled="!item.isEditable" v-model="item.domain" :placeholder="$t(placeholder)"
+							@input="validateDomain(item)"
 							:class="{ 'is-danger': !item.isValid && item.domain !== '' }"></b-input>
 						<p v-if="!item.isValid && item.domain !== ''" class="help is-danger">Invalid domain</p>
 					</b-field>
@@ -37,11 +38,12 @@
 						<option value="https">https</option>
 					</b-select>
 					<b-select v-model="item.sslProvider" v-if="shouldShowSSLProvider(item)">
-						<option value="selfSigned">Self Signed</option>
-						<option value="http">Let's Encrypt</option>
+						<option value="selfSigned">Local SSL</option>
+						<option value="http">Global SSL</option>
 					</b-select>
-					<b-input v-model="item.domain" :placeholder="$t(placeholder)" @input="validateDomain(item)"
-						:class="{ 'is-danger': !item.isValid && item.domain !== '' }" expanded></b-input>
+					<b-input :disabled="!item.isEditable" v-model="item.domain" :placeholder="$t(placeholder)"
+						@input="validateDomain(item)" :class="{ 'is-danger': !item.isValid && item.domain !== '' }"
+						expanded></b-input>
 					<p v-if="!item.isValid && item.domain !== ''" class="help is-danger">Invalid domain</p>
 				</b-field>
 			</template>
@@ -92,6 +94,7 @@ export default {
 				scheme: "http",
 				sslProvider: "selfSigned",
 				mainLink: false,
+				isEditable: true,
 			};
 			this.items.push(itemObj);
 		},
