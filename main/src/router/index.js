@@ -51,7 +51,7 @@ const needInit = async () => {
 	}
 }
 router.beforeEach(async (to, from, next) => {
-	
+	debugger;
 	const accessToken = localStorage.getItem("access_token");
 	// const authentikToken = localStorage.getItem("authentik_token");
 	if (to.path === '/authentik-offline') {
