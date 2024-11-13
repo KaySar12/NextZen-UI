@@ -119,7 +119,7 @@ const builtInApplications = [
 		title: {
 			en_us: 'AccessControl Center'
 		},
-		icon: require(`@/assets/img/app/access-management.png`),
+		icon: require(`@/assets/img/app/account.png`),
 		status: 'running',
 		app_type: 'system'
 	},
