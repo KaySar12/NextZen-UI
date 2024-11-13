@@ -1,194 +1,88 @@
 <template>
-  <div
-    class="common-card is-flex is-align-items-center is-justify-content-center app-card"
-    @mouseleave="hover = true"
-    @mouseover="hover = true"
-  >
+  <div class="common-card is-flex is-align-items-center is-justify-content-center app-card" @mouseleave="hover = true"
+    @mouseover="hover = true">
     <!-- Action Button Start -->
     <div v-if="item.name === 'Files' && item.app_type === 'system'" class="action-btn">
-      <b-dropdown
-        ref="dro"
-        :mobile-modal="false"
-        :triggers="['contextmenu', 'click']"
-        animation="fade1"
-        append-to-body
-        aria-role="list"
-        class="app-card-drop"
-        :position="dropdownPosition"
-        @active-change="setDropState"
-      >
+      <b-dropdown ref="dro" :mobile-modal="false" :triggers="['contextmenu', 'click']" animation="fade1" append-to-body
+        aria-role="list" class="app-card-drop" :position="dropdownPosition" @active-change="setDropState">
         <template #trigger>
           <p role="button" @click="handleDorpdownPosition">
-            <b-icon
-              class="is-clickable"
-              icon="dots-vertical-outline"
-              pack="casa"
-            ></b-icon>
+            <b-icon class="is-clickable" icon="dots-vertical-outline" pack="casa"></b-icon>
           </p>
         </template>
         <b-button expanded tag="a" type="is-text" @click="openFileNewTab(item)">{{
           $t("Open New Tab")
-        }}</b-button>
+          }}</b-button>
       </b-dropdown>
     </div>
-    <div
-      v-if="item.app_type !== 'system' && !isContainerApp && !isUninstalling"
-      class="action-btn"
-    >
-      <b-dropdown
-        ref="dro"
-        :mobile-modal="false"
-        :triggers="['contextmenu', 'click']"
-        animation="fade1"
-        append-to-body
-        aria-role="list"
-        class="app-card-drop"
-        :position="dropdownPosition"
-        @active-change="setDropState"
-      >
+    <div v-if="item.app_type !== 'system' && !isContainerApp && !isUninstalling" class="action-btn">
+      <b-dropdown ref="dro" :mobile-modal="false" :triggers="['contextmenu', 'click']" animation="fade1" append-to-body
+        aria-role="list" class="app-card-drop" :position="dropdownPosition" @active-change="setDropState">
         <template #trigger>
           <p role="button" @click="handleDorpdownPosition">
-            <b-icon
-              class="is-clickable"
-              icon="dots-vertical-outline"
-              pack="casa"
-            ></b-icon>
+            <b-icon class="is-clickable" icon="dots-vertical-outline" pack="casa"></b-icon>
           </p>
         </template>
 
         <b-dropdown-item :focusable="false" aria-role="menu-item" custom>
-          <b-button
-            v-if="item.status === 'running'"
-            expanded
-            tag="a"
-            type="is-text"
-            @click="openApp(item)"
-            >{{ $t("Open") }}</b-button
-          >
+          <b-button v-if="item.status === 'running'" expanded tag="a" type="is-text" @click="openApp(item)">{{
+            $t("Open")
+            }}</b-button>
           <b-button v-else expanded tag="a" type="is-text" @click="openApp(item)">{{
             $t("launch-and-open")
-          }}</b-button>
-          <b-button
-            v-if="isV2App"
-            expanded
-            icon-pack="casa"
-            icon-right="question-outline"
-            size="is-16"
-            type="is-text"
-            @click="openTips(item.name)"
-          >
+            }}</b-button>
+          <b-button v-if="isV2App" expanded icon-pack="casa" icon-right="question-outline" size="is-16" type="is-text"
+            @click="openTips(item.name)">
             {{ $t("Tips") }}
           </b-button>
-          <b-button
-            v-if="isV2App"
-            expanded
-            size="is-16"
-            type="is-text"
-            @click="openSetupDomain(item.name)"
-          >
+          <b-button v-if="isV2App" expanded size="is-16" type="is-text" @click="openSetupDomain(item.name)">
             {{ $t("Setup Domain") }}
           </b-button>
-          <b-button
-            v-if="isV2App || isLinkApp"
-            expanded
-            type="is-text"
-            @click="configApp()"
-            >{{ $t("Setting") }}
+          <b-button v-if="isV2App || isLinkApp" expanded type="is-text" @click="configApp()">{{ $t("Setting") }}
           </b-button>
 
-          <b-button
-            v-if="isV2App && !item.is_uncontrolled"
-            expanded
-            type="is-text"
-            @click="checkAppVersion(item.name)"
-            >{{ $t("Check then update") }}
+          <b-button v-if="isV2App && !item.is_uncontrolled" expanded type="is-text"
+            @click="checkAppVersion(item.name)">{{
+              $t("Check then update") }}
             <b-loading :active="isCheckThenUpdate || isUpdating" :is-full-page="false">
-              <img
-                :src="require('@/assets/img/loading/waiting.svg')"
-                alt="pending"
-                class="ml-4 is-24x24"
-              />
+              <img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
             </b-loading>
           </b-button>
 
-          <b-button v-if="isV1App" expanded type="is-text" @click="exportYAML(item)"
-            >{{ $t("Export as Compose") }}
+          <b-button v-if="isV1App" expanded type="is-text" @click="exportYAML(item)">{{ $t("Export as Compose") }}
           </b-button>
 
-          <b-button
-            v-if="isV1App"
-            :loading="isRebuilding"
-            expanded
-            type="is-text"
-            @click="rebuild(item)"
-            >{{ $t("Rebuild") }}
+          <b-button v-if="isV1App" :loading="isRebuilding" expanded type="is-text" @click="rebuild(item)">{{
+            $t("Rebuild")
+            }}
           </b-button>
 
-          <b-button
-            v-if="isLinkApp"
-            class="mb-1"
-            expanded
-            type="is-text"
-            @click="uninstallApp(true)"
-          >
+          <b-button v-if="isLinkApp" class="mb-1" expanded type="is-text" @click="uninstallApp(true)">
             {{ $t("Delete") }}
             <b-loading v-model="isUninstalling" :is-full-page="false">
-              <img
-                :src="require('@/assets/img/loading/waiting.svg')"
-                alt="pending"
-                class="ml-4 is-24x24"
-              />
+              <img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
             </b-loading>
           </b-button>
-          <b-button
-            v-else
-            class="has-text-red"
-            expanded
-            type="is-text"
-            @click="uninstallConfirm"
-          >
+          <b-button v-else class="has-text-red" expanded type="is-text" @click="uninstallConfirm">
             {{ $t("Uninstall") }}
             <b-loading v-model="isUninstalling" :is-full-page="false">
-              <img
-                :src="require('@/assets/img/loading/waiting.svg')"
-                alt="pending"
-                class="ml-4 is-24x24"
-              />
+              <img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
             </b-loading>
           </b-button>
 
           <div v-if="!isLinkApp" class="gap">
             <div class="columns is-gapless _b-bor is-flex">
               <div class="column is-flex is-justify-content-center is-align-items-center">
-                <b-button
-                  :loading="isRestarting"
-                  expanded
-                  type="is-text"
-                  @click="restartApp"
-                  :disabled="item.status != 'running'"
-                >
-                  <b-icon
-                    custom-size="is-size-20px"
-                    icon="restart-outline"
-                    pack="casa"
-                  ></b-icon>
+                <b-button :loading="isRestarting" expanded type="is-text" @click="restartApp"
+                  :disabled="item.status != 'running'">
+                  <b-icon custom-size="is-size-20px" icon="restart-outline" pack="casa"></b-icon>
                 </b-button>
               </div>
               <div class="column is-flex is-justify-content-center is-align-items-center">
-                <b-button
-                  :class="item.status"
-                  :loading="isStarting"
-                  class="has-text-red"
-                  expanded
-                  type="is-text"
-                  @click="toggle(item)"
-                >
-                  <b-icon
-                    custom-size="is-size-20px"
-                    icon="shutdown-outline"
-                    pack="casa"
-                    :custom-class="shutDownClass"
-                  ></b-icon>
+                <b-button :class="item.status" :loading="isStarting" class="has-text-red" expanded type="is-text"
+                  @click="toggle(item)">
+                  <b-icon custom-size="is-size-20px" icon="shutdown-outline" pack="casa"
+                    :custom-class="shutDownClass"></b-icon>
                 </b-button>
               </div>
             </div>
@@ -200,55 +94,28 @@
     <div class="blur-background"></div>
     <div class="cards-content">
       <!-- Card Content Start -->
-      <b-tooltip
-        :always="isActiveTooltip"
-        :animated="true"
-        :label="tooltipLabel"
-        :triggers="tooltipTriger"
-        animation="fade1"
-        class="in-card"
-        type="is-white"
-      >
-        <div
-          class="has-text-centered is-flex is-justify-content-center is-flex-direction-column pt-5 pb-3px img-c"
-        >
+      <b-tooltip :always="isActiveTooltip" :animated="true" :label="tooltipLabel" :triggers="tooltipTriger"
+        animation="fade1" class="in-card" type="is-white">
+        <div class="has-text-centered is-flex is-justify-content-center is-flex-direction-column pt-5 pb-3px img-c">
           <div class="is-flex is-justify-content-center">
             <div class="is-relative">
-              <b-image
-                :class="dotClass(item.status, isLoading)"
-                :src="item.icon"
-                :src-fallback="require('@/assets/img/app/default.svg')"
-                class="is-64x64"
-                webp-fallback=".jpg"
-                @click.native="openApp(item)"
-              ></b-image>
+              <b-image :class="dotClass(item.status, isLoading)" :src="item.icon"
+                :src-fallback="require('@/assets/img/app/default.svg')" class="is-64x64" webp-fallback=".jpg"
+                @click.native="openApp(item)"></b-image>
               <!-- Unstable-->
-              <cTooltip
-                v-if="newAppIds.includes(item.name)"
-                class="__position"
-                content="NEW"
-              ></cTooltip>
+              <cTooltip v-if="newAppIds.includes(item.name)" class="__position" content="NEW"></cTooltip>
             </div>
 
             <!-- Loading Bar Start -->
-            <b-loading
-              :active="isLoading"
-              :can-cancel="false"
-              :is-full-page="false"
-              class="has-background-gray-800 op80 is-64x64"
-              style="
+            <b-loading :active="isLoading" :can-cancel="false" :is-full-page="false"
+              class="has-background-gray-800 op80 is-64x64" style="
                 top: auto;
                 bottom: auto;
                 right: auto;
                 left: auto;
                 border-radius: 11.5px;
-              "
-            >
-              <img
-                :src="require('@/assets/img/loading/waiting-white.svg')"
-                alt="loading"
-                class="is-20x20"
-              />
+              ">
+              <img :src="require('@/assets/img/loading/waiting-white.svg')" alt="loading" class="is-20x20" />
             </b-loading>
             <!-- Loading Bar End -->
           </div>
@@ -449,23 +316,20 @@ export default {
         case "Files":
           this.homeShowFiles();
           break;
-        case "Access Management":
-          this.openLink("http://accessmanager.local/");
+        case "AccessControl Center":
+          this.openLink("https://account.nextzenvn.com/");
           break;
         case "NextNAS":
-          this.openLink("http://nextnas.local/");
-          break;
-        case "Proxmox":
-          this.openLink("http://proxmox.local/");
+          this.openLink("http://nas.nextzenvn.com/");
           break;
         case "NextDNS":
-          this.openLink("http://nextdns.local/");
+          this.openLink("https://ad.nextzenvn.com/");
           break;
-        case "App Manager":
-          this.openLink("http://appmanager.local/");
+        case "NextWeb":
+          this.openLink("https://web.nextzenvn.com/");
           break;
-        case "NextFirewall":
-          this.openLink("http://nextfirewall.local/");
+        case "NextVPN":
+          this.openLink("https://vpn.nextzenvn.com/");
           break;
         default:
           break;
@@ -976,7 +840,7 @@ export default {
      * @param {Object} data
      * @return {void}
      */
-    "app:update-begin"() {},
+    "app:update-begin"() { },
 
     "docker:image:pull-end"(data) {
       if (data.Properties["app:name"] === this.item.name) {
@@ -1068,7 +932,7 @@ export default {
       .dropdown-item {
         padding: 0;
 
-        & > * {
+        &>* {
           margin: 1px 0;
         }
       }
@@ -1083,7 +947,7 @@ export default {
           height: 1.25rem !important;
         }
 
-        span + span i {
+        span+span i {
           color: hsla(208, 16%, 42%, 1);
         }
 

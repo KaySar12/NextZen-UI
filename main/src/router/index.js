@@ -122,8 +122,8 @@ router.beforeEach(async (to, from, next) => {
 					}
 				} catch (error) {
 					// Handle version fetch error (e.g., log it or show a message)
-					localStorage.clear()
-					window.location.reload()
+					// localStorage.clear()
+					// window.location.reload()
 					console.error('Error fetching version:', error);
 				}
 

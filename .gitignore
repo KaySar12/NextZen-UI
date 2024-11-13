@@ -38,5 +38,4 @@ unused-files.json
 node_modules
 main/public/img/icon/favicon.svgZone.Identifier
 *.gz
-/main/src/assets/img
 /main/public/img

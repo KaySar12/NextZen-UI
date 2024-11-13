@@ -115,9 +115,9 @@ const builtInApplications = [
 	},
 	{
 		id: '3',
-		name: 'Access Management',
+		name: 'AccessControl Center',
 		title: {
-			en_us: 'Access Management'
+			en_us: 'AccessControl Center'
 		},
 		icon: require(`@/assets/img/app/access-management.png`),
 		status: 'running',
@@ -135,16 +135,6 @@ const builtInApplications = [
 	},
 	{
 		id: '5',
-		name: 'App Manager',
-		title: {
-			en_us: 'App Manager'
-		},
-		icon: require(`@/assets/img/app/portainer.png`),
-		status: 'running',
-		app_type: 'system'
-	},
-	{
-		id: '6',
 		name: 'NextDNS',
 		title: {
 			en_us: 'NextDNS'
@@ -154,22 +144,22 @@ const builtInApplications = [
 		app_type: 'system'
 	},
 	{
-		id: '7',
-		name: 'Proxmox',
+		id: '6',
+		name: 'NextWeb',
 		title: {
-			en_us: 'Proxmox'
+			en_us: 'NextWeb'
 		},
-		icon: require(`@/assets/img/app/proxmox.png`),
+		icon: require(`@/assets/img/app/nextweb.png`),
 		status: 'running',
 		app_type: 'system'
 	},
 	{
-		id: '8',
-		name: 'NextFirewall',
+		id: '7',
+		name: 'NextVPN',
 		title: {
-			en_us: 'NextFirewall'
+			en_us: 'NextVPN'
 		},
-		icon: require(`@/assets/img/app/nextfirewall.png`),
+		icon: require(`@/assets/img/app/nextvpn.png`),
 		status: 'running',
 		app_type: 'system'
 	}
