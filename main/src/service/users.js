@@ -14,7 +14,7 @@ const users = {
 		return api.delete(`${PREFIX}`);
 	},
 	// get user status [OK]
-	getUserStatus() {
+    getUserStatus() {
 		return api.get(`${PREFIX}/status`);
 	},
 	// get user current info [OK]

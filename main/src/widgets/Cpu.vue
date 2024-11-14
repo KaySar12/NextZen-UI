@@ -15,7 +15,7 @@
 
 			<div class="columns is-mobile mt-0 mb-1">
 				<div class="column is-half has-text-centered">
-					<radial-bar :extendContent="NAS" 
+					<radial-bar :extendContent="power + temperature" :extendContentClickable="true"
 						:percent="parseInt(cpuSeries)" label="CPU" @extendContentClick="changeFormat"></radial-bar>
 				</div>
 				<div class="column is-half has-text-centered">

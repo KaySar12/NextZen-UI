@@ -3,7 +3,7 @@
 		<!-- Title Bar Start -->
 		<div class="is-flex is-align-items-center mb-4">
 			<app-section-title-tip id="appTitle1" class="is-flex-grow-1 has-text-sub-04" label="Drag icons to sort."
-				title="Apps">
+				title="System Apps">
 			</app-section-title-tip>
 
 			<b-dropdown animation="fade1" aria-role="menu" class="file-dropdown" position="is-bottom-left">
@@ -11,9 +11,6 @@
 					<b-icon class="polymorphic is-clickable has-text-grey-100" icon="plus-outline" pack="casa"
 						size="is-24"></b-icon>
 				</template>
-				<b-dropdown-item aria-role="menuitem" @click="showInstall(0, 'custom')">
-					{{ $t('Custom Install APP') }}
-				</b-dropdown-item>
 				<b-dropdown-item aria-role="menuitem" @click="showExternalLinkPanel">
 					{{ $t('Add external link/APP') }}
 				</b-dropdown-item>
@@ -22,11 +19,11 @@
 		<!-- Title Bar End -->
 
 		<!-- App List Start -->
-		<draggable v-model="appList" :draggable="draggable" class="app-list contextmenu-canvas" tag="div"
+		<draggable v-model="systemAppList" :draggable="draggable" class="app-list contextmenu-canvas" tag="div"
 			v-bind="dragOptions" @end="onSortEnd" @start="drag = true">
 			<!-- App Icon Card Start -->
 			<template v-if="!isLoading">
-				<div v-for="item in appList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle">
+				<div v-for="item in systemAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle">
 					<app-card :item="item" @configApp="showConfigPanel" @importApp="showContainerPanel"
 						@updateState="getList"></app-card>
 				</div>
@@ -39,8 +36,41 @@
 			<!-- App Icon Card End -->
 			<!-- <b-loading slot="footer" v-model="isLoading" :is-full-page="false"></b-loading> -->
 		</draggable>
+		
 		<!-- App List End -->
+		<template v-if="appList.length > 0">
+			<!-- Title Bar Start -->
+			<div class="title-bar is-flex is-align-items-center mt-2rem mb-5">
+				<app-section-title-tip id="appTitle2" class="is-flex-grow-1 has-text-sub-04" label="app installed in appstore"
+					title="Installed App">
+				</app-section-title-tip>
+				<b-dropdown animation="fade1" aria-role="menu" class="file-dropdown" position="is-bottom-left">
+				<template #trigger>
+					<b-icon class="polymorphic is-clickable has-text-grey-100" icon="plus-outline" pack="casa"
+						size="is-24"></b-icon>
+				</template>
+				<b-dropdown-item aria-role="menuitem" @click="showInstall(0, 'custom')">
+					{{ $t('Custom Install APP') }}
+				</b-dropdown-item>
+			</b-dropdown>
+			</div>
 
+			<!-- Title Bar End -->
+
+			<!-- App List Start -->
+			<transition name="slide">
+				<div class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
+
+					<!-- Application not imported Start -->
+					<div v-for="item in appList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle ">
+						<app-card :isCasa="false" :item="item" @configApp="showConfigPanel"
+							@importApp="showContainerPanel" @updateState="getList"></app-card>
+					</div>
+					<!-- Application not imported End -->
+				</div>
+			</transition>
+			<!-- App List End -->
+		</template>
 		<template v-if="oldAppList.length > 0">
 			<!-- Title Bar Start -->
 			<div class="title-bar is-flex is-align-items-center mt-2rem mb-5">
@@ -162,6 +192,16 @@ const builtInApplications = [
 		icon: require(`@/assets/img/app/nextvpn.png`),
 		status: 'running',
 		app_type: 'system'
+	},
+	{
+		id: '8',
+		name: 'NextFireWall',
+		title: {
+			en_us: 'NextFireWall'
+		},
+		icon: require(`@/assets/img/app/nextfirewall.png`),
+		status: 'running',
+		app_type: 'system'
 	}
 ]
 
@@ -174,6 +214,7 @@ export default {
 			display: true,
 			user_id: localStorage.getItem('user_id'),
 			appList: [],
+			systemAppList:[],
 			oldAppList: [],
 			appConfig: {},
 			drag: false,
@@ -295,20 +336,22 @@ export default {
 					}
 				})
 				// all app list
-				let casaAppList = concat(builtInApplications, orgNewAppList, listLinkApp)
+				let mainAppList = concat(builtInApplications, listLinkApp)
+				this.systemAppList = mainAppList;
+				let installedAppList = orgNewAppList
 				// get app sort info.
 				let lateSortList = await this.$api.users
 					.getCustomStorage(orderConfig)
 					.then(res => res.data.data.data || [])
 
-				// filter anything not in casaAppList.
-				const propList = casaAppList.map(obj => obj.name)
+				// filter anything not in installedAppList.
+				const propList = installedAppList.map(obj => obj.name)
 				const existingList = lateSortList.filter(item => propList.includes(item))
 				const futureList = propList.filter(item => !lateSortList.includes(item))
 				const newSortList = existingList.concat(futureList)
 
 				// then sort.
-				const sortedAppList = casaAppList.sort((obj1, obj2) => {
+				const sortedAppList = installedAppList.sort((obj1, obj2) => {
 					return newSortList.indexOf(obj1.name) - newSortList.indexOf(obj2.name)
 				})
 

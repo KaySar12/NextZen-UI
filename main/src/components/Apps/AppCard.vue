@@ -309,6 +309,7 @@ export default {
     },
 
     openSystemApps(item) {
+      debugger;
       switch (item.name) {
         case "App Store":
           this.openAppStore();
@@ -331,6 +332,9 @@ export default {
         case "NextVPN":
           this.openLink("https://vpn.nextzenvn.com/");
           break;
+        case "NextFireWall":
+          this.openLink("https://firewall.nextzenvn.com/");
+        break;
         default:
           break;
       }
