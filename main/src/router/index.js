@@ -53,13 +53,8 @@ const needInit = async () => {
 const useOIDC = process.env.SSO
 router.beforeEach(async (to, from, next) => {
 	debugger;
-	if (!useOIDC) {
-		await local(to, from, next)
-	}
-	else {
-		await oidc(to, from, next)
-	}
-
+	// await oidc(to, from, next)
+	await local(to, from, next)
 });
 
 const local = async (to, from, next) => {
