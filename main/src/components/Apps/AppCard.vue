@@ -317,7 +317,7 @@ export default {
         case "Files":
           this.homeShowFiles();
           break;
-        case "AccessControl Center":
+        case "Account Center":
           this.openLink("https://account.nextzenvn.com/");
           break;
         case "NextNAS":

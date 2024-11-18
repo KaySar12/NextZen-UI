@@ -50,20 +50,16 @@ const needInit = async () => {
 		return false
 	}
 }
+const useOIDC = process.env.SSO
 router.beforeEach(async (to, from, next) => {
 	debugger;
-	// const authentikToken = localStorage.getItem("authentik_token");
-	if (process.env.NODE_ENV === 'dev') {
-		if (process.env.LOGIN_METHOD === 'local') {
-			await local(to, from, next)
-		}
-		else {
-			await oidc(to, from, next)
-		}
+	if (!useOIDC) {
+		await local(to, from, next)
 	}
 	else {
 		await oidc(to, from, next)
 	}
+
 });
 
 const local = async (to, from, next) => {
@@ -109,7 +105,7 @@ const local = async (to, from, next) => {
 	}
 	// 5. Attempt Login or Register if No Token
 	if (!accessToken) {
-		var res = await api.users.login('nextzen', 'smartyourlife');
+		var res = await api.users.login('nextzen12', 'smartyourlife');
 		// If login or registration was successful, store tokens and user data
 		if (res && res.data.success == 200) {
 			localStorage.setItem("access_token", res.data.data.token.access_token);

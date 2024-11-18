@@ -145,9 +145,9 @@ const builtInApplications = [
 	},
 	{
 		id: '3',
-		name: 'AccessControl Center',
+		name: 'Account Center',
 		title: {
-			en_us: 'AccessControl Center'
+			en_us: 'Account Center'
 		},
 		icon: require(`@/assets/img/app/account.png`),
 		status: 'running',
