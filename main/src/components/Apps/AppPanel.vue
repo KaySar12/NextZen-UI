@@ -1163,8 +1163,8 @@ export default {
 		 */
 		updateApp() {
 			debugger;
-			var app = YAML.parse(this.settingComposeData);
-			var appNew = YAML.parse(this.dockerComposeCommands);
+			var app = parse(this.settingComposeData); 
+			var appNew = parse(this.dockerComposeCommands);
 			var oldPortMap = app['x-casaos']?.port_map || ''
 			var newPortMap = appNew['x-casaos']?.port_map || ''
 			var domains = app['x-casaos']?.domains || []

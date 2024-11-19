@@ -6,8 +6,7 @@
  *
  * Copyright (c) 2022 by IceWhale, All Rights Reserved.
  */
-
-import Yaml from "yamljs";
+import {parse} from "yaml"
 
 export default {
 	methods: {
@@ -25,7 +24,7 @@ export default {
 					},
 				})
 				.then((res) => res.data);
-			let app = YAML.parse(composeData)
+			let app = parse(composeData)
 			let domains = app['x-casaos']?.domains || []
 			this.$messageBus('apps_open', appInfo.name);
 			if (appInfo.hostname !== "" || appInfo.port !== "" || appInfo.index !== "") {

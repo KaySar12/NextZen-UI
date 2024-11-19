@@ -205,7 +205,7 @@
           <!-- <b-button :type="state_mainstorage_operability" class="width" rounded
 						@click="showStorageSettingsModal">{{ $t('Merge Storages') }}
 					</b-button> -->
-          <a href="http://10.0.0.4:1081/#/storage/disks" target="_blank">
+          <a href="https://nas.nextzenvn.com/#/storage/disks" target="_blank">
             <b-button :type="state_mainstorage_operability" class="width" rounded>
               {{ $t("Manage Storages") }}
             </b-button>
