@@ -263,7 +263,6 @@ export default {
       }
     },
   },
-
   methods: {
     handleDorpdownPosition(event) {
       this.$nextTick(() => {
