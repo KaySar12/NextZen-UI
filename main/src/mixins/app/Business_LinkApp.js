@@ -30,7 +30,16 @@ export default {
 				console.error('getLinkAppList', e)
 			}
 		},
-
+		async getDefaultAppList() {
+			try {
+				// forecast null or String.
+				let LinkAppList = await this.$api.users.getDefaultAppList().then(v => v.data.data || []);
+				LinkAppList = this.transferLinkAppList(LinkAppList);
+				return LinkAppList
+			} catch (e) {
+				console.error('getLinkAppList', e)
+			}
+		},
 		setLinkAppList(LinkAppList) {
 			if (LinkAppList === "") {
 				LinkAppList = []

@@ -53,11 +53,14 @@ const needInit = async () => {
 const useOIDC = process.env.SSO
 router.beforeEach(async (to, from, next) => {
 	debugger;
-	// await oidc(to, from, next)
+	//await oidc(to, from, next)
 	await local(to, from, next)
 });
 
 const local = async (to, from, next) => {
+	if (to.path === '/offline') {
+		next()
+	}
 	const accessToken = localStorage.getItem("access_token");
 	const requireAuth = to.matched.some(record => record.meta.requireAuth);
 	if (requireAuth) {
@@ -86,11 +89,11 @@ const local = async (to, from, next) => {
 	if (to.path === '/init') {
 		var userStatus = await api.users.getUserStatus();
 		const initKey = userStatus.data.data.key;
-		var register = await api.users.register('nextzen12', 'smartyourlife', '', initKey);
+		var register = await api.users.register('hoang123', 'smartyourlife', '', initKey);
 
 		if (register.data.success == 200) {
 			// If registration succeeds, try logging in again
-			res = await api.users.login('nextzen12', 'smartyourlife');
+			res = await api.users.login('hoang123', 'smartyourlife');
 		} else {
 			// Handle registration failure (e.g., show error message)
 			console.error('Registration failed:', register.data);
@@ -100,7 +103,7 @@ const local = async (to, from, next) => {
 	}
 	// 5. Attempt Login or Register if No Token
 	if (!accessToken) {
-		var res = await api.users.login('nextzen12', 'smartyourlife');
+		var res = await api.users.login('hoang123', 'smartyourlife');
 		// If login or registration was successful, store tokens and user data
 		if (res && res.data.success == 200) {
 			localStorage.setItem("access_token", res.data.data.token.access_token);

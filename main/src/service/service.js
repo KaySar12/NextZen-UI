@@ -65,6 +65,12 @@ function AuthentikOffline() {
 		path: '/authentik-offline'
 	})
 }
+function Offline() {
+	localStorage.clear()
+	router.replace({
+		path: '/offline'
+	})
+}
 instance.interceptors.response.use(
 	(response) => {
 		return response;
@@ -115,6 +121,9 @@ instance.interceptors.response.use(
 					resolve(instance(originalConfig))
 				})
 			})
+		}
+		if (error?.response?.status === 502) {
+			Offline()
 		}
 		if (error?.response?.status === 503 && error.config.url === '/v1/users/oidc/logout') {
 			AuthentikOffline()

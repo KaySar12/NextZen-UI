@@ -5,12 +5,7 @@
       <div class="is-flex-grow-1">
         <h3 class="title is-header">{{ panelTitle }}</h3>
       </div>
-      <b-icon
-        class="close-button"
-        icon="close-outline"
-        pack="casa"
-        @click.native="$emit('close')"
-      />
+      <b-icon class="close-button" icon="close-outline" pack="casa" @click.native="$emit('close')" />
     </header>
     <!-- Modal-Card Header End -->
     <!-- Modal-Card Body Start -->
@@ -19,33 +14,20 @@
         <div class="mb-0">
           <ValidationObserver ref="ob1">
             <ValidationProvider v-slot="{ errors, valid }" rules="required">
-              <b-field
-                :message="$t(errors)"
-                :type="{ 'is-danger': errors[0], 'is-success': valid }"
-                class="is-flex-wrap-nowrap"
-              >
+              <b-field :message="$t(errors)" :type="{ 'is-danger': errors[0], 'is-success': valid }"
+                class="is-flex-wrap-nowrap">
                 <template #label>
                   {{ $t("Address") }}
                   <label style="color: red">*</label>
                 </template>
-                <b-autocomplete
-                  ref="inputs"
-                  v-model="hostname"
-                  :data="filteredDataObj"
-                  :placeholder="$t('Local URL,Pblic URL')"
-                  append-to-body
-                  field="hostname"
-                  max-height="120px"
-                  open-on-focus
-                >
+                <b-autocomplete ref="inputs" v-model="hostname" :data="filteredDataObj"
+                  :placeholder="$t('Local URL,Pblic URL')" append-to-body field="hostname" max-height="120px"
+                  open-on-focus>
                 </b-autocomplete>
               </b-field>
             </ValidationProvider>
 
-            <div
-              v-if="!state_hostIsExist"
-              class="message-alert is-flex is-align-items-center"
-            >
+            <div v-if="!state_hostIsExist" class="message-alert is-flex is-align-items-center">
               <div class="left mr-2 is-flex is-align-items-center">
                 <b-icon icon="danger" pack="casa"></b-icon>
               </div>
@@ -55,21 +37,14 @@
             </div>
 
             <ValidationProvider v-slot="{ errors, valid }" rules="required">
-              <b-field
-                :message="$t(errors)"
-                :type="{ 'is-danger': errors[0], 'is-success': valid }"
-                class="is-flex-wrap-nowrap"
-              >
+              <b-field :message="$t(errors)" :type="{ 'is-danger': errors[0], 'is-success': valid }"
+                class="is-flex-wrap-nowrap">
                 <template #label>
                   {{ $t("App Name") }}
                   <label style="color: red">*</label>
                 </template>
-                <b-input
-                  v-model="name"
-                  :disabled="disableEditName"
-                  :placeholder="$t('Customize your APP name')"
-                  max-height="120px"
-                >
+                <b-input v-model="name" :disabled="disableEditName" :placeholder="$t('Customize your APP name')"
+                  max-height="120px">
                 </b-input>
               </b-field>
             </ValidationProvider>
@@ -77,20 +52,11 @@
             <b-field :label="$t('Icon URL')">
               <p class="control">
                 <span class="button is-static container-icon">
-                  <b-image
-                    :key="icon"
-                    :src="icon"
-                    :src-fallback="require('@/assets/img/app/default.svg')"
-                    class="is-32x32"
-                    ratio="1by1"
-                  ></b-image>
+                  <b-image :key="icon" :src="icon" :src-fallback="require('@/assets/img/app/default.svg')"
+                    class="is-32x32" ratio="1by1"></b-image>
                 </span>
               </p>
-              <b-input
-                v-model="icon"
-                :placeholder="$t('Your custom icon URL')"
-                expanded
-              ></b-input>
+              <b-input v-model="icon" :placeholder="$t('Your custom icon URL')" expanded></b-input>
             </b-field>
           </ValidationObserver>
         </div>
@@ -101,14 +67,7 @@
     <footer class="modal-card-foot is-flex is-align-items-center">
       <div class="is-flex-grow-1"></div>
       <div>
-        <b-button
-          :label="$t('Connect')"
-          :loading="isLoading"
-          expaned
-          rounded
-          type="is-primary"
-          @click="connect"
-        />
+        <b-button :label="$t('Connect')" :loading="isLoading" expaned rounded type="is-primary" @click="connect" />
       </div>
     </footer>
     <!-- Modal-Card Footer End -->
@@ -138,6 +97,10 @@ export default {
       type: String,
       default: "",
     },
+    linkType: {
+      type: String,
+      default: "",
+    }
   },
   data() {
     return {
@@ -147,6 +110,7 @@ export default {
         en_us: "",
       },
       icon: "",
+      app_type: "",
       isLoading: false,
     };
   },
@@ -173,6 +137,7 @@ export default {
     this.hostname = this.linkHost || "http://";
     this.name = this.linkName;
     this.icon = this.linkIcon;
+    this.app_type = this.linkType;
   },
 
   mounted() {
@@ -193,33 +158,53 @@ export default {
     },
 
     connect() {
+      debugger;
       this.isLoading = true;
       this.checkStep(this.$refs.ob1).then(async (valid) => {
         if (valid) {
-          let listLinkApp = await this.getLinkAppList();
-          if (
-            !listLinkApp.find((item) => {
-              if (item.name === this.name) {
-                item.hostname = this.hostname;
-                item.icon = this.icon;
-                return true;
-              }
-            })
-          ) {
-            listLinkApp = listLinkApp.concat({
-              hostname: this.hostname,
-              name: this.name,
-              icon: this.icon,
-              app_type: "LinkApp",
-              status: "running",
-            });
-            this.addIdToSessionStorage(this.name);
+          if (this.app_type == 'DefaultApp') {
+            await this.connectDefaultApp()
           }
-          this.saveLinkApp(listLinkApp);
+          else {
+            await this.connectLinkApp()
+          }
         }
       });
     },
+    async connectDefaultApp() {
+      let listDefaultApp = await this.getDefaultAppList();
+      const existingApp = listDefaultApp.find((item) => item.name === this.name);
+      if (existingApp) {
+        existingApp.hostname = this.hostname;
+        existingApp.icon = this.icon;
+      }
+      // Save the updated list
+      this.saveLinkApp(listDefaultApp, this.app_type)
+    },
+    async connectLinkApp() {
+      let listLinkApp = await this.getLinkAppList();
 
+      const existingApp = listLinkApp.find((item) => item.name === this.name);
+
+      if (existingApp) {
+        existingApp.hostname = this.hostname;
+        existingApp.icon = this.icon;
+      } else {
+        const newApp = {
+          hostname: this.hostname,
+          name: this.name,
+          icon: this.icon,
+          app_type: "LinkApp",
+          status: "running",
+        };
+        listLinkApp = [...listLinkApp, newApp];
+
+        this.addIdToSessionStorage(this.name);
+      }
+
+      // Save the updated list
+      this.saveLinkApp(listLinkApp, this.app_type);
+    },
     getLinkAppByHost() {
       this.$api.sys
         .getProxyRequestContent(this.hostname)
@@ -244,9 +229,38 @@ export default {
         });
     },
 
-    saveLinkApp(data) {
+    saveLinkApp(data, app_type) {
+      debugger;
       let json = JSON.stringify(data);
-      this.$api.users
+      if (app_type === 'DefaultApp') {
+        this.$api.users
+        .saveDefaultAppList(json)
+        .then((res) => {
+          this.isLoading = false;
+          if (res.data.success == 200) {
+            let stor = res.data.data;
+            if (stor === "") {
+              stor = [];
+            }
+            this.$emit("updateState");
+            this.$emit("close");
+          } else {
+            this.$buefy.toast.open({
+              message: res.data.message,
+              type: "is-warning",
+            });
+          }
+        })
+        .catch((err) => {
+          this.isLoading = false;
+          this.$buefy.toast.open({
+            message: err.response.data.message || "NOT FOUND",
+            type: "is-danger",
+          });
+        });
+      }
+      else {
+        this.$api.users
         .saveLinkAppDetail(json)
         .then((res) => {
           this.isLoading = false;
@@ -271,6 +285,7 @@ export default {
             type: "is-danger",
           });
         });
+      }
     },
   },
 };

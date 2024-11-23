@@ -2,27 +2,14 @@
   <div class="home-section has-text-left">
     <!-- Title Bar Start -->
     <div class="is-flex is-align-items-center mb-4">
-      <app-section-title-tip
-        id="appTitle1"
-        class="is-flex-grow-1 has-text-sub-04"
-        label="Drag icons to sort."
-        title="System Apps"
-      >
+      <app-section-title-tip id="appTitle1" class="is-flex-grow-1 has-text-sub-04" label="Drag icons to sort."
+        title="System Apps">
       </app-section-title-tip>
 
-      <b-dropdown
-        animation="fade1"
-        aria-role="menu"
-        class="file-dropdown"
-        position="is-bottom-left"
-      >
+      <b-dropdown animation="fade1" aria-role="menu" class="file-dropdown" position="is-bottom-left">
         <template #trigger>
-          <b-icon
-            class="polymorphic is-clickable has-text-grey-100"
-            icon="plus-outline"
-            pack="casa"
-            size="is-24"
-          ></b-icon>
+          <b-icon class="polymorphic is-clickable has-text-grey-100" icon="plus-outline" pack="casa"
+            size="is-24"></b-icon>
         </template>
         <b-dropdown-item aria-role="menuitem" @click="showExternalLinkPanel">
           {{ $t("Add external link/APP") }}
@@ -32,38 +19,17 @@
     <!-- Title Bar End -->
 
     <!-- App List Start -->
-    <draggable
-      v-model="systemAppList"
-      :draggable="draggable"
-      class="app-list contextmenu-canvas"
-      tag="div"
-      v-bind="dragOptions"
-      @end="onSortEnd"
-      @start="drag = true"
-    >
+    <draggable v-model="systemAppList" :draggable="draggable" class="app-list contextmenu-canvas" tag="div"
+      v-bind="dragOptions" @end="onSortEnd" @start="drag = true">
       <!-- App Icon Card Start -->
       <template v-if="!isLoading">
-        <div
-          v-for="item in systemAppList"
-          :id="'app-' + item.name"
-          :key="'app-' + item.name"
-          class="handle"
-        >
-          <app-card
-            :item="item"
-            @configApp="showConfigPanel"
-            @importApp="showContainerPanel"
-            @updateState="getList"
-          ></app-card>
+        <div v-for="item in systemAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle">
+          <app-card :item="item" @configApp="showConfigPanel" @importApp="showContainerPanel"
+            @updateState="getList"></app-card>
         </div>
       </template>
       <template v-else>
-        <div
-          v-for="index in skCount"
-          :id="'app-' + index"
-          :key="'app-' + index"
-          class="handle"
-        >
+        <div v-for="index in skCount" :id="'app-' + index" :key="'app-' + index" class="handle">
           <app-card-skeleton :index="index"></app-card-skeleton>
         </div>
       </template>
@@ -75,26 +41,13 @@
     <template v-if="appList.length > 0">
       <!-- Title Bar Start -->
       <div class="title-bar is-flex is-align-items-center mt-2rem mb-5">
-        <app-section-title-tip
-          id="appTitle2"
-          class="is-flex-grow-1 has-text-sub-04"
-          label="app installed in appstore"
-          title="Installed App"
-        >
+        <app-section-title-tip id="appTitle2" class="is-flex-grow-1 has-text-sub-04" label="app installed in appstore"
+          title="Installed App">
         </app-section-title-tip>
-        <b-dropdown
-          animation="fade1"
-          aria-role="menu"
-          class="file-dropdown"
-          position="is-bottom-left"
-        >
+        <b-dropdown animation="fade1" aria-role="menu" class="file-dropdown" position="is-bottom-left">
           <template #trigger>
-            <b-icon
-              class="polymorphic is-clickable has-text-grey-100"
-              icon="plus-outline"
-              pack="casa"
-              size="is-24"
-            ></b-icon>
+            <b-icon class="polymorphic is-clickable has-text-grey-100" icon="plus-outline" pack="casa"
+              size="is-24"></b-icon>
           </template>
           <b-dropdown-item aria-role="menuitem" @click="showInstall(0, 'custom')">
             {{ $t("Custom Install APP") }}
@@ -108,19 +61,9 @@
       <transition name="slide">
         <div class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
           <!-- Application not imported Start -->
-          <div
-            v-for="item in appList"
-            :id="'app-' + item.name"
-            :key="'app-' + item.name"
-            class="handle"
-          >
-            <app-card
-              :isCasa="false"
-              :item="item"
-              @configApp="showConfigPanel"
-              @importApp="showContainerPanel"
-              @updateState="getList"
-            ></app-card>
+          <div v-for="item in appList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle">
+            <app-card :isCasa="false" :item="item" @configApp="showConfigPanel" @importApp="showContainerPanel"
+              @updateState="getList"></app-card>
           </div>
           <!-- Application not imported End -->
         </div>
@@ -130,21 +73,12 @@
     <template v-if="oldAppList.length > 0">
       <!-- Title Bar Start -->
       <div class="title-bar is-flex is-align-items-center mt-2rem mb-5">
-        <app-section-title-tip
-          id="appTitle2"
-          class="is-flex-grow-1 has-text-sub-04"
-          label="To be rebuilt."
-          title="Legacy app (To be rebuilt)."
-        >
+        <app-section-title-tip id="appTitle2" class="is-flex-grow-1 has-text-sub-04" label="To be rebuilt."
+          title="Legacy app (To be rebuilt).">
         </app-section-title-tip>
         <template>
-          <b-icon
-            @click.native="toggleLegacyApp()"
-            class="polymorphic is-clickable has-text-grey-100"
-            :icon="!display ? 'minus-outline' : 'plus-outline'"
-            pack="casa"
-            size="is-24"
-          ></b-icon>
+          <b-icon @click.native="toggleLegacyApp()" class="polymorphic is-clickable has-text-grey-100"
+            :icon="!display ? 'minus-outline' : 'plus-outline'" pack="casa" size="is-24"></b-icon>
         </template>
       </div>
 
@@ -152,24 +86,11 @@
 
       <!-- App List Start -->
       <transition name="slide">
-        <div
-          v-if="!display"
-          class="columns is-variable is-2 is-multiline app-list contextmenu-canvas"
-        >
+        <div v-if="!display" class="columns is-variable is-2 is-multiline app-list contextmenu-canvas">
           <!-- Application not imported Start -->
-          <div
-            v-for="item in oldAppList"
-            :id="'app-' + item.name"
-            :key="'app-' + item.name"
-            class="handle"
-          >
-            <app-card
-              :isCasa="false"
-              :item="item"
-              @configApp="showConfigPanel"
-              @importApp="showContainerPanel"
-              @updateState="getList"
-            ></app-card>
+          <div v-for="item in oldAppList" :id="'app-' + item.name" :key="'app-' + item.name" class="handle">
+            <app-card :isCasa="false" :item="item" @configApp="showConfigPanel" @importApp="showContainerPanel"
+              @updateState="getList"></app-card>
           </div>
           <!-- Application not imported End -->
         </div>
@@ -219,66 +140,66 @@ const builtInApplications = [
     status: "running",
     app_type: "system",
   },
-  {
-    id: "3",
-    name: "Account Center",
-    title: {
-      en_us: "Account Center",
-    },
-    icon: require(`@/assets/img/app/account.png`),
-    status: "running",
-    app_type: "system",
-  },
-  {
-    id: "4",
-    name: "NextNAS",
-    title: {
-      en_us: "NextNAS",
-    },
-    icon: require(`@/assets/img/app/nextnas.jpg`),
-    status: "running",
-    app_type: "system",
-  },
-  {
-    id: "5",
-    name: "NextDNS",
-    title: {
-      en_us: "NextDNS",
-    },
-    icon: require(`@/assets/img/app/nextdns.png`),
-    status: "running",
-    app_type: "system",
-  },
-  {
-    id: "6",
-    name: "NextWeb",
-    title: {
-      en_us: "NextWeb",
-    },
-    icon: require(`@/assets/img/app/nextweb.png`),
-    status: "running",
-    app_type: "system",
-  },
-  {
-    id: "7",
-    name: "NextVPN",
-    title: {
-      en_us: "NextVPN",
-    },
-    icon: require(`@/assets/img/app/nextvpn.png`),
-    status: "running",
-    app_type: "system",
-  },
-  {
-    id: "8",
-    name: "NextFireWall",
-    title: {
-      en_us: "NextFireWall",
-    },
-    icon: require(`@/assets/img/app/nextfirewall.png`),
-    status: "running",
-    app_type: "system",
-  },
+  // {
+  //   id: "3",
+  //   name: "Account Center",
+  //   title: {
+  //     en_us: "Account Center",
+  //   },
+  //   icon: require(`@/assets/img/app/account.png`),
+  //   status: "running",
+  //   app_type: "system",
+  // },
+  // {
+  //   id: "4",
+  //   name: "NextNAS",
+  //   title: {
+  //     en_us: "NextNAS",
+  //   },
+  //   icon: require(`@/assets/img/app/nextnas.jpg`),
+  //   status: "running",
+  //   app_type: "system",
+  // },
+  // {
+  //   id: "5",
+  //   name: "NextDNS",
+  //   title: {
+  //     en_us: "NextDNS",
+  //   },
+  //   icon: require(`@/assets/img/app/nextdns.png`),
+  //   status: "running",
+  //   app_type: "system",
+  // },
+  // {
+  //   id: "6",
+  //   name: "NextWeb",
+  //   title: {
+  //     en_us: "NextWeb",
+  //   },
+  //   icon: require(`@/assets/img/app/nextweb.png`),
+  //   status: "running",
+  //   app_type: "system",
+  // },
+  // {
+  //   id: "7",
+  //   name: "NextVPN",
+  //   title: {
+  //     en_us: "NextVPN",
+  //   },
+  //   icon: require(`@/assets/img/app/nextvpn.png`),
+  //   status: "running",
+  //   app_type: "system",
+  // },
+  // {
+  //   id: "8",
+  //   name: "NextFireWall",
+  //   title: {
+  //     en_us: "NextFireWall",
+  //   },
+  //   icon: require(`@/assets/img/app/nextfirewall.png`),
+  //   status: "running",
+  //   app_type: "system",
+  // },
 ];
 
 const orderConfig = "app_order";
@@ -405,6 +326,13 @@ export default {
         this.oldAppList = orgOldAppList;
 
         let listLinkApp = await this.getLinkAppList();
+        let defaultAppList = await this.getDefaultAppList();
+        defaultAppList.forEach((item) => {
+          // linkApp does not have title.
+          item.title = {
+            en_us: item.name,
+          };
+        });
         listLinkApp.forEach((item) => {
           // linkApp does not have title.
           item.title = {
@@ -412,7 +340,7 @@ export default {
           };
         });
         // all app list
-        let mainAppList = concat(builtInApplications, listLinkApp);
+        let mainAppList = concat(builtInApplications, defaultAppList,listLinkApp);
         this.systemAppList = mainAppList;
         let installedAppList = orgNewAppList;
         // get app sort info.
@@ -543,10 +471,11 @@ export default {
      * @return {*}
      */
     async showConfigPanel(item, isCasa) {
+      debugger;
       let name = item.name;
       this.$messageBus("appsexsiting_open", name);
       try {
-        if (item?.app_type === "LinkApp") {
+        if (item?.app_type === "LinkApp" || item?.app_type === "DefaultApp") {
           await this.showExternalLinkPanel(item);
           return;
         }
@@ -649,6 +578,7 @@ export default {
           linkName: item.name,
           linkHost: item.hostname,
           linkIcon: item.icon,
+          linkType: item.app_type,
         },
       });
     },

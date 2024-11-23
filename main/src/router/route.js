@@ -29,6 +29,16 @@ export default [
 		}
 	},
 	{
+		path: '/offline',
+		name: 'Error',
+		hidden: true,
+		component: () => import('@/views/Offline.vue'),
+		meta: {
+			requireAuth: false,
+			showBackground: false
+		}
+	},
+	{
 		path: '/profile',
 		name: 'Profile',
 		hidden: true,

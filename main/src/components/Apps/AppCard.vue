@@ -38,7 +38,8 @@
           <b-button v-if="isV2App" expanded size="is-16" type="is-text" @click="openSetupDomain(item.name)">
             {{ $t("Setup Domain") }}
           </b-button>
-          <b-button v-if="isV2App || isLinkApp" expanded type="is-text" @click="configApp()">{{ $t("Setting") }}
+          <b-button v-if="isV2App || isLinkApp || isDefaultApp" expanded type="is-text" @click="configApp()">{{
+            $t("Setting") }}
           </b-button>
 
           <b-button v-if="isV2App && !item.is_uncontrolled" expanded type="is-text"
@@ -56,21 +57,21 @@
             $t("Rebuild")
             }}
           </b-button>
-
-          <b-button v-if="isLinkApp" class="mb-1" expanded type="is-text" @click="uninstallApp(true)">
-            {{ $t("Delete") }}
-            <b-loading v-model="isUninstalling" :is-full-page="false">
-              <img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
-            </b-loading>
-          </b-button>
-          <b-button v-else class="has-text-red" expanded type="is-text" @click="uninstallConfirm">
-            {{ $t("Uninstall") }}
-            <b-loading v-model="isUninstalling" :is-full-page="false">
-              <img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
-            </b-loading>
-          </b-button>
-
-          <div v-if="!isLinkApp" class="gap">
+          <div v-if="!isDefaultApp">
+            <b-button v-if="isLinkApp" class="mb-1" expanded type="is-text" @click="uninstallApp(true)">
+              {{ $t("Delete") }}
+              <b-loading v-model="isUninstalling" :is-full-page="false">
+                <img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
+              </b-loading>
+            </b-button>
+            <b-button v-else class="has-text-red" expanded type="is-text" @click="uninstallConfirm">
+              {{ $t("Uninstall") }}
+              <b-loading v-model="isUninstalling" :is-full-page="false">
+                <img :src="require('@/assets/img/loading/waiting.svg')" alt="pending" class="ml-4 is-24x24" />
+              </b-loading>
+            </b-button>
+          </div>
+          <div v-if="!isLinkApp && !isDefaultApp" class="gap">
             <div class="columns is-gapless _b-bor is-flex">
               <div class="column is-flex is-justify-content-center is-align-items-center">
                 <b-button :loading="isRestarting" expanded type="is-text" @click="restartApp"
@@ -234,6 +235,9 @@ export default {
     isLinkApp() {
       return this.item.app_type === "LinkApp";
     },
+    isDefaultApp() {
+      return this.item.app_type === "DefaultApp";
+    },
     shutDownClass() {
       return this.item.status !== "running" ? "shutdown-rounded" : "";
     },
@@ -292,7 +296,7 @@ export default {
       }
       if (item.app_type === "system") {
         this.openSystemApps(item);
-      } else if (this.isLinkApp) {
+      } else if (this.isLinkApp || this.isDefaultApp) {
         window.open(item.hostname, "_blank");
         this.removeIdFromSessionStorage(item.name);
       } else {
@@ -333,7 +337,7 @@ export default {
           break;
         case "NextFireWall":
           this.openLink("https://firewall.nextzenvn.com/");
-        break;
+          break;
         default:
           break;
       }

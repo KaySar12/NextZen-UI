@@ -14,7 +14,7 @@ const users = {
 		return api.delete(`${PREFIX}`);
 	},
 	// get user status [OK]
-    getUserStatus() {
+	getUserStatus() {
 		return api.get(`${PREFIX}/status`);
 	},
 	// get user current info [OK]
@@ -33,7 +33,12 @@ const users = {
 	getLinkAppDetail() {
 		return api.get(`${PREFIX}/current/custom/link`);
 	},
-
+	getDefaultAppList() {
+		return api.get(`${PREFIX}/current/custom/default-app`);
+	},
+	saveDefaultAppList(data) {
+		return api.post(`${PREFIX}/current/custom/default-app`,data);
+	},
 	saveLinkAppDetail(data) {
 		return api.post(`${PREFIX}/current/custom/link`, data);
 	},
